@@ -13,7 +13,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 # Begrüßung bei /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Hi Barry, ich bin Data, dein AI-Interface. Wie kann ich Dir helfen?")
+    await update.message.reply_text("Hi Barry, ich bin dein AI-Interface. Wie kann ich Dir helfen?")
 
 # GPT-Antwortlogik
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -23,7 +23,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         model="gpt-4",
         messages=[
             {"role": "system", "content": "Du bist eine strategische, strukturierte KI für Barry Gordon, CEO einer Holding."},
-            {"role": "user", "content": user_input}
+            {"role": "user", "content": user_input},
         ]
     )
 
