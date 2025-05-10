@@ -3,12 +3,17 @@ import openai
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
+# Lade API-Keys aus Umgebungsvariablen
 openai.api_key = os.getenv("OPENAI_API_KEY")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY")
 
+bot = telegram.Bot(token=TELEGRAM_TOKEN)
+
+# Start-Befehl – sendet eine Begrüßung
 def start(update, context):
     update.message.reply_text("Hi Barry, ich bin dein Telegram-GPT. Frag mich, was du willst.")
 
+# Nachricht verarbeiten und GPT-Antwort senden
 def handle_message(update, context):
     user_input = update.message.text
     response = openai.ChatCompletion.create(
@@ -20,6 +25,7 @@ def handle_message(update, context):
     reply = response["choices"][0]["message"]["content"]
     update.message.reply_text(reply)
 
+# Bot starten
 def main():
     updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
     dp = updater.dispatcher
