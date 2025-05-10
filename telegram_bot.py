@@ -1,41 +1,34 @@
-import logging
 import os
 import openai
-from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
+import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# API-Schlüssel aus Umgebungsvariablen
 openai.api_key = os.getenv("OPENAI_API_KEY")
-TELEGRAM_API_KEY = os.getenv("TELEGRAM_API_KEY")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY")
 
-# Logging für Fehlersuche
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
-# Begrüßung bei /start
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Hi Barry, ich bin dein AI-Interface. Wie kann ich Dir helfen?")
+def start(update, context):
+    update.message.reply_text("Hi Barry, ich bin dein Interface. Sag mir, was du brauchst.")
 
-# GPT-Antwortlogik
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def handle_message(update, context):
     user_input = update.message.text
-
     response = openai.ChatCompletion.create(
         model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Du bist eine strategische, strukturierte KI für Barry Gordon, CEO einer Holding."},
-            {"role": "user", "content": user_input},
-        ]
+        messages=[{"role": "user", "content": user_input}]
     )
-
     reply = response.choices[0].message.content
-    await update.message.reply_text(reply)
+    update.message.reply_text(reply)
 
-# Main App starten
+def main():
+    updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+
+    updater.start_polling()
+    updater.idle()
+
 if __name__ == "__main__":
-    app = ApplicationBuilder().token(TELEGRAM_API_KEY).build()
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-    print("Bot läuft...")
-    app.run_polling()
+    main()
