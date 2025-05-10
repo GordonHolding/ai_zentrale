@@ -1,41 +1,41 @@
 import os
 import openai
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# API-Keys aus Umgebungsvariablen laden
+# API-Keys laden
 openai.api_key = os.getenv("OPENAI_API_KEY")
-TELEGRAM_API_KEY = os.getenv("TELEGRAM_API_KEY")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_API_KEY")
 
 # Begrüßung bei /start
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Hi Barry, ich bin dein Telegram-GPT. Frag mich, was du willst.")
+def start(update, context):
+    update.message.reply_text("Hi Barry, ich bin dein Telegram-GPT. Frag mich, was du willst.")
 
 # GPT-Antwortlogik mit Fehlerausgabe
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def handle_message(update, context):
     user_input = update.message.text
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=[
-                {"role": "system", "content": "Du bist ein strategisches KI-Interface für Barry Gordon, CEO einer Holding."},
+                {"role": "system", "content": "Du bist eine strategische KI für Barry Gordon, CEO einer Holding."},
                 {"role": "user", "content": user_input}
             ]
         )
         reply = response.choices[0].message.content
-        await update.message.reply_text(reply)
-
     except Exception as e:
-        await update.message.reply_text("Fehler bei der Antworterstellung:\n" + str(e))
-        print("DEBUG – GPT-Fehler:", e)
+        reply = f"Fehler bei der GPT-Antwort:\n{str(e)}"
+    update.message.reply_text(reply)
 
-# Startfunktion
+# Main-Funktion
 def main():
-    app = ApplicationBuilder().token(TELEGRAM_API_KEY).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Bot läuft…")
-    app.run_polling()
+    updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+
+    updater.start_polling()
+    updater.idle()
 
 if __name__ == "__main__":
     main()
