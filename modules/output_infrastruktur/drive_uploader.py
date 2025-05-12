@@ -4,7 +4,7 @@ from modules.google_utils import get_credentials
 import os
 
 def upload_to_drive(file_path, name=None, mime_type="application/pdf", folder_id=None):
-    creds = get_credentials(scope="https://www.googleapis.com/auth/drive")
+    creds = get_credentials(["https://www.googleapis.com/auth/drive"])
     service = build("drive", "v3", credentials=creds)
 
     file_metadata = {"name": name or os.path.basename(file_path)}
