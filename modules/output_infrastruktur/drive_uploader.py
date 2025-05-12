@@ -1,12 +1,10 @@
-def upload_to_drive(file_path, name=None, mime_type="application/pdf", folder_id=None):
-    from google.oauth2 import service_account
-    from googleapiclient.discovery import build
-    import os
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from modules.google_utils import get_credentials
+import os
 
-    creds = service_account.Credentials.from_service_account_file(
-        "0.0 SYSTEM/0.1 Zugangsdaten/ai-zentrale-cloud-....json",
-        scopes=["https://www.googleapis.com/auth/drive"]
-    )
+def upload_to_drive(file_path, name=None, mime_type="application/pdf", folder_id=None):
+    creds = get_credentials(scope="https://www.googleapis.com/auth/drive")
     service = build("drive", "v3", credentials=creds)
 
     file_metadata = {"name": name or os.path.basename(file_path)}
