@@ -1,12 +1,9 @@
-def create_event(summary, start_time, end_time, calendar_id="primary"):
-    from google.oauth2 import service_account
-    from googleapiclient.discovery import build
-    import datetime
+from googleapiclient.discovery import build
+from modules.google_utils import get_credentials
+import datetime
 
-    creds = service_account.Credentials.from_service_account_file(
-        "0.0 SYSTEM/0.1 Zugangsdaten/ai-zentrale-cloud-....json",
-        scopes=["https://www.googleapis.com/auth/calendar"]
-    )
+def create_event(summary, start_time, end_time, calendar_id="primary"):
+    creds = get_credentials(["https://www.googleapis.com/auth/calendar"])
     service = build("calendar", "v3", credentials=creds)
 
     event = {
