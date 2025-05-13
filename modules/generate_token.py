@@ -8,7 +8,7 @@ SCOPES = [
 ]
 
 def main():
-    creds_path = "/Users/data/Desktop/client_secret_1046247609064-0fe5dsec75u6bu73n306keu267a1qrcl.apps.googleusercontent.com.json"  # Pfad zur JSON-Datei anpassen!
+    creds_path = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.1 Zugangsdaten/client_secret_1046247609064-0fe5dsec75u6bu73n306keu267a1qrcl.apps.googleusercontent.com.json"  # Pfad zur JSON-Datei anpassen!
     
     flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
     creds = flow.run_local_server(port=8000)
