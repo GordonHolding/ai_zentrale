@@ -3,7 +3,7 @@ import json
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 def get_gmail_credentials():
-    with open("/etc/secrets/gmail_oauth.json", "r") as f:
+    with open("/etc/secrets/client_secret_office_at_gordonholding.json", "r") as f:
         creds_data = json.load(f)
 
     flow = InstalledAppFlow.from_client_config(
