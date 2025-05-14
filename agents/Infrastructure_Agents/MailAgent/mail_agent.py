@@ -8,6 +8,7 @@ from mail_triggers import (
     save_draft, delete_message, get_threads,
     summarize_thread, send_email_reply
 )
+from agents.Infrastructure_Agents.MailAgent.mail_agent_prompt import MAIL_AGENT_SYSTEM_PROMPT
 
 def process_emails(account_key):
     creds = get_gmail_credentials(MAIL_ACCOUNTS[account_key])
