@@ -8,7 +8,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 @cl.on_message
 async def main(message):
     response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "Du bist die visuelle AI-Zentrale für Barry Gordon. Antworte kurz, smart und CI-konform."},
             {"role": "user", "content": message.content}
