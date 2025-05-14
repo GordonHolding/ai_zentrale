@@ -67,3 +67,11 @@ def summarize_thread(thread_messages):
 
 def send_email_reply(service, message, body_text):
     print(f"[GPT-Antwort] Entwurf vorbereitet für: {message['id']}\nInhalt: {body_text}")
+# PDF-Anhänge speichern (optional)
+def extract_attachments(service, message):
+    parts = message.get("payload", {}).get("parts", [])
+    for part in parts:
+        if part.get("filename") and "attachmentId" in part.get("body", {}):
+            print(f"📎 Anhang erkannt: {part['filename']}")
+            # Optional: Datei herunterladen (Demo-Zweck)
+
