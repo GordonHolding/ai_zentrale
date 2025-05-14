@@ -1,12 +1,35 @@
-# mail_triggers.py
+# mail_triggers.py – Helferfunktionen
 
-def apply_label(service, msg_id, label_name):
-    label_id = ensure_label_exists(service, label_name)
+def archive_message(service, msg_id):
     service.users().messages().modify(
         userId="me",
         id=msg_id,
+        body={"removeLabelIds": ["INBOX"]}
+    ).execute()
+
+def mark_as_read(service, msg_id):
+    service.users().messages().modify(
+        userId="me",
+        id=msg_id,
+        body={"removeLabelIds": ["UNREAD"]}
+    ).execute()
+
+def apply_label(service, message):
+    snippet = message.get("snippet", "").lower()
+    label = "default"
+
+    for key, keywords in LABEL_RULES.items():
+        if any(kw in snippet for kw in keywords):
+            label = key
+            break
+
+    label_id = ensure_label_exists(service, label)
+    service.users().messages().modify(
+        userId="me",
+        id=message["id"],
         body={"addLabelIds": [label_id]}
     ).execute()
+    return label
 
 def ensure_label_exists(service, label_name):
     labels = service.users().labels().list(userId="me").execute().get("labels", [])
@@ -20,22 +43,27 @@ def ensure_label_exists(service, label_name):
     ).execute()
     return new_label["id"]
 
-def save_draft(service, msg_id, reply_text):
-    original = service.users().messages().get(userId="me", id=msg_id, format="metadata").execute()
-    thread_id = original.get("threadId")
-
-    message_body = {
+def save_draft(service, message, body_text):
+    thread_id = message.get("threadId")
+    draft_body = {
         "message": {
-            "raw": "",  # Optional: MIME-Code mit reply
-            "threadId": thread_id
+            "threadId": thread_id,
+            "raw": ""  # Optional: MIME-formatieren
         }
     }
+    service.users().drafts().create(userId="me", body=draft_body).execute()
 
-    service.users().drafts().create(userId="me", body=message_body).execute()
+def delete_message(service, msg_id):
+    service.users().messages().delete(userId="me", id=msg_id).execute()
 
-def archive_message(service, msg_id):
-    service.users().messages().modify(
-        userId="me",
-        id=msg_id,
-        body={"removeLabelIds": ["INBOX"]}
-    ).execute()
+def get_threads(service, message):
+    thread_id = message.get("threadId")
+    thread = service.users().threads().get(userId="me", id=thread_id).execute()
+    return thread.get("messages", [])
+
+def summarize_thread(thread_messages):
+    content = "\n".join([msg.get("snippet", "") for msg in thread_messages])
+    return f"Zusammenfassung: {content[:300]}..."
+
+def send_email_reply(service, message, body_text):
+    print(f"[GPT-Antwort] Entwurf vorbereitet für: {message['id']}\nInhalt: {body_text}")
