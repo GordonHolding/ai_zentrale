@@ -1,4 +1,4 @@
-# mail_config.py
+# mail_config.py – Konfiguration
 
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
@@ -16,10 +16,10 @@ MAIL_ACCOUNTS = {
     "private": "gordonmunich"
 }
 
-# Filter-Keywords für Auto-Sortierung
+# Keywords zur automatischen Kategorisierung
 LABEL_RULES = {
-    "invoice": ["rechnung", "payment", "überweisung", "invoice"],
-    "event": ["einladung", "event", "party", "gala"],
-    "urgent": ["dringend", "sofort", "!!!", "wichtig"],
-    "marketing": ["newsletter", "angebot", "promo"]
+    "finance": ["rechnung", "zahlung", "invoice"],
+    "events": ["einladung", "event", "veranstaltung"],
+    "urgent": ["dringend", "sofort", "wichtig"],
+    "default": []
 }
