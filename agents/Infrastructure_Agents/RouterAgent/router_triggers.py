@@ -1,10 +1,9 @@
-# interface_triggers.py
+# router_triggers.py
 
 def post_action_trigger(agent, result):
     """
-    Optional: Triggert Folgeaktionen nach erfolgreicher Ausführung.
+    Optional: Reaktionen nach Agentenausführung.
     """
-    print(f"[Trigger] Aktion von {agent} abgeschlossen.")
-    # Beispiel: Bei memory-Antwort automatische Notiz speichern
+    print(f"[Trigger] {agent} hat seine Aufgabe abgeschlossen.")
     if agent == "memory":
-        print("📝 Trigger: Ergebnis kann ins Gedächtnis übernommen werden.")
+        print("📥 Erinnerung möglich – Kontext wurde verarbeitet.")
