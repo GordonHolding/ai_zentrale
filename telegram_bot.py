@@ -6,25 +6,39 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
 from agents.Infrastructure_Agents.RouterAgent.router_agent import handle_user_input
+from modules.reasoning_intelligenz.global_identity_prompt import load_global_identity_prompt
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# /start Begrüßung
+# Begrüßung bei /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Willkommen in der AI-Zentrale. Was möchtest du tun?")
 
-# Hauptlogik: Eingabe analysieren, RouterAgent aktivieren
+# Nachricht verarbeiten & an RouterAgent weitergeben
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_input = update.message.text
     print(f"📩 Telegram Input: {user_input}")
 
     try:
-        result = handle_user_input(user_input)
-        await update.message.reply_text(f"🤖 RouterAgent: {result}")
-    except Exception as e:
-        await update.message.reply_text(f"❌ Fehler bei der Verarbeitung: {e}")
+        system_prompt = load_global_identity_prompt()
 
-# Start des Telegram-Bots
+        response = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_input}
+            ]
+        )
+
+        reply = response.choices[0].message["content"].strip()
+        print(f"🤖 RouterAgent-Antwort: {reply}")
+        await update.message.reply_text(reply)
+
+    except Exception as e:
+        print(f"❌ Fehler: {e}")
+        await update.message.reply_text(f"❌ Systemfehler: {e}")
+
+# Telegram-Bot starten
 if __name__ == "__main__":
     app = ApplicationBuilder().token(os.getenv("TELEGRAM_API_KEY")).build()
 
