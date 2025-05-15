@@ -1,36 +1,18 @@
-# router_router.py
-
 import openai
+from agents.Infrastructure_Agents.RouterAgent.router_prompt_loader import load_identity_prompt, load_dynamic_router_prompt
 
 def determine_agent(user_input):
-    """
-    GPT entscheidet, welcher Spezialagent zuständig ist.
-    """
-
-    prompt = f"""
-Du bist der zentrale RouterAgent der Gordon Holding.
-Analysiere den folgenden Nutzereingabetext und bestimme, welcher Spezialagent zuständig ist:
-
-"{user_input}"
-
-Antwortoptionen:
-- "mail" → für E-Mail-Themen
-- "memory" → für Gedächtnis, Protokolle, Entscheidungen
-- "unbekannt" → wenn nicht klar
-"""
+    prompt = load_identity_prompt() + "\n\n" + load_dynamic_router_prompt()
 
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "Du bist ein Routing-Agent für AI-Agentenarchitekturen."},
-                {"role": "user", "content": prompt}
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": user_input}
             ]
         )
-        decision = response.choices[0].message["content"].strip().lower()
-        print(f"🔀 GPT Routing: {decision}")
-        return decision
-
+        reply = response.choices[0].message["content"].strip()
+        return reply
     except Exception as e:
-        print(f"❌ Routing-Fehler: {e}")
-        return "unbekannt"
+        return f"Routing-Fehler: {e}"
