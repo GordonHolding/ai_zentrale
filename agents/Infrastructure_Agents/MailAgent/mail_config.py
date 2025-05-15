@@ -1,4 +1,7 @@
-# mail_config.py – Konfiguration
+import os
+
+# Basispfad für alles, was MailAgent lokal speichert
+MAIL_AGENT_BASE_PATH = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.2 Agenten/Infrastructure_Agents/MailAgent"
 
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
@@ -10,13 +13,29 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.metadata"
 ]
 
+# Gmail-Konten
 MAIL_ACCOUNTS = {
     "office": "office_gordonholding",
     "business": "business_barrygordon",
     "private": "gordonmunich"
 }
 
-# Erweiterte Label-Regeln für automatische Klassifizierung
+# Token- und Secret-Dateien
+TOKEN_PATHS = {
+    "office": os.path.join(MAIL_AGENT_BASE_PATH, "tokens", "token_office_gordonholding.json"),
+    "business": os.path.join(MAIL_AGENT_BASE_PATH, "tokens", "token_business_barrygordon.json")
+}
+
+CLIENT_SECRETS = {
+    "office": os.path.join(MAIL_AGENT_BASE_PATH, "tokens", "client_secret_office_gordonholding.json"),
+    "business": os.path.join(MAIL_AGENT_BASE_PATH, "tokens", "client_secret_business_barrygordon.json")
+}
+
+# Lokale Logs (Memory-ähnlich, aber nur für Aktionen)
+MAIL_ROUTING_LOG = os.path.join(MAIL_AGENT_BASE_PATH, "MailAgent_Memory", "mail_routing_log.json")
+MAIL_ERROR_LOG = os.path.join(MAIL_AGENT_BASE_PATH, "MailAgent_Memory", "mail_error_log.json")
+
+# Automatische Label-Regeln (nutzt apply_label())
 LABEL_RULES = {
     "finance": ["rechnung", "zahlung", "invoice", "überweisung", "kontostand", "gutschrift", "mahnung"],
     "events": ["einladung", "event", "veranstaltung", "termin", "konferenz", "meeting", "webinar"],
