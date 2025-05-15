@@ -1,4 +1,4 @@
-# interface_config.py
+# router_config.py
 
 AGENT_LABELS = {
     "mail": "MailAgent",
