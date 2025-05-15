@@ -1,26 +1,22 @@
-# mail_gpt_router.py – GPT-Routing für E-Mail-Entscheidungen
-
 import openai
-from agents.Infrastructure_Agents.MailAgent.mail_agent_prompt import MAIL_AGENT_SYSTEM_PROMPT
 from mail_triggers import (
     archive_message, mark_as_read, apply_label,
-    save_draft, extract_attachments
+    save_draft, extract_attachments, detect_iban,
+    extract_pdf_attachments, sender_prioritization,
+    log_email_to_memory
 )
+from mail_config import load_mail_agent_prompt
+
+MAIL_AGENT_SYSTEM_PROMPT = load_mail_agent_prompt()
 
 def route_gpt_decision(snippet, service, msg_data):
-    """
-    Fragt GPT, wie eine bestimmte Mail verarbeitet werden soll,
-    und ruft die entsprechende Funktion auf.
-    """
-
     try:
         msg_id = msg_data["id"]
         headers = msg_data["payload"].get("headers", [])
         internal_date = int(msg_data.get("internalDate", 0))  # UNIX-Timestamp (ms)
         label_ids = msg_data.get("labelIds", [])
         thread_id = msg_data.get("threadId", "")
-        
-        # Header extrahieren
+
         def get_header(name):
             for h in headers:
                 if h["name"].lower() == name.lower():
@@ -31,7 +27,6 @@ def route_gpt_decision(snippet, service, msg_data):
         sender = get_header("From")
         date = get_header("Date")
 
-        # GPT ansprechen
         response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
@@ -56,7 +51,6 @@ Was soll ich tun? (z. B. Label, Archiv, Antwort, Anhang speichern, markieren, 
 
         gpt_reply = response.choices[0].message["content"].lower()
 
-        # Entscheidung umsetzen
         if "archivieren" in gpt_reply or "archive" in gpt_reply:
             archive_message(service, msg_id)
 
@@ -71,6 +65,17 @@ Was soll ich tun? (z. B. Label, Archiv, Antwort, Anhang speichern, markieren, 
 
         if "anhang" in gpt_reply or "attachment" in gpt_reply:
             extract_attachments(service, msg_data)
+
+        if detect_iban(msg_data):
+            apply_label(service, msg_data)
+
+        pdfs = extract_pdf_attachments(msg_data)
+        if pdfs:
+            print(f"📄 PDF-Anhänge erkannt: {len(pdfs)} Dateien")
+
+        sender_prioritization(service, msg_data)
+
+        log_email_to_memory(msg_data, category="unclassified", summary=gpt_reply[:200])
 
         print(f"🧠 GPT-Routing abgeschlossen: {gpt_reply}")
 
