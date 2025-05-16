@@ -1,42 +1,57 @@
-# conversation_tracker.py
-import time
-from collections import defaultdict
+import os
+import json
+import datetime
+from typing import List, Dict
 
-# Temporärer In-Memory-Store (für Produktion später Redis oder DB)
-conversation_store = defaultdict(list)
+# BASISPFAD zur Ablage
+BASE_DIR = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.3 AI-Regelwerk & Historie/Systemregeln/Chat-History"
+LOG_PATH = os.path.join(BASE_DIR, "chat_history_log.json")
+UPLOAD_DIR = os.path.join(BASE_DIR, "Uploads")
 
-# Konfigurierbare Limits
-MAX_CONTEXT_LENGTH = 20  # Anzahl Nachrichten, die zurückgegeben werden (inkl. GPT-Antworten)
-MAX_CONTEXT_AGE_SECONDS = 60 * 60  # 1 Stunde
+# Sicherstellen, dass Ordner existieren
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-def _current_time():
-    return int(time.time())
+# Interner Speicher (z. B. als RAM-Store oder Mini-Cache)
+conversation_store: Dict[str, List[Dict]] = {}
 
-def track_message(user_id: str, role: str, content: str):
-    conversation_store[user_id].append({
-        "role": role,
-        "content": content,
-        "timestamp": _current_time()
-    })
+# Laden vorhandener History
+if os.path.exists(LOG_PATH):
+    with open(LOG_PATH, "r") as f:
+        try:
+            conversation_store = json.load(f)
+        except json.JSONDecodeError:
+            conversation_store = {}
 
-def get_context(user_id: str):
-    now = _current_time()
-    history = conversation_store.get(user_id, [])
-    # Nur relevante Nachrichten der letzten Stunde behalten
-    recent = [m for m in history if now - m["timestamp"] <= MAX_CONTEXT_AGE_SECONDS]
-    return recent[-MAX_CONTEXT_LENGTH:]  # maximal X Messages zurückgeben
+# Verlauf holen
+def get_context(user_id: str) -> List[Dict]:
+    return conversation_store.get(user_id, [])
 
-def reset_context(user_id: str):
-    if user_id in conversation_store:
-        del conversation_store[user_id]
+# Neue Nachricht + Verlauf zurückgeben
+def log_and_get_context(user_id: str, message: str) -> List[Dict]:
+    conversation_store.setdefault(user_id, []).append({"role": "user", "content": message})
+    save_log()
+    return conversation_store[user_id]
 
-def log_and_get_context(user_id: str, new_user_message: str):
-    track_message(user_id, "user", new_user_message)
-    return get_context(user_id)
-
+# GPT-Antwort speichern
 def add_gpt_reply(user_id: str, reply: str):
-    track_message(user_id, "assistant", reply)
+    conversation_store.setdefault(user_id, []).append({"role": "assistant", "content": reply})
+    save_log()
 
-# Erweiterung für Datei-Uploads (PDF, Image, etc.)
+# Kontext löschen
+def reset_context(user_id: str):
+    conversation_store[user_id] = []
+    save_log()
+
+# Dateiupload verlinken
 def attach_file_summary(user_id: str, summary: str):
-    track_message(user_id, "user", f"[Datei-Upload] {summary}")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    conversation_store.setdefault(user_id, []).append({
+        "role": "system",
+        "content": f"📎 Datei-Upload registriert am {timestamp}: {summary}"
+    })
+    save_log()
+
+# Zentrale Speicherung als JSON-Protokoll
+def save_log():
+    with open(LOG_PATH, "w") as f:
+        json.dump(conversation_store, f, indent=2)
