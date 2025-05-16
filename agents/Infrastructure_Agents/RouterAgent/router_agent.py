@@ -19,16 +19,20 @@ def handle_user_input(user_input):
         print("📬 MailAgent wird aktiviert...")
         result = process_emails(DEFAULT_MAIL_ACCOUNT)
         post_action_trigger("mail", result)
+        return result
 
     elif agent_key == "memory":
         print("🧠 MemoryAgent wird aktiviert...")
-        result = search_memory("florian")  # später dynamisch
+        # Dynamischer Suchbegriff aus dem Input könnte hier extrahiert werden
+        result = search_memory(user_input)
         post_action_trigger("memory", result)
+        return result
 
     else:
-        print("🤷 Kein zuständiger Agent erkannt.")
+        print("❓ Kein zuständiger Agent erkannt.")
         return "Keine Aktion ausgeführt."
 
+# Optional für lokalen CLI-Test
 if __name__ == "__main__":
     user_input = input("Was möchtest du tun? ").strip()
     handle_user_input(user_input)
