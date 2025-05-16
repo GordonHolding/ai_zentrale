@@ -1,11 +1,14 @@
+# mail_gpt_router.py – GPT-Routing für E-Mail-Entscheidungen + Thread-Analyse
+
 import openai
 from mail_triggers import (
     archive_message, mark_as_read, apply_label,
     save_draft, extract_attachments, detect_iban,
     extract_pdf_attachments, sender_prioritization,
-    log_email_to_memory
+    log_email_to_memory, get_threads
 )
 from mail_config import load_mail_agent_prompt
+from modules.ai_intelligenz.thread_summary import summarize_thread_messages
 
 MAIL_AGENT_SYSTEM_PROMPT = load_mail_agent_prompt()
 
@@ -27,11 +30,14 @@ def route_gpt_decision(snippet, service, msg_data):
         sender = get_header("From")
         date = get_header("Date")
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": MAIL_AGENT_SYSTEM_PROMPT},
-                {"role": "user", "content": f"""
+        # Thread-Zusammenfassung bei langen Verläufen
+        thread_messages = get_threads(service, msg_data)
+        thread_summary = ""
+        if len(thread_messages) >= 3:
+            thread_summary = summarize_thread_messages(thread_messages)
+
+        # GPT ansprechen mit optionalem Thread-Kontext
+        user_message = f"""
 Hier ist eine neue E-Mail:
 
 📨 Betreff: {subject}
@@ -43,9 +49,16 @@ Hier ist eine neue E-Mail:
 
 📎 Vorschau:
 {snippet}
+"""
 
-Was soll ich tun? (z. B. Label, Archiv, Antwort, Anhang speichern, markieren, löschen)
-"""}
+        if thread_summary:
+            user_message += f"\n\n📌 Kontext-Zusammenfassung bisheriger Mails:\n{thread_summary}"
+
+        response = openai.ChatCompletion.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": MAIL_AGENT_SYSTEM_PROMPT},
+                {"role": "user", "content": user_message}
             ]
         )
 
