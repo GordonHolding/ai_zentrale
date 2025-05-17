@@ -1,27 +1,19 @@
 # gpt_prompt_selector.py
 
-import os
 import json
+import os
 
-PROMPT_MAP_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/prompt_map.json"
-PROMPT_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Prompts/"
+INDEX_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/index.json"
 
-def load_prompt_map():
-    if os.path.exists(PROMPT_MAP_PATH):
-        with open(PROMPT_MAP_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+def load_prompt_for_project(project_key):
+    if not os.path.exists(INDEX_PATH):
+        return "Handle im Stil der Gordon Holding. Professionell, klar, strukturiert."
 
-def load_prompt(prompt_key):
-    prompt_map = load_prompt_map()
-    file_name = prompt_map.get(prompt_key)
+    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+        index = json.load(f)
 
-    if not file_name:
-        return "Du bist eine GPT-Instanz der Gordon Holding. Handle professionell und strukturiert."
+    project = index.get(project_key)
+    if not project:
+        return "Handle im Standard-GPT-Modus."
 
-    full_path = os.path.join(PROMPT_DIR, file_name)
-    if not os.path.exists(full_path):
-        return f"[Fehler: Prompt-Datei {file_name} nicht gefunden]"
-
-    with open(full_path, "r", encoding="utf-8") as f:
-        return f.read()
+    return project.get("prompt_text", "Handle im Stil der Holding.")
