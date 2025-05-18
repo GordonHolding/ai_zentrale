@@ -4,6 +4,8 @@ import os
 import openai
 import fitz  # PyMuPDF
 from modules.ai_intelligenz.gpt_prompt_selector import load_prompt_for_project
+from modules.reasoning_intelligenz.memory_log import log_interaction
+from datetime import datetime
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -26,6 +28,15 @@ def summarize_pdf(pdf_path: str, project_key="2.0_GORDON_HOLDING", instruction="
                 {"role": "user", "content": f"{instruction}\n\n{text}"}
             ]
         )
-        return response.choices[0].message["content"]
+        summary = response.choices[0].message["content"]
+
+        log_interaction("System", {
+            "type": "PDFSummary",
+            "file": os.path.basename(pdf_path),
+            "summary": summary[:300],
+            "timestamp": datetime.now().isoformat()
+        })
+
+        return summary
     except Exception as e:
         return f"❌ Fehler bei GPT-Zusammenfassung: {e}"
