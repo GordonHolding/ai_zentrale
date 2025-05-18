@@ -1,14 +1,19 @@
-import json
+# memory_log.py
+
 import os
+import json
 from datetime import datetime
 
-LOG_FILE = "memory_log.json"
+DEFAULT_LOG_FILE = "0.3 AI-Regelwerk & Historie/Systemregeln/Chat-History/memory_log.json"
 
-def log_interaction(user, prompt, response):
+def log_interaction(user, prompt, response, path=DEFAULT_LOG_FILE):
     memory = []
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE) as f:
-            memory = json.load(f)
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            try:
+                memory = json.load(f)
+            except:
+                memory = []
     memory.append({
         "type": "chat",
         "user": user,
@@ -16,17 +21,17 @@ def log_interaction(user, prompt, response):
         "response": response,
         "timestamp": datetime.utcnow().isoformat()
     })
-    with open(LOG_FILE, "w") as f:
-        json.dump(memory, f, indent=2)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(memory, f, indent=2, ensure_ascii=False)
 
-def log_mail_entry(mail_id, sender, subject, category, summary):
-    """
-    Erweitert das Memory-Log um strukturierte E-Mail-Einträge.
-    """
+def log_mail_entry(mail_id, sender, subject, category, summary, path=DEFAULT_LOG_FILE):
     memory = []
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE) as f:
-            memory = json.load(f)
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            try:
+                memory = json.load(f)
+            except:
+                memory = []
     memory.append({
         "type": "mail",
         "mail_id": mail_id,
@@ -36,5 +41,5 @@ def log_mail_entry(mail_id, sender, subject, category, summary):
         "summary": summary,
         "timestamp": datetime.utcnow().isoformat()
     })
-    with open(LOG_FILE, "w") as f:
-        json.dump(memory, f, indent=2)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(memory, f, indent=2, ensure_ascii=False)
