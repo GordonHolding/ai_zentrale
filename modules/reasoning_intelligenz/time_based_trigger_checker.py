@@ -3,8 +3,7 @@
 import os
 import json
 import datetime
-from modules.output_infrastruktur.mail_tools import send_reminder_mail  # optional
-from modules.reasoning_intelligenz.reminder_engine import trigger_custom_action  # frei definierbar
+from modules.reasoning_intelligenz.trigger_custom_action import execute_trigger_action
 
 CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/trigger_config.json"
 
@@ -26,16 +25,15 @@ def check_and_execute_triggers(current_time=None):
             if not trigger.get("enabled", True):
                 continue
 
-            trigger_time = trigger.get("time")  # Format: "14:00"
-            trigger_day = trigger.get("day")  # Optional: "Monday", "daily"
+            trigger_time = trigger.get("time")  # z. B. "09:00"
+            trigger_day = trigger.get("day")    # z. B. "Monday" oder "daily"
 
             now_str = current_time.strftime("%H:%M")
             weekday_str = current_time.strftime("%A")
 
             if (trigger_day.lower() == "daily" or trigger_day == weekday_str) and now_str == trigger_time:
-                # Triggeraktion ausführen
-                trigger_custom_action(trigger)  # oder eigene Engine
-                executed.append(trigger["name"])
+                result = execute_trigger_action(trigger)
+                executed.append(f"{trigger['name']} → {result}")
 
         except Exception as e:
             executed.append(f"{trigger.get('name', 'Unbekannt')} ❌ Fehler: {e}")
