@@ -1,12 +1,13 @@
 import openai
 from mail_triggers import (
     archive_message, mark_as_read, apply_label,
-    save_draft, extract_attachments, detect_iban,
+    extract_attachments, detect_iban,
     extract_pdf_attachments, sender_prioritization,
     log_email_to_memory, get_threads
 )
 from mail_config import load_mail_agent_prompt
 from modules.ai_intelligenz.thread_summary import summarize_thread_messages
+from modules.output_infrastruktur.mail_tools import send_mail
 
 MAIL_AGENT_SYSTEM_PROMPT = load_mail_agent_prompt()
 
@@ -49,30 +50,49 @@ def route_gpt_decision(snippet, service, msg_data):
             messages=[
                 {"role": "system", "content": MAIL_AGENT_SYSTEM_PROMPT},
                 {"role": "user", "content": user_message}
-            ]
+            ],
+            functions=[]  # optional: JSON-mode support
         )
 
-        gpt_reply = response.choices[0].message["content"].lower()
+        gpt_reply = response.choices[0].message["content"].strip().lower()
 
-        if "archivieren" in gpt_reply or "archive" in gpt_reply:
+        # Optional: mail_mode aus GPT-Antwort ableiten
+        mail_mode = "save_draft_confirm"
+        if "sofort senden" in gpt_reply or "send_now" in gpt_reply:
+            mail_mode = "send_now"
+        elif "nur entwurf" in gpt_reply or "save_draft_prepare" in gpt_reply:
+            mail_mode = "save_draft_prepare"
+        elif "freigabe" in gpt_reply or "save_draft_confirm" in gpt_reply:
+            mail_mode = "save_draft_confirm"
+
+        # GPT-gesteuerte Aktionen
+        if "archivieren" in gpt_reply:
             archive_message(service, msg_id)
         if "label" in gpt_reply:
             apply_label(service, msg_data)
-        if "entwurf" in gpt_reply or "antwort" in gpt_reply or "draft" in gpt_reply:
-            save_draft(service, msg_data, "Vielen Dank für Ihre Nachricht.")
-        if "gelesen" in gpt_reply or "read" in gpt_reply:
+        if "antwort" in gpt_reply or "mail schreiben" in gpt_reply:
+            send_mail(
+                recipient=sender,
+                subject=f"RE: {subject}",
+                message_text="Vielen Dank für Ihre Nachricht. Wir melden uns zeitnah.",
+                html_text=None,
+                attachments=None,
+                mail_mode=mail_mode
+            )
+        if "gelesen" in gpt_reply:
             mark_as_read(service, msg_id)
-        if "anhang" in gpt_reply or "attachment" in gpt_reply:
+        if "anhang" in gpt_reply:
             extract_attachments(service, msg_data)
         if detect_iban(msg_data):
             apply_label(service, msg_data)
+
         pdfs = extract_pdf_attachments(msg_data)
         if pdfs:
             print(f"📄 PDF-Anhänge erkannt: {len(pdfs)} Dateien")
 
         sender_prioritization(service, msg_data)
         log_email_to_memory(msg_data, category="unclassified", summary=gpt_reply[:200])
-        print(f"🧠 GPT-Routing abgeschlossen: {gpt_reply}")
+        print(f"🧠 GPT-Routing abgeschlossen: {gpt_reply} | Modus: {mail_mode}")
 
     except Exception as e:
         print(f"❌ GPT-Routing-Fehler: {e}")
