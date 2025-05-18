@@ -1,38 +1,55 @@
-import json
+# memory_log_search.py
+
 import os
+import json
 from typing import List, Dict
 
-MEMORY_LOG_PATH = "memory_log.json"
+MEMORY_BASE_PATH = "0.2 Agenten"
+
+def collect_memory_files() -> List[str]:
+    """
+    Sammelt alle .json-Dateien aus *_Memory/ Ordnern in allen Agentenstrukturen.
+    """
+    collected = []
+    for root, dirs, files in os.walk(MEMORY_BASE_PATH):
+        if "_Memory" in root:
+            for file in files:
+                if file.endswith(".json"):
+                    collected.append(os.path.join(root, file))
+    return collected
 
 def memory_log_search(criteria: str) -> List[Dict]:
     """
-    Durchsucht das Memory-Log nach Keywords im Kontext von GPT-Antworten, E-Mails oder Notizen.
+    Durchsucht alle Memory-Files nach dem Kriterium (Text-Snippet).
     """
-    if not os.path.exists(MEMORY_LOG_PATH):
-        return [{"result": "🔍 Kein Memory-Log vorhanden."}]
+    results = []
+    files = collect_memory_files()
 
-    with open(MEMORY_LOG_PATH) as f:
+    if not files:
+        return [{"result": "⚠️ Keine Memory-Dateien gefunden."}]
+
+    for path in files:
         try:
-            memory = json.load(f)
-        except json.JSONDecodeError:
-            return [{"result": "⚠️ Fehler beim Lesen der Memory-Logdatei."}]
+            with open(path, encoding="utf-8") as f:
+                memory = json.load(f)
+                for entry in memory:
+                    entry_text = " ".join([
+                        str(entry.get("prompt", "")),
+                        str(entry.get("response", "")),
+                        str(entry.get("summary", "")),
+                        str(entry.get("subject", "")),
+                        str(entry.get("category", "")),
+                        str(entry.get("type", ""))
+                    ]).lower()
 
-    # Filterfunktion: einfache Teiltextsuche über Schlüsselwerte
-    matches = []
-    for entry in memory:
-        entry_text = " ".join([
-            str(entry.get("prompt", "")),
-            str(entry.get("response", "")),
-            str(entry.get("summary", "")),
-            str(entry.get("subject", "")),
-            str(entry.get("category", "")),
-            str(entry.get("type", ""))
-        ]).lower()
+                    if criteria.lower() in entry_text:
+                        result_entry = dict(entry)
+                        result_entry["source"] = path
+                        results.append(result_entry)
+        except:
+            continue
 
-        if criteria.lower() in entry_text:
-            matches.append(entry)
-
-    if not matches:
+    if not results:
         return [{"result": f"❌ Keine Einträge gefunden für: '{criteria}'"}]
 
-    return matches
+    return results
