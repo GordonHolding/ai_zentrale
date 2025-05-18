@@ -1,4 +1,4 @@
-# gpt_vision_handler.py – Modul 1: Bilderkennung per GPT-4o Vision
+# gpt_vision_handler.py – GPT-4o Vision Modul
 
 import os
 import openai
@@ -6,7 +6,6 @@ import base64
 from PIL import Image
 from io import BytesIO
 
-# Konfiguration: GPT mit Vision (automatisch aktiviert bei Bild-Input)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def analyze_image(file_path: str, user_instruction: str = "Was ist auf diesem Bild zu sehen?") -> str:
@@ -19,7 +18,6 @@ def analyze_image(file_path: str, user_instruction: str = "Was ist auf diesem Bi
             img.save(buffered, format="PNG")
             img_b64 = base64.b64encode(buffered.getvalue()).decode()
 
-        # GPT aufrufen mit Vision-Modus
         response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
