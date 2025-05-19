@@ -1,34 +1,53 @@
-# json_loader.py – rekursiver JSON-Scanner für alle AI-Zentrale-Verzeichnisse
+# json_loader.py – Zentrale Verwaltung aller JSON-Dateien im System (rekursiv, GPT-kompatibel)
 
 import os
 import json
 
-ROOT_DIR = os.getenv("AI_ZENTRALE_ROOT") or "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale"
+# Basisverzeichnis, in dem alle .json-Dateien liegen können (rekursiv durchsucht)
+CONFIG_DIR = os.getenv("CONFIG_DIR") or "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale"
 
 def load_config(filename: str) -> dict:
     """
-    Sucht rekursiv nach einer Datei mit exakt diesem Namen und lädt sie als JSON.
-    Gibt ein leeres Dict zurück, falls Datei nicht gefunden oder fehlerhaft ist.
+    Lädt eine JSON-Konfigurationsdatei aus dem zentralen Verzeichnis (CONFIG_DIR).
+    Gibt ein leeres Dict zurück, falls Datei fehlt oder ungültig ist.
     """
-    for dirpath, _, filenames in os.walk(ROOT_DIR):
-        if filename in filenames:
-            try:
-                path = os.path.join(dirpath, filename)
-                with open(path, "r", encoding="utf-8") as f:
+    try:
+        for root, _, files in os.walk(CONFIG_DIR):
+            if filename in files:
+                full_path = os.path.join(root, filename)
+                with open(full_path, "r", encoding="utf-8") as f:
                     return json.load(f)
-            except Exception as e:
-                print(f"❌ Fehler beim Laden von {filename}: {e}")
-                return {}
-    print(f"⚠️ Datei {filename} nicht gefunden.")
-    return {}
+        return {"error": f"{filename} nicht gefunden in {CONFIG_DIR}"}
+    except Exception as e:
+        return {"error": f"Fehler beim Laden von {filename}: {e}"}
 
-def list_all_jsons() -> list:
+def list_all_configs(extension: str = ".json") -> list:
     """
-    Gibt eine Liste aller .json-Dateien in AI-Zentrale zurück (rekursiv).
+    Gibt eine Liste aller .json-Dateien im gesamten CONFIG_DIR zurück.
     """
-    json_files = []
-    for dirpath, _, filenames in os.walk(ROOT_DIR):
-        for f in filenames:
-            if f.endswith(".json"):
-                json_files.append(os.path.join(dirpath, f))
-    return json_files
+    result = []
+    try:
+        for root, _, files in os.walk(CONFIG_DIR):
+            for file in files:
+                if file.endswith(extension):
+                    result.append(os.path.join(root, file))
+        return result
+    except Exception as e:
+        print(f"❌ Fehler beim Auflisten der Configs: {e}")
+        return []
+
+def get_json_by_keyword(keyword: str) -> dict:
+    """
+    Findet eine JSON-Datei im CONFIG_DIR, deren Dateiname das Keyword enthält.
+    Gibt das geladene Dict zurück oder eine Fehlermeldung.
+    """
+    try:
+        for root, _, files in os.walk(CONFIG_DIR):
+            for file in files:
+                if file.endswith(".json") and keyword.lower() in file.lower():
+                    path = os.path.join(root, file)
+                    with open(path, "r", encoding="utf-8") as f:
+                        return json.load(f)
+        return {"error": f"Keine passende JSON-Datei mit Keyword '{keyword}' gefunden."}
+    except Exception as e:
+        return {"error": f"Fehler beim Suchen nach JSON: {e}"}
