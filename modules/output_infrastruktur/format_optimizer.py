@@ -1,16 +1,21 @@
+# format_optimizer.py
+
 def format_text_ci_style(text: str) -> str:
     """
     Optimiert Text nach CI-Vorgaben:
-    - Absätze harmonisieren
-    - Headlines erkennen & formatieren
-    - Einrückungen bereinigen
-    - Zeilen umbrechen
+    – Absätze harmonisieren
+    – Headlines erkennen & formatieren
+    – Einrückungen bereinigen
+    – Zeilen umbrechen
     """
     lines = text.strip().split("\n")
     formatted = []
+
     for line in lines:
-        if line.strip().endswith(":"):
-            formatted.append(f"\n\n{line.strip().upper()}")  # Headlines betonen
+        clean = line.strip()
+        if clean.endswith(":"):
+            formatted.append(f"\n\n{clean.upper()}")  # Headlines betonen
         else:
-            formatted.append(line.strip())
+            formatted.append(clean)
+
     return "\n".join(formatted)
