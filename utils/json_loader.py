@@ -1,30 +1,34 @@
-# json_loader.py
+# json_loader.py – rekursiver JSON-Scanner für alle AI-Zentrale-Verzeichnisse
 
 import os
 import json
 
-# Standardverzeichnis für alle systemweiten JSON-Dateien
-JSON_DIR = os.getenv("JSON_DIR") or "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.3 AI-Regelwerk & Historie/Systemregeln/Config"
+ROOT_DIR = os.getenv("AI_ZENTRALE_ROOT") or "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale"
 
-def load_json(filename: str) -> dict:
+def load_config(filename: str) -> dict:
     """
-    Lädt eine JSON-Datei aus dem zentralen JSON-Verzeichnis.
-    Gibt ein leeres Dict zurück, falls Datei fehlt oder ungültig ist.
+    Sucht rekursiv nach einer Datei mit exakt diesem Namen und lädt sie als JSON.
+    Gibt ein leeres Dict zurück, falls Datei nicht gefunden oder fehlerhaft ist.
     """
-    try:
-        path = os.path.join(JSON_DIR, filename)
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"❌ Fehler beim Laden von {filename}: {e}")
-        return {}
+    for dirpath, _, filenames in os.walk(ROOT_DIR):
+        if filename in filenames:
+            try:
+                path = os.path.join(dirpath, filename)
+                with open(path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"❌ Fehler beim Laden von {filename}: {e}")
+                return {}
+    print(f"⚠️ Datei {filename} nicht gefunden.")
+    return {}
 
-def list_json_files(extension: str = ".json") -> list:
+def list_all_jsons() -> list:
     """
-    Gibt eine Liste aller .json-Dateien im JSON_DIR zurück.
+    Gibt eine Liste aller .json-Dateien in AI-Zentrale zurück (rekursiv).
     """
-    try:
-        return [f for f in os.listdir(JSON_DIR) if f.endswith(extension)]
-    except Exception as e:
-        print(f"❌ Fehler beim Auflisten der JSON-Dateien: {e}")
-        return []
+    json_files = []
+    for dirpath, _, filenames in os.walk(ROOT_DIR):
+        for f in filenames:
+            if f.endswith(".json"):
+                json_files.append(os.path.join(dirpath, f))
+    return json_files
