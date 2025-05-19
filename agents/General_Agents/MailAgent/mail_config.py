@@ -1,6 +1,6 @@
 import os
 
-MAIL_AGENT_BASE_PATH = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.2 Agenten/Infrastructure_Agents/MailAgent"
+MAIL_AGENT_BASE_PATH = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.2 Agenten/General_Agents/MailAgent"
 
 SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
