@@ -1,7 +1,7 @@
 # json_agent.py – zentrale Logik für GPT-gesteuerte JSON-Verwaltung
 
-from agents.Infrastructure_Agents.JsonAgent.json_utils import load_json, write_json
-from agents.Infrastructure_Agents.JsonAgent.json_config import JSON_CONFIG_LIST
+from agents.General_Agents.JsonAgent.json_loader import load_json, write_json
+from agents.General_Agents.JsonAgent.json_config import JSON_CONFIG_LIST
 from datetime import datetime
 from modules.reasoning_intelligenz.memory_log import log_interaction
 
@@ -10,14 +10,12 @@ def update_json_entry(file_key, key, value, overwrite=False):
     if not config:
         return f"❌ Datei-Konfiguration für '{file_key}' nicht gefunden."
 
-    path = config["path"]
-    data = load_json(path)
-
+    data = load_json(config["filename"])
     if not overwrite and key in data:
         return f"⚠️ Schlüssel '{key}' existiert bereits in '{file_key}'."
 
     data[key] = value
-    write_json(path, data)
+    write_json(config["filename"], data)
 
     log_interaction("System", {
         "type": "JsonUpdate",
