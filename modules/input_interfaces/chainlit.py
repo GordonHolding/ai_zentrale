@@ -29,7 +29,7 @@ async def main(message):
     print(f"🧠 Chainlit Input: {user_input}")
 
     try:
-        # 🔍 Memory Trigger (z. B. „Erinnere dich an …“)
+        # 🔍 Memory Trigger
         if any(k in user_input.lower() for k in load_keywords()):
             results = memory_log_search(user_input)
             if results:
@@ -39,13 +39,13 @@ async def main(message):
                 await cl.Message(content=summary).send()
                 return
 
-        # ⚡ Trigger-Dispatch (optional GPT-Zugriff auf Routinen)
+        # ⚡ Trigger Dispatch
         if any(trigger_word in user_input.lower() for trigger_word in ["systemscan", "guardian", "zeittrigger", "reminder"]):
             result = handle_trigger_input(user_input)
             await cl.Message(content=str(result)).send()
             return
 
-        # 🧠 GPT-Verlauf & Kontext
+        # 🧠 GPT-Logik & Kontext
         messages = log_and_get_context(user_id, user_input)
         response = openai.ChatCompletion.create(
             model="gpt-4o",
@@ -57,4 +57,9 @@ async def main(message):
         await cl.Message(content=reply).send()
 
     except Exception as e:
-        await cl.Message(content=f"❌ Systemfehler: {e}").send()
+        await cl.Message(content=f"❌ Systemfehler: {str(e)}").send()
+
+
+# ▶ Start über main_controller.py möglich
+def main():
+    os.system("chainlit run chainlit.py --port 8000")
