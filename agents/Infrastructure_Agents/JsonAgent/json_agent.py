@@ -1,9 +1,9 @@
 # json_agent.py – zentrale Logik für GPT-gesteuerte JSON-Verwaltung
 
-from agents.General_Agents.JsonAgent.json_loader import load_json, write_json
-from agents.General_Agents.JsonAgent.json_config import JSON_CONFIG_LIST
+from .json_loader import load_json, write_json
+from .json_config import JSON_CONFIG_LIST
 from datetime import datetime
-from modules.reasoning_intelligenz.memory_log import log_interaction
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
 def update_json_entry(file_key, key, value, overwrite=False):
     config = JSON_CONFIG_LIST.get(file_key)
@@ -26,3 +26,8 @@ def update_json_entry(file_key, key, value, overwrite=False):
     })
 
     return f"✅ '{key}' wurde in '{file_key}' aktualisiert."
+
+
+# ▶ Beispielhafte Initialisierung
+def main():
+    print("✅ JSON Agent initialisiert.")
