@@ -4,7 +4,7 @@ import json
 from modules.reasoning_intelligenz.gpt_prompt_selector import load_prompt_for_project
 from modules.reasoning_intelligenz.global_identity_prompt import get_system_prompt
 from modules.reasoning_intelligenz.structure_content_loader import get_all_structures
-from utils.json_loader import load_json
+from utils.json_loader import load_config as load_json
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_system_start
 
 CONFIG_PATH = "0.4 GPT-Tools/startup_loader/startup_loader_config.json"
