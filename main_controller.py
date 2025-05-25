@@ -1,36 +1,30 @@
-# main_controller.py – Zentraler Einstiegspunkt für AI-ZENTRALE
+# main_controller.py – Zentrale Steuerinstanz der AI-ZENTRALE
 
 import json
+import importlib
 import os
-from importlib import import_module
-from chainlit.cli.main import run_chainlit  # Chainlit direkt ausführen
+import time
 
-# Systemmodule laden
-CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/system_modules.json"
+from modules.utils.json_loader import load_json_file
 
+# 🔄 Lade aktivierte Module
 def load_active_modules():
-    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-        modules = json.load(f)
-    return [m for m in modules if m.get("active")]
+    config_path = "0.3 AI-Regelwerk & Historie/Systemregeln/system_modules.json"
+    modules = load_json_file(config_path)
+    return [m for m in modules if m.get("active") is True]
 
-def start_chainlit():
-    print("🚀 Starte Chainlit Interface auf Port 8000...")
-    run_chainlit(path="ai_zentrale/modules/input_interfaces/chainlit.py", port=8000)
-
-def start_all_modules():
-    active_modules = load_active_modules()
-    for module in active_modules:
-        if module["filename"] == "chainlit.py":
-            # Chainlit wird separat als Server gestartet
-            start_chainlit()
-        else:
-            try:
-                import_path = module["import_path"]
-                import_module(import_path)
-                print(f"✅ Modul geladen: {import_path}")
-            except Exception as e:
-                print(f"❌ Fehler beim Laden von {module['filename']}: {str(e)}")
+# ▶ Starte Module nacheinander
+def run_modules():
+    modules = load_active_modules()
+    for module in modules:
+        try:
+            import_path = module["import_path"]
+            print(f"🟢 Lade Modul: {import_path}")
+            importlib.import_module(import_path)
+        except Exception as e:
+            print(f"❌ Fehler beim Laden von {import_path}: {e}")
 
 if __name__ == "__main__":
-    print("📦 Starte AI-ZENTRALE über main_controller.py...")
-    start_all_modules()
+    print("🚀 Starte MAIN CONTROLLER ...")
+    time.sleep(1)
+    run_modules()
