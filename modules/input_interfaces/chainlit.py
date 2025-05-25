@@ -4,6 +4,7 @@ import chainlit as cl
 import os
 import openai
 import json
+import subprocess
 
 from modules.reasoning_intelligenz.conversation_tracker import (
     log_and_get_context, add_gpt_reply
@@ -11,8 +12,13 @@ from modules.reasoning_intelligenz.conversation_tracker import (
 from agents.Infrastructure_Agents.MemoryAgent.memory_log_search import memory_log_search
 from agents.Infrastructure_Agents.TriggerAgent.trigger_router import handle_trigger_input
 
+# 🔁 Starte zentralen Backend-Controller beim UI-Start
+subprocess.Popen(["python3", "main_controller.py"])
+
+# 🔑 API-Key für GPT
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# 🔍 GPT-Schlüsselwörter für Memory-Suche
 CONFIG_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/"
 KEYWORDS_PATH = os.path.join(CONFIG_DIR, "gpt_memory_keywords.json")
 
@@ -22,14 +28,15 @@ def load_keywords():
             return json.load(f)
     return []
 
+# 📥 Eingehende Nachrichten aus Chainlit-UI
 @cl.on_message
-async def on_message(message):
+async def main(message):
     user_input = message.content
     user_id = cl.user_session.id
     print(f"🧠 Chainlit Input: {user_input}")
 
     try:
-        # 🔍 Memory Trigger
+        # 🧠 GPT-Memory-Suche (Log-Durchsuchung)
         if any(k in user_input.lower() for k in load_keywords()):
             results = memory_log_search(user_input)
             if results:
@@ -39,13 +46,13 @@ async def on_message(message):
                 await cl.Message(content=summary).send()
                 return
 
-        # ⚡ Trigger Dispatch (derzeit optional, wird später scharfgestellt)
-        if any(trigger_word in user_input.lower() for trigger_word in ["systemscan", "guardian", "zeittrigger", "reminder"]):
+        # ⚡ Trigger-Agent
+        if any(t in user_input.lower() for t in ["systemscan", "guardian", "zeittrigger", "reminder"]):
             result = handle_trigger_input(user_input)
             await cl.Message(content=str(result)).send()
             return
 
-        # 🧠 GPT-Antwort mit Kontext
+        # 🤖 GPT-Kontextgenerierung
         messages = log_and_get_context(user_id, user_input)
         response = openai.ChatCompletion.create(
             model="gpt-4o",
@@ -53,6 +60,7 @@ async def on_message(message):
         )
         reply = response.choices[0].message["content"].strip()
         add_gpt_reply(user_id, reply)
+
         await cl.Message(content=reply).send()
 
     except Exception as e:
