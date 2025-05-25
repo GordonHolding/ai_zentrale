@@ -8,7 +8,7 @@ import json
 from modules.reasoning_intelligenz.conversation_tracker import (
     log_and_get_context, add_gpt_reply
 )
-from modules.reasoning_intelligenz.memory_log_search import memory_log_search
+from agents.Infrastructure_Agents.MemoryAgent.memory_log_search import memory_log_search
 from agents.Infrastructure_Agents.TriggerAgent.trigger_router import handle_trigger_input
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
