@@ -1,9 +1,7 @@
-# drive_uploader.py
-
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from modules.google_utils import get_credentials
-from modules.reasoning_intelligenz.memory_log import log_interaction
+from modules.authentication.google_utils import get_credentials
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 from datetime import datetime
 import os
 
