@@ -5,7 +5,7 @@ import importlib
 import os
 import time
 
-from modules.utils.json_loader import load_json_file
+from utils.json_loader import load_json_file
 
 # 🔄 Lade aktivierte Module
 def load_active_modules():
