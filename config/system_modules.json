@@ -518,11 +518,6 @@
         "import_path": "modules.input_interfaces.telegram_file_handler"
     },
     {
-        "filename": "chainlit.py",
-        "active": true,
-        "import_path": "chainlit"
-    },
-    {
         "filename": "telegram_bot.py",
         "active": false,
         "import_path": "telegram_bot"
