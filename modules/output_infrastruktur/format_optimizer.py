@@ -1,4 +1,4 @@
-# format_optimizer.py
+# format_optimizer.py – Optimiert Text nach CI-Vorgaben
 
 def format_text_ci_style(text: str) -> str:
     """
@@ -13,6 +13,8 @@ def format_text_ci_style(text: str) -> str:
 
     for line in lines:
         clean = line.strip()
+        if not clean:
+            continue
         if clean.endswith(":"):
             formatted.append(f"\n\n{clean.upper()}")  # Headlines betonen
         else:
