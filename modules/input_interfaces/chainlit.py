@@ -15,7 +15,7 @@ from agents.Infrastructure_Agents.TriggerAgent.trigger_router import handle_trig
 # 🔁 Starte zentralen Backend-Controller beim UI-Start
 subprocess.Popen(["python3", "main_controller.py"])
 
-# 🔑 API-Key für GPT
+# 🔑 GPT-API-Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 🔍 GPT-Schlüsselwörter für Memory-Suche
@@ -28,7 +28,7 @@ def load_keywords():
             return json.load(f)
     return []
 
-# 📥 Eingehende Nachrichten aus Chainlit-UI
+# 📥 Eingehende Nachrichten aus der UI
 @cl.on_message
 async def main(message):
     user_input = message.content
@@ -36,7 +36,7 @@ async def main(message):
     print(f"🧠 Chainlit Input: {user_input}")
 
     try:
-        # 🧠 GPT-Memory-Suche (Log-Durchsuchung)
+        # 🔍 Memory Trigger (Schlüsselwortsuche)
         if any(k in user_input.lower() for k in load_keywords()):
             results = memory_log_search(user_input)
             if results:
@@ -46,13 +46,13 @@ async def main(message):
                 await cl.Message(content=summary).send()
                 return
 
-        # ⚡ Trigger-Agent
+        # ⚡ Trigger Agent
         if any(t in user_input.lower() for t in ["systemscan", "guardian", "zeittrigger", "reminder"]):
             result = handle_trigger_input(user_input)
             await cl.Message(content=str(result)).send()
             return
 
-        # 🤖 GPT-Kontextgenerierung
+        # 🤖 GPT-Kontext & Antwort
         messages = log_and_get_context(user_id, user_input)
         response = openai.ChatCompletion.create(
             model="gpt-4o",
