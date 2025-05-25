@@ -3,8 +3,8 @@
 import json
 import os
 from googleapiclient.discovery import build
-from modules.google_utils import get_credentials
-from modules.reasoning_intelligenz.memory_log import log_interaction
+from modules.authentication.google_utils import get_credentials
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 from datetime import datetime
 
 CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/drive_index_config.json"
