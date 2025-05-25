@@ -6,8 +6,9 @@ import openai
 import json
 import subprocess
 
-from modules.reasoning_intelligenz.conversation_tracker import (
-    log_and_get_context, add_gpt_reply
+from agents.Infrastructure_Agents.MemoryAgent.conversation_tracker import (
+    log_and_get_context,
+    add_gpt_reply
 )
 from agents.Infrastructure_Agents.MemoryAgent.memory_log_search import memory_log_search
 from agents.Infrastructure_Agents.TriggerAgent.trigger_router import handle_trigger_input
