@@ -2,539 +2,539 @@
     {
         "filename": "agent_loader.py",
         "active": true,
-        "import_path": "ai_zentrale.utils.agent_loader"
+        "import_path": "utils.agent_loader"
     },
     {
         "filename": "json_loader.py",
         "active": true,
-        "import_path": "ai_zentrale.utils.json_loader"
+        "import_path": "utils.json_loader"
     },
     {
         "filename": "mail_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.MailAgent.mail_agent"
+        "import_path": "agents.General_Agents.MailAgent.mail_agent"
     },
     {
         "filename": "mail_config.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.MailAgent.mail_config"
+        "import_path": "agents.General_Agents.MailAgent.mail_config"
     },
     {
         "filename": "mail_gpt_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.MailAgent.mail_gpt_router"
+        "import_path": "agents.General_Agents.MailAgent.mail_gpt_router"
     },
   
     {
         "filename": "multi_account_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.MailAgent.multi_account_router"
+        "import_path": "agents.General_Agents.MailAgent.multi_account_router"
     },
     {
         "filename": "auto_reply_engine.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.auto_reply_engine"
+        "import_path": "modules.output_infrastruktur.auto_reply_engine"
     },
     {
         "filename": "mail_tools.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.mail_tools"
+        "import_path": "modules.output_infrastruktur.mail_tools"
     },
     {
         "filename": "calendar_tools.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.CalendarAgent.calendar_tools"
+        "import_path": "agents.General_Agents.CalendarAgent.calendar_tools"
     },
     {
         "filename": "calendar_reader.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.CalendarAgent.calendar_reader"
+        "import_path": "agents.General_Agents.CalendarAgent.calendar_reader"
     },
     {
         "filename": "text_agent.py",
         "active": true,
-        "import_path": "ai_zentrale.agents.General_Agents.TextAgent.text_agent"
+        "import_path": "agents.General_Agents.TextAgent.text_agent"
     },
     {
         "filename": "text_templates.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.TextAgent.text_templates"
+        "import_path": "agents.General_Agents.TextAgent.text_templates"
     },
     {
         "filename": "text_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.TextAgent.text_router"
+        "import_path": "agents.General_Agents.TextAgent.text_router"
     },
     {
         "filename": "text_summarizer.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.TextAgent.text_summarizer"
+        "import_path": "agents.General_Agents.TextAgent.text_summarizer"
     },
     {
         "filename": "create_text_snippet.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.TextAgent.create_text_snippet"
+        "import_path": "agents.General_Agents.TextAgent.create_text_snippet"
     },
     {
         "filename": "text_creator.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.TextAgent.text_creator"
+        "import_path": "agents.General_Agents.TextAgent.text_creator"
     },
     {
         "filename": "document_template_engine.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.document_template_engine"
+        "import_path": "modules.output_infrastruktur.document_template_engine"
     },
     {
         "filename": "pdf_export_engine.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.pdf_export_engine"
+        "import_path": "modules.output_infrastruktur.pdf_export_engine"
     },
     {
         "filename": "pdf_summary_export.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.pdf_summary_export"
+        "import_path": "modules.output_infrastruktur.pdf_summary_export"
     },
     {
         "filename": "pdf_generator_weasyprint.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.pdf_generator_weasyprint"
+        "import_path": "modules.output_infrastruktur.pdf_generator_weasyprint"
     },
     {
         "filename": "gpt_pdf_summary.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.gpt_pdf_summary"
+        "import_path": "modules.output_infrastruktur.gpt_pdf_summary"
     },
     {
         "filename": "sheet_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_agent"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_agent"
     },
     {
         "filename": "sheet_generator.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_generator"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_generator"
     },
     {
         "filename": "sheet_reader.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_reader"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_reader"
     },
     {
         "filename": "sheet_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_router"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_router"
     },
     {
         "filename": "sheet_templates.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_templates"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_templates"
     },
     {
         "filename": "sheet_creator.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_creator"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_creator"
     },
     {
         "filename": "sheet_summary.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.SheetAgent.sheet_summary"
+        "import_path": "agents.General_Agents.SheetAgent.sheet_summary"
     },
     {
         "filename": "agent_suggester.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.AgentSuggester.agent_suggester"
+        "import_path": "agents.General_Agents.AgentSuggester.agent_suggester"
     },
     {
         "filename": "agent_suggester_prompt.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.AgentSuggester.agent_suggester_prompt"
+        "import_path": "agents.General_Agents.AgentSuggester.agent_suggester_prompt"
     },
     {
         "filename": "agent_suggester_log.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.AgentSuggester.agent_suggester_log"
+        "import_path": "agents.General_Agents.AgentSuggester.agent_suggester_log"
     },
     {
         "filename": "agent_suggester_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.General_Agents.AgentSuggester.agent_suggester_router"
+        "import_path": "agents.General_Agents.AgentSuggester.agent_suggester_router"
     },
     {
         "filename": "json_agent.py",
         "active": true,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.JsonAgent.json_agent"
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_agent"
     },
     {
         "filename": "json_config.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.JsonAgent.json_config"
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_config"
     },
     {
         "filename": "json_utils.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.JsonAgent.json_utils"
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_utils"
     },
     {
         "filename": "json_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.JsonAgent.json_router"
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_router"
     },
     {
         "filename": "gpt_vision_handler.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.VisionAgent.gpt_vision_handler"
+        "import_path": "agents.Infrastructure_Agents.VisionAgent.gpt_vision_handler"
     },
     {
         "filename": "memory_agent.py",
         "active": true,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.MemoryAgent.memory_agent"
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_agent"
     },
     {
         "filename": "memory_config.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.MemoryAgent.memory_config"
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_config"
     },
     {
         "filename": "memory_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.MemoryAgent.memory_router"
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_router"
     },
 
     {
         "filename": "memory_log.py",
         "active": true,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.MemoryAgent.memory_log"
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_log"
     },
     {
         "filename": "memory_log_search.py",
         "active": true,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.MemoryAgent.memory_log_search"
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_log_search"
     },
     {
         "filename": "router_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.RouterAgent.router_agent"
+        "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent"
     },
     {
         "filename": "router_config.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.RouterAgent.router_config"
+        "import_path": "agents.Infrastructure_Agents.RouterAgent.router_config"
     },
     {
         "filename": "router_prompt_loader.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.RouterAgent.router_prompt_loader"
+        "import_path": "agents.Infrastructure_Agents.RouterAgent.router_prompt_loader"
     },
     {
         "filename": "router_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.RouterAgent.router_router"
+        "import_path": "agents.Infrastructure_Agents.RouterAgent.router_router"
     },
 
     {
         "filename": "list_available_agents.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.RouterAgent.list_available_agents"
+        "import_path": "agents.Infrastructure_Agents.RouterAgent.list_available_agents"
     },
     {
         "filename": "systemguardian_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.systemguardian_agent"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_agent"
     },
     {
         "filename": "systemguardian_config.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.systemguardian_config"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_config"
     },
     {
         "filename": "systemguardian_triggers.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.systemguardian_triggers"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_triggers"
     },
     {
         "filename": "systemguardian_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.systemguardian_router"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_router"
     },
     {
         "filename": "systemguardian_prompt_loader.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.systemguardian_prompt_loader"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_prompt_loader"
     },
     {
         "filename": "list_available_guardian_functions.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.list_available_guardian_functions"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.list_available_guardian_functions"
     },
     {
         "filename": "guardian_function_registry.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.guardian_function_registry"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.guardian_function_registry"
     },
     {
         "filename": "systemguardian_analyzer.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer"
+        "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer"
     },
     {
         "filename": "trigger_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_agent"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_agent"
     },
     {
         "filename": "trigger_config.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_config"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_config"
     },
     {
         "filename": "trigger_router.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_router"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_router"
     },
     {
         "filename": "trigger_triggers.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_triggers"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_triggers"
     },
     {
         "filename": "trigger_prompt_loader.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_prompt_loader"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_prompt_loader"
     },
     {
         "filename": "trigger_runner.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_runner"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_runner"
     },
     {
         "filename": "append_to_trigger_log.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.append_to_trigger_log"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.append_to_trigger_log"
     },
     {
         "filename": "time_based_trigger_checker.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.time_based_trigger_checker"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.time_based_trigger_checker"
     },
     {
         "filename": "trigger_custom_action.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.trigger_custom_action"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_custom_action"
     },
     {
         "filename": "deadline_checker.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.deadline_checker"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.deadline_checker"
     },
     {
         "filename": "reminder_engine.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.TriggerAgent.reminder_engine"
+        "import_path": "agents.Infrastructure_Agents.TriggerAgent.reminder_engine"
     },
     {
         "filename": "watcher_trigger.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.WatcherTrigger.watcher_trigger"
+        "import_path": "agents.Infrastructure_Agents.WatcherTrigger.watcher_trigger"
     },
     {
         "filename": "watcher_trigger_log.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.WatcherTrigger.watcher_trigger_log"
+        "import_path": "agents.Infrastructure_Agents.WatcherTrigger.watcher_trigger_log"
     },
     {
         "filename": "watcher_trigger_runner.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Infrastructure_Agents.WatcherTrigger.watcher_trigger_runner"
+        "import_path": "agents.Infrastructure_Agents.WatcherTrigger.watcher_trigger_runner"
     },
     {
         "filename": "business_plan_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.business_plan_agent"
+        "import_path": "agents.Business_Core_Agents.business_plan_agent"
     },
     {
         "filename": "finance_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.finance_agent"
+        "import_path": "agents.Business_Core_Agents.finance_agent"
     },
     {
         "filename": "founders_assistant.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.founders_assistant"
+        "import_path": "agents.Business_Core_Agents.founders_assistant"
     },
     {
         "filename": "investor_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.investor_agent"
+        "import_path": "agents.Business_Core_Agents.investor_agent"
     },
     {
         "filename": "marketing_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.marketing_agent"
+        "import_path": "agents.Business_Core_Agents.marketing_agent"
     },
     {
         "filename": "project_manager_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.project_manager_agent"
+        "import_path": "agents.Business_Core_Agents.project_manager_agent"
     },
     {
         "filename": "tech_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.tech_agent"
+        "import_path": "agents.Business_Core_Agents.tech_agent"
     },
     {
         "filename": "tax_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.tax_agent"
+        "import_path": "agents.Business_Core_Agents.tax_agent"
     },
     {
         "filename": "law_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Business_Core_Agents.law_agent"
+        "import_path": "agents.Business_Core_Agents.law_agent"
     },
     {
         "filename": "education_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.education_agent"
+        "import_path": "agents.Private_Agents.education_agent"
     },
     {
         "filename": "food_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.food_agent"
+        "import_path": "agents.Private_Agents.food_agent"
     },
     {
         "filename": "friends_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.friends_agent"
+        "import_path": "agents.Private_Agents.friends_agent"
     },
     {
         "filename": "health_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.health_agent"
+        "import_path": "agents.Private_Agents.health_agent"
     },
     {
         "filename": "holiday_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.holiday_agent"
+        "import_path": "agents.Private_Agents.holiday_agent"
     },
     {
         "filename": "invest_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.invest_agent"
+        "import_path": "agents.Private_Agents.invest_agent"
     },
     {
         "filename": "love_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.love_agent"
+        "import_path": "agents.Private_Agents.love_agent"
     },
     {
         "filename": "movie_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.movie_agent"
+        "import_path": "agents.Private_Agents.movie_agent"
     },
     {
         "filename": "music_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.music_agent"
+        "import_path": "agents.Private_Agents.music_agent"
     },
     {
         "filename": "realestate_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.realestate_agent"
+        "import_path": "agents.Private_Agents.realestate_agent"
     },
     {
         "filename": "savings_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.savings_agent"
+        "import_path": "agents.Private_Agents.savings_agent"
     },
     {
         "filename": "shopping_agent.py",
         "active": false,
-        "import_path": "ai_zentrale.agents.Private_Agents.shopping_agent"
+        "import_path": "agents.Private_Agents.shopping_agent"
     },
     {
         "filename": "gpt_response_parser.py",
         "active": true,
-        "import_path": "ai_zentrale.modules.ai_intelligenz.gpt_response_parser"
+        "import_path": "modules.ai_intelligenz.gpt_response_parser"
     },
     {
         "filename": "startup_loader.py",
         "active": true,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.startup_loader"
+        "import_path": "modules.reasoning_intelligenz.startup_loader"
     },
     {
         "filename": "structure_content_loader.py",
         "active": true,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.structure_content_loader"
+        "import_path": "modules.reasoning_intelligenz.structure_content_loader"
     },
     {
         "filename": "global_identity_prompt.py",
         "active": true,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.global_identity_prompt"
+        "import_path": "modules.reasoning_intelligenz.global_identity_prompt"
     },
     {
         "filename": "gpt_prompt_selector.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.gpt_prompt_selector"
+        "import_path": "modules.reasoning_intelligenz.gpt_prompt_selector"
     },
     {
         "filename": "analytics_module.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.analytics_module"
+        "import_path": "modules.reasoning_intelligenz.analytics_module"
     },
     {
         "filename": "qa_checker.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.qa_checker"
+        "import_path": "modules.reasoning_intelligenz.qa_checker"
     },
     {
         "filename": "voice_tools.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.reasoning_intelligenz.voice_tools"
+        "import_path": "modules.reasoning_intelligenz.voice_tools"
     },
     {
         "filename": "file_uploader.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.file_uploader"
+        "import_path": "modules.output_infrastruktur.file_uploader"
     },
     {
         "filename": "drive_uploader.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.drive_uploader"
+        "import_path": "modules.output_infrastruktur.drive_uploader"
     },
     {
         "filename": "drive_indexer.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.drive_indexer"
+        "import_path": "modules.output_infrastruktur.drive_indexer"
     },
     {
         "filename": "format_optimizer.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.output_infrastruktur.format_optimizer"
+        "import_path": "modules.output_infrastruktur.format_optimizer"
     },
     {
         "filename": "telegram_file_handler.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.input_interfaces.telegram_file_handler"
+        "import_path": "modules.input_interfaces.telegram_file_handler"
     },
     {
         "filename": "chainlit.py",
         "active": true,
-        "import_path": "ai_zentrale.chainlit"
+        "import_path": "chainlit"
     },
     {
         "filename": "telegram_bot.py",
         "active": false,
-        "import_path": "ai_zentrale.telegram_bot"
+        "import_path": "telegram_bot"
     },
     {
         "filename": "gmail_auth.py",
         "active": false,
-        "import_path": "ai_zentrale.modules.authentication.gmail_auth"
+        "import_path": "modules.authentication.gmail_auth"
     },
     {
         "filename": "google_utils.py",
         "active": true,
-        "import_path": "ai_zentrale.modules.authentication.google_utils"
+        "import_path": "modules.authentication.google_utils"
     }
 ]
