@@ -1,16 +1,15 @@
-# json_loader.py – Zentrale Verwaltung aller JSON-Dateien im System (rekursiv, GPT-kompatibel)
+# json_loader.py – JSON-Verwaltung für AI-ZENTRALE (rekursiv, GPT-kompatibel)
 
 import os
 import json
 
-# Basisverzeichnis, in dem alle .json-Dateien liegen können (rekursiv durchsucht)
+# 🗂️ Root-Verzeichnis aller JSON-Dateien (rekursiv durchsucht)
 CONFIG_DIR = os.getenv("CONFIG_DIR") or "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale"
 
+# 🔍 JSON-Datei anhand ihres Namens laden (außer system_modules.json)
 def load_config(filename: str) -> dict:
-    """
-    Lädt eine JSON-Konfigurationsdatei aus dem zentralen Verzeichnis (CONFIG_DIR).
-    Gibt ein leeres Dict zurück, falls Datei fehlt oder ungültig ist.
-    """
+    if filename == "system_modules.json":
+        return {"error": "Zugriff auf system_modules.json ist nur über GitHub erlaubt."}
     try:
         for root, _, files in os.walk(CONFIG_DIR):
             if filename in files:
@@ -21,10 +20,8 @@ def load_config(filename: str) -> dict:
     except Exception as e:
         return {"error": f"Fehler beim Laden von {filename}: {e}"}
 
+# 📁 Gibt alle .json-Dateien im gesamten AI-ZENTRALE-Verzeichnis zurück
 def list_all_configs(extension: str = ".json") -> list:
-    """
-    Gibt eine Liste aller .json-Dateien im gesamten CONFIG_DIR zurück.
-    """
     result = []
     try:
         for root, _, files in os.walk(CONFIG_DIR):
@@ -36,11 +33,8 @@ def list_all_configs(extension: str = ".json") -> list:
         print(f"❌ Fehler beim Auflisten der Configs: {e}")
         return []
 
+# 🔎 Findet und lädt erste .json-Datei, deren Name ein Keyword enthält
 def get_json_by_keyword(keyword: str) -> dict:
-    """
-    Findet eine JSON-Datei im CONFIG_DIR, deren Dateiname das Keyword enthält.
-    Gibt das geladene Dict zurück oder eine Fehlermeldung.
-    """
     try:
         for root, _, files in os.walk(CONFIG_DIR):
             for file in files:
