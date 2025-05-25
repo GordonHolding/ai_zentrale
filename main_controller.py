@@ -9,7 +9,7 @@ from utils.json_loader import load_json_file
 
 # 🔄 Lade aktivierte Module
 def load_active_modules():
-    config_path = "0.3 AI-Regelwerk & Historie/Systemregeln/system_modules.json"
+    config_path = "config/system_modules.json"
     modules = load_json_file(config_path)
     return [m for m in modules if m.get("active") is True]
 
