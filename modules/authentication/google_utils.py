@@ -31,3 +31,5 @@ def get_sheet_service(account_name="office_gordonholding", log_access=False):
 # 🧠 Loggt, wann welches Google-System genutzt wurde (für GPT & DSGVO)
 def log_credential_usage(service_type, account_name):
     log_interaction("System", f"Google Zugriff: {service_type} über Account {account_name}", "✅ Zugriff erfolgreich")
+
+get_credentials = get_service_account_credentials
