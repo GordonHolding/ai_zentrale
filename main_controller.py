@@ -1,5 +1,6 @@
 # ===============================================
 # 🧠 main_controller.py – Steuerzentrale der AI-Zentrale
+# Enthält: Modulsteuerung, Logging, Dev-Modus, Healthcheck, Approval-Logik
 # ===============================================
 
 import importlib
@@ -9,19 +10,22 @@ import sys
 import traceback
 from datetime import datetime
 
-# 🔁 Dynamischer Importpfad-Fix
+# 🔁 Dynamischer Importpfad-Fix (angepasst auf ai_zentrale)
 BASE_DIR = os.path.dirname(__file__)
-PROJECT_PATH = os.path.join(BASE_DIR, "chainlit_ai_zentrale")
+PROJECT_PATH = os.path.join(BASE_DIR, "ai_zentrale")
 if PROJECT_PATH not in sys.path:
     sys.path.insert(0, PROJECT_PATH)
 
+# 🔧 Konfigurationspfade
 CONFIG_PATH = os.path.join(BASE_DIR, 'config/system_modules.json')
 LOG_PATH = os.path.join(BASE_DIR, 'config/controller_log.json')
 HEALTH_PATH = os.path.join(BASE_DIR, 'config/health_status.json')
 
+# 📅 Timestamp-Funktion
 def timestamp():
     return datetime.utcnow().isoformat()
 
+# 📜 Logging: controller_log.json
 def log_entry(entries):
     if os.path.exists(LOG_PATH):
         with open(LOG_PATH, "r") as f:
@@ -32,6 +36,7 @@ def log_entry(entries):
     with open(LOG_PATH, "w") as f:
         json.dump(data, f, indent=4)
 
+# ❤️‍🩹 HealthCheck: health_status.json
 def write_health_status(success, error_count):
     status = {
         "status": "ok" if error_count == 0 else "degraded",
@@ -42,10 +47,12 @@ def write_health_status(success, error_count):
     with open(HEALTH_PATH, "w") as f:
         json.dump(status, f, indent=4)
 
+# 🔁 Module laden
 def load_modules(config_path):
     with open(config_path, 'r') as f:
         return json.load(f)
 
+# ▶ Modul starten (sofern main() vorhanden)
 def run_module(import_path):
     try:
         mod = importlib.import_module(import_path)
@@ -57,6 +64,7 @@ def run_module(import_path):
     except Exception as e:
         return "error", str(e)
 
+# ✅ Dev-/Prod-Modus + Ausführung
 def main():
     print("🚀 Initialisiere AI-ZENTRALE...")
     modules = load_modules(CONFIG_PATH)
@@ -107,5 +115,6 @@ def main():
     write_health_status(success, errors)
     print(f"🏁 Fertig: {success} Module aktiv, {errors} Fehler.")
 
+# ▶ Entry Point
 if __name__ == "__main__":
     main()
