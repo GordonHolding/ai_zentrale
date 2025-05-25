@@ -12,6 +12,7 @@ from agents.Infrastructure_Agents.MemoryAgent.memory_log_search import memory_lo
 from agents.Infrastructure_Agents.TriggerAgent.trigger_router import handle_trigger_input
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 CONFIG_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/"
 KEYWORDS_PATH = os.path.join(CONFIG_DIR, "gpt_memory_keywords.json")
 
@@ -38,7 +39,7 @@ async def on_message(message):
                 await cl.Message(content=summary).send()
                 return
 
-        # ⚡ Trigger Dispatch (derzeit optional)
+        # ⚡ Trigger Dispatch (derzeit optional, wird später scharfgestellt)
         if any(trigger_word in user_input.lower() for trigger_word in ["systemscan", "guardian", "zeittrigger", "reminder"]):
             result = handle_trigger_input(user_input)
             await cl.Message(content=str(result)).send()
