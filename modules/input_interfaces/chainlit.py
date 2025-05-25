@@ -1,4 +1,4 @@
-# chainlit.py
+# chainlit.py – Eingangs-Interface für AI-ZENTRALE
 
 import chainlit as cl
 import os
@@ -62,4 +62,4 @@ async def main(message):
 
 # ▶ Start über main_controller.py möglich
 def main():
-    os.system("chainlit run chainlit.py --port 8000")
+    os.system("chainlit run ai_zentrale/modules/input_interfaces/chainlit.py --port 8000")
