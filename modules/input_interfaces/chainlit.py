@@ -16,20 +16,22 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 CONFIG_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/"
 KEYWORDS_PATH = os.path.join(CONFIG_DIR, "gpt_memory_keywords.json")
 
+# 🔍 Lade GPT-Memory-Trigger-Keywords
 def load_keywords():
     if os.path.exists(KEYWORDS_PATH):
         with open(KEYWORDS_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
 
+# 📩 Reagiere auf Benutzernachrichten in Chainlit
 @cl.on_message
-async def main(message):
+async def handle_message(message):
     user_input = message.content
     user_id = cl.user_session.id
     print(f"🧠 Chainlit Input: {user_input}")
 
     try:
-        # 🔍 Memory Trigger
+        # 🔁 Memory-Trigger auslösen
         if any(k in user_input.lower() for k in load_keywords()):
             results = memory_log_search(user_input)
             if results:
@@ -39,13 +41,13 @@ async def main(message):
                 await cl.Message(content=summary).send()
                 return
 
-        # ⚡ Trigger Dispatch
+        # ⚙️ Trigger-Wörter verarbeiten (z. B. "systemscan")
         if any(trigger_word in user_input.lower() for trigger_word in ["systemscan", "guardian", "zeittrigger", "reminder"]):
             result = handle_trigger_input(user_input)
             await cl.Message(content=str(result)).send()
             return
 
-        # 🧠 GPT-Logik & Kontext
+        # 🤖 GPT-Kontextlogik mit Antwort
         messages = log_and_get_context(user_id, user_input)
         response = openai.ChatCompletion.create(
             model="gpt-4o",
@@ -53,13 +55,11 @@ async def main(message):
         )
         reply = response.choices[0].message["content"].strip()
         add_gpt_reply(user_id, reply)
-
         await cl.Message(content=reply).send()
 
     except Exception as e:
         await cl.Message(content=f"❌ Systemfehler: {str(e)}").send()
 
-
-# ▶ Start über main_controller.py möglich
-def main():
+# ▶️ Optionaler Start über main_controller.py
+def start_chainlit():
     os.system("chainlit run ai_zentrale/modules/input_interfaces/chainlit.py --port 8000")
