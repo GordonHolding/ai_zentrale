@@ -5,12 +5,11 @@ import importlib
 import os
 import time
 
-from utils.json_loader import load_json_file
+from utils.json_loader import load_config
 
-# 🔄 Lade aktivierte Module
+# 🔄 Lade aktivierte Module direkt aus GitHub-Pfad
 def load_active_modules():
-    config_path = "config/system_modules.json"
-    modules = load_json_file(config_path)
+    modules = load_config("config/system_modules.json")
     return [m for m in modules if m.get("active") is True]
 
 # ▶ Starte Module nacheinander
