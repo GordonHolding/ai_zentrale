@@ -162,7 +162,7 @@
     },
     {
         "filename": "json_agent.py",
-        "active": true,
+        "active": false,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_agent"
     },
     {
@@ -519,7 +519,7 @@
     },
     {
         "filename": "chainlit.py",
-        "active": true,
+        "active": false,
         "import_path": "chainlit"
     },
     {
