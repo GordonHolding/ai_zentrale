@@ -1,124 +1,36 @@
-# ===============================================
-# 🧠 main_controller.py – Steuerzentrale der AI-Zentrale
-# Enthält: Modulsteuerung, Logging, Dev-Modus, Healthcheck, Approval-Logik
-# ===============================================
+# main_controller.py – Zentraler Einstiegspunkt für AI-ZENTRALE
 
-import importlib
 import json
 import os
-import sys
-import traceback
-from datetime import datetime
+from importlib import import_module
+from chainlit.cli.main import run_chainlit  # Chainlit direkt ausführen
 
-# 🔁 Dynamischer Importpfad-Fix (angepasst auf ai_zentrale)
-BASE_DIR = os.path.dirname(__file__)
-PROJECT_PATH = os.path.join(BASE_DIR, "ai_zentrale")
-if PROJECT_PATH not in sys.path:
-    sys.path.insert(0, PROJECT_PATH)
+# Systemmodule laden
+CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/system_modules.json"
 
-# 🔧 Konfigurationspfade
-CONFIG_PATH = os.path.join(BASE_DIR, 'config/system_modules.json')
-LOG_PATH = os.path.join(BASE_DIR, 'config/controller_log.json')
-HEALTH_PATH = os.path.join(BASE_DIR, 'config/health_status.json')
+def load_active_modules():
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+        modules = json.load(f)
+    return [m for m in modules if m.get("active")]
 
-# 📅 Timestamp-Funktion
-def timestamp():
-    return datetime.utcnow().isoformat()
+def start_chainlit():
+    print("🚀 Starte Chainlit Interface auf Port 8000...")
+    run_chainlit(path="ai_zentrale/modules/input_interfaces/chainlit.py", port=8000)
 
-# 📜 Logging: controller_log.json
-def log_entry(entries):
-    if os.path.exists(LOG_PATH):
-        with open(LOG_PATH, "r") as f:
-            data = json.load(f)
-    else:
-        data = []
-    data.extend(entries)
-    with open(LOG_PATH, "w") as f:
-        json.dump(data, f, indent=4)
-
-# ❤️‍🩹 HealthCheck: health_status.json
-def write_health_status(success, error_count):
-    status = {
-        "status": "ok" if error_count == 0 else "degraded",
-        "active_modules": success,
-        "errors": error_count,
-        "timestamp": timestamp()
-    }
-    with open(HEALTH_PATH, "w") as f:
-        json.dump(status, f, indent=4)
-
-# 🔁 Module laden
-def load_modules(config_path):
-    with open(config_path, 'r') as f:
-        return json.load(f)
-
-# ▶ Modul laden & optional starten
-def run_module(import_path):
-    try:
-        mod = importlib.import_module(import_path)
-        if hasattr(mod, "main"):
-            mod.main()
-            return "started", None
+def start_all_modules():
+    active_modules = load_active_modules()
+    for module in active_modules:
+        if module["filename"] == "chainlit.py":
+            # Chainlit wird separat als Server gestartet
+            start_chainlit()
         else:
-            return "loaded", None  # Modul wurde nur geladen, nicht automatisch ausgeführt
-    except Exception as e:
-        return "error", str(e)
+            try:
+                import_path = module["import_path"]
+                import_module(import_path)
+                print(f"✅ Modul geladen: {import_path}")
+            except Exception as e:
+                print(f"❌ Fehler beim Laden von {module['filename']}: {str(e)}")
 
-# ✅ Dev-/Prod-Modus + Ausführung
-def main():
-    print("🚀 Initialisiere AI-ZENTRALE...")
-    modules = load_modules(CONFIG_PATH)
-    mode = "prod"
-    selected_module = None
-
-    # Dev-Modus mit gezielter Modulauswahl
-    if len(sys.argv) >= 3 and sys.argv[1] == "--dev":
-        mode = "dev"
-        selected_module = sys.argv[2]
-        print(f"🧪 Dev-Modus aktiv: Starte nur {selected_module}")
-
-    log = []
-    success = 0
-    errors = 0
-
-    for module in modules:
-        filename = module.get("filename")
-        import_path = module.get("import_path")
-        active = module.get("active", False)
-        approval = module.get("approval_required", False)
-
-        if mode == "dev" and filename != selected_module:
-            continue
-
-        if active:
-            if approval:
-                status = "waiting_for_approval"
-                error_msg = "Approval required"
-                print(f"🔒 {import_path} wartet auf Freigabe.")
-            else:
-                status, error_msg = run_module(import_path)
-                if status == "started":
-                    success += 1
-                    print(f"✅ Gestartet: {import_path}")
-                elif status == "loaded":
-                    print(f"ℹ️ Geladen (kein main() ausgeführt): {import_path}")
-                elif status == "error":
-                    errors += 1
-                    print(f"❌ Fehler in {import_path}: {error_msg}")
-                else:
-                    print(f"⚠️ {import_path} übersprungen ({error_msg})")
-
-            log.append({
-                "module": import_path,
-                "status": status,
-                "error": error_msg,
-                "timestamp": timestamp()
-            })
-
-    log_entry(log)
-    write_health_status(success, errors)
-    print(f"🏁 Fertig: {success} Module aktiv, {errors} Fehler.")
-
-# ▶ Entry Point
 if __name__ == "__main__":
-    main()
+    print("📦 Starte AI-ZENTRALE über main_controller.py...")
+    start_all_modules()
