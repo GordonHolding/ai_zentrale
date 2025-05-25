@@ -504,7 +504,7 @@
     },
     {
         "filename": "drive_indexer.py",
-        "active": false,
+        "active": true,
         "import_path": "modules.output_infrastruktur.drive_indexer"
     },
     {
