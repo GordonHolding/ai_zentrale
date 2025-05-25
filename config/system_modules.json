@@ -499,7 +499,7 @@
     },
     {
         "filename": "drive_uploader.py",
-        "active": false,
+        "active": true,
         "import_path": "modules.output_infrastruktur.drive_uploader"
     },
     {
