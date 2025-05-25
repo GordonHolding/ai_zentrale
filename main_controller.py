@@ -1,6 +1,6 @@
 # ===============================================
 # 🧠 main_controller.py – Steuerzentrale der AI-Zentrale
-# Enthält: Modulsteuerung, Logging, Dev-Modus, Healthcheck, Approval-Logik
+# Enthält: Modulsteuerung, Logging, Dev-Modus, Healthcheck
 # ===============================================
 
 # 🔁 system_modules.json Loader
@@ -12,7 +12,7 @@ import traceback
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(__file__)
-CONFIG_PATH = os.path.join(BASE_DIR, 'system_modules.json')
+CONFIG_PATH = os.path.join(BASE_DIR, 'config/system_modules.json')
 LOG_PATH = os.path.join(BASE_DIR, 'controller_log.json')
 HEALTH_PATH = os.path.join(BASE_DIR, 'health_status.json')
 
@@ -65,6 +65,7 @@ def main():
     modules = load_modules(CONFIG_PATH)
     mode = "prod"
     selected_module = None
+
     if len(sys.argv) >= 3 and sys.argv[1] == "--dev":
         mode = "dev"
         selected_module = sys.argv[2]
