@@ -52,7 +52,7 @@ def load_modules(config_path):
     with open(config_path, 'r') as f:
         return json.load(f)
 
-# ▶ Modul starten (sofern main() vorhanden)
+# ▶ Modul laden & optional starten
 def run_module(import_path):
     try:
         mod = importlib.import_module(import_path)
@@ -60,7 +60,7 @@ def run_module(import_path):
             mod.main()
             return "started", None
         else:
-            return "skipped", "No main() found"
+            return "loaded", None  # Modul wurde nur geladen, nicht automatisch ausgeführt
     except Exception as e:
         return "error", str(e)
 
@@ -70,6 +70,8 @@ def main():
     modules = load_modules(CONFIG_PATH)
     mode = "prod"
     selected_module = None
+
+    # Dev-Modus mit gezielter Modulauswahl
     if len(sys.argv) >= 3 and sys.argv[1] == "--dev":
         mode = "dev"
         selected_module = sys.argv[2]
@@ -98,11 +100,13 @@ def main():
                 if status == "started":
                     success += 1
                     print(f"✅ Gestartet: {import_path}")
+                elif status == "loaded":
+                    print(f"ℹ️ Geladen (kein main() ausgeführt): {import_path}")
                 elif status == "error":
                     errors += 1
                     print(f"❌ Fehler in {import_path}: {error_msg}")
                 else:
-                    print(f"⚠ {import_path} übersprungen ({error_msg})")
+                    print(f"⚠️ {import_path} übersprungen ({error_msg})")
 
             log.append({
                 "module": import_path,
