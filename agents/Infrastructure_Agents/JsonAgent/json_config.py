@@ -13,3 +13,12 @@ def get_json_index():
 def get_json_config(file_key):
     index = get_json_index()
     return index.get(file_key, None)
+
+# ✅ Einheitlicher Zugriff auf Metadaten – empfohlene Standardfunktion
+def get_json_metadata(file_key):
+    return get_json_config(file_key) or {
+        "filename": f"{file_key}.json",
+        "description": "Not found – fallback config",
+        "tags": [],
+        "status": "missing"
+    }
