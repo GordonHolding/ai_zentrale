@@ -1,21 +1,33 @@
-# memory_config.py – Zentrale Pfaddefinitionen für Memory-Agent
+# memory_config.py
 
-import os
+from json_config import get_json_metadata
 
-# 🔁 BASISPFAD: GDrive-Verzeichnis der MemoryAgent-Komponenten
-BASE_PATH = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.0 SYSTEM & KI-GRUNDBASIS/0.2 Agenten/Infrastructure_Agents/MemoryAgent"
+# Dynamisch aus json_memory_index.json geladen
+MEMORY_LOG_FILE = get_json_metadata("memory_log")["filename"]
+MEMORY_INDEX_FILE = get_json_metadata("memory_index")["filename"]
+MEMORY_PROMPT_FILE = get_json_metadata("memory_agent_prompt")["filename"]
+MEMORY_QUERIES_LOG_FILE = get_json_metadata("memory_queries_log")["filename"]
+MEMORY_REFUSALS_LOG_FILE = get_json_metadata("memory_refusals_log")["filename"]
 
-# 🧠 MEMORY: Zentrale Speicherorte für Memory-Daten
-MEMORY_LOG_PATH = os.path.join(BASE_PATH, "MemoryAgent_Memory", "memory_log.json")
-MEMORY_INDEX_PATH = os.path.join(BASE_PATH, "MemoryAgent_Memory", "memory_index.json")
+# Speicherstrategie
+MAX_MEMORY_ITEMS = 5000
+DEFAULT_TTL_DAYS = 365  # Automatische Löschung nach 1 Jahr (optional)
 
-# 📜 PROTOKOLLE: Weitere Logs für GPT-Abfragen und Verweigerungen
-MEMORY_QUERIES_LOG_PATH = os.path.join(BASE_PATH, "MemoryAgent_Protokolle", "memory_queries_log.json")
-MEMORY_REFUSALS_LOG_PATH = os.path.join(BASE_PATH, "MemoryAgent_Protokolle", "memory_refusals_log.json")
+# Logging
+ENABLE_QUERY_LOGGING = True
+ENABLE_REFUSAL_LOGGING = True
+LOG_ALL_MEMORY_ENTRIES = True  # Auch interne Einträge speichern
 
-# 📂 KONTEXTE (optional erweiterbar)
-MEMORY_AGENT_PROMPT_PATH = os.path.join(BASE_PATH, "MemoryAgent_Kontexte_Promptweitergaben", "memory_agent_prompt.json")
+# Trigger & Verhalten
+ENABLE_INDEX_MATCHING = True
+ENABLE_ROLE_ROUTING = True
+DEFAULT_AGENT_ROLE = "MemoryAgent"
+DEFAULT_MEMORY_CATEGORY = "System"
 
-# ➕ Erweiterbare weitere Speicherpfade (z. B. für:
-# MEMORY_SUMMARIES_PATH = os.path.join(BASE_PATH, "MemoryAgent_Memory", "summaries.json")
-# MEMORY_FLAGS_PATH = os.path.join(BASE_PATH, "MemoryAgent_Protokolle", "memory_flags.json")
+# Tags für GPT-Auswertung
+PRIORITY_TAGS = ["core", "investor", "high_priority"]
+SENSITIVE_TAGS = ["sensible", "private", "legal"]
+AUTOSAVE_CATEGORIES = ["Projekt", "System", "Finanzen"]
+
+# Debugging
+VERBOSE_MODE = False
