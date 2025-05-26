@@ -7,13 +7,15 @@ from modules.reasoning_intelligenz.structure_content_loader import get_all_struc
 from utils.json_loader import load_json
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_system_start
 
+# Konfigurationspfade (im Drive abgelegt)
 CONFIG_PATH = "0.4 GPT-Tools/startup_loader/startup_loader_config.json"
 LOG_PATH = "0.4 GPT-Tools/startup_loader/startup_loader_log.json"
 PROMPT_PATH = "0.4 GPT-Tools/startup_loader/startup_loader_prompt.json"
+DRIVE_CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/drive_index_config.json"
 
 def run_startup_initialization():
     """Führt alle Initial-Ladevorgänge beim Start der AI-Zentrale aus"""
-    
+
     config = load_json(CONFIG_PATH)
     log_entries = []
 
@@ -27,13 +29,24 @@ def run_startup_initialization():
 
     # 3. Lade alle Strukturdefinitionen (für Navigation & GPT-Verständnis)
     structures = get_all_structures()
-    log_entries.append({"task": "structure_files_loaded", "count": len(structures)})
+    log_entries.append({
+        "task": "structure_files_loaded",
+        "count": len(structures),
+        "loaded_files": list(structures.keys())
+    })
 
     # 4. Lade optionale Start-Prompts oder Hinweise (z. B. GPT-Moduswechsel)
     startup_prompt = load_json(PROMPT_PATH).get("startup_message", "")
     log_entries.append({"task": "startup_prompt", "content": startup_prompt})
 
-    # 5. Logge Systemstart
+    # 5. Prüfe Drive-Konfiguration (nur Logzweck)
+    drive_config = load_json(DRIVE_CONFIG_PATH)
+    if "root_folder_id" in drive_config:
+        log_entries.append({"task": "drive_config_checked", "folder_id": drive_config["root_folder_id"]})
+    else:
+        log_entries.append({"task": "drive_config_missing_or_invalid"})
+
+    # 6. Logge Systemstart
     log_system_start(LOG_PATH, log_entries)
 
     return {
@@ -41,5 +54,6 @@ def run_startup_initialization():
         "identity": identity_prompt,
         "project_prompt": project_prompt,
         "startup_message": startup_prompt,
-        "structures": list(structures.keys())
+        "structures": list(structures.keys()),
+        "drive_config": drive_config
     }
