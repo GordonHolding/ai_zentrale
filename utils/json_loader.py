@@ -20,6 +20,24 @@ def load_config(filename: str) -> dict:
     except Exception as e:
         return {"error": f"Fehler beim Laden von {filename}: {e}"}
 
+# 📥 GPT-kompatibel: JSON-Datei laden (einfacher Shortcut für Agenten)
+def load_json(filename: str) -> dict:
+    return load_config(filename)
+
+# 💾 GPT-kompatibel: JSON-Datei speichern
+def write_json(filename: str, data: dict) -> bool:
+    try:
+        for root, _, files in os.walk(CONFIG_DIR):
+            if filename in files:
+                full_path = os.path.join(root, filename)
+                with open(full_path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+                return True
+        return False
+    except Exception as e:
+        print(f"❌ Fehler beim Speichern von {filename}: {e}")
+        return False
+
 # 📁 Gibt alle .json-Dateien im gesamten AI-ZENTRALE-Verzeichnis zurück
 def list_all_configs(extension: str = ".json") -> list:
     result = []
