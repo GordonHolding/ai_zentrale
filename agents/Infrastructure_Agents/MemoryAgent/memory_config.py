@@ -1,6 +1,6 @@
 # memory_config.py
 
-from json_config import get_json_metadata
+from agents.Infrastructure_Agents.JsonAgent.json_config import get_json_metadata
 
 # Dynamisch aus json_memory_index.json geladen
 MEMORY_LOG_FILE = get_json_metadata("memory_log")["filename"]
