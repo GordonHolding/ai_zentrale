@@ -1,6 +1,6 @@
 # json_router.py – GPT-Befehle analysieren und weiterreichen
 
-from agents.General_Agents.JsonAgent.json_agent import update_json_entry
+from agents.Infrastructure_Agents.JsonAgent.json_agent import update_json_entry
 
 def handle_json_instruction(instruction: str) -> str:
     # einfache textbasierte Analyse – z. B. für: "Füge zu trigger_config X hinzu"
