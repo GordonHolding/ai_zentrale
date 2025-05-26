@@ -1,24 +1,15 @@
-# json_config.py – zentrale Übersicht über steuerbare JSON-Dateien
+# json_config.py – Dynamische JSON-Verwaltung über zentralen Index
 
-JSON_CONFIG_LIST = {
-    "trigger_config": {
-        "filename": "trigger_config.json",
-        "description": "Zeit- und Aktionsbasierte Triggerdefinitionen"
-    },
-    "agent_registry": {
-        "filename": "agent_registry.json",
-        "description": "Liste aller verfügbaren GPT-Agenten"
-    },
-    "reply_templates": {
-        "filename": "reply_templates.json",
-        "description": "Vorlagen für automatische GPT-Antworten"
-    },
-    "index": {
-        "filename": "index.json",
-        "description": "Zentrales Referenzsystem für GPT & Navigation"
-    },
-    "structure_master": {
-        "filename": "structure_master.json",
-        "description": "Übersicht aller Systemstrukturbereiche"
-    }
-}
+from utils.json_loader import load_json
+
+# 🔁 Lädt vollständigen Index aller verwaltbaren JSON-Dateien
+def get_json_index():
+    data = load_json("json_memory_index.json")
+    if isinstance(data, dict):
+        return data
+    return {}
+
+# 🔎 Gibt die Pfadinfo zu einer spezifischen Datei anhand des Schlüssels zurück
+def get_json_config(file_key):
+    index = get_json_index()
+    return index.get(file_key, None)
