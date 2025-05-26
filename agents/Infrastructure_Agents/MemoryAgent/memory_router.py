@@ -1,34 +1,63 @@
-# memory_router.py
+# memory_router.py – GPT-Memory Routing & Steuerlogik
 
-import openai
-from memory_config import MEMORY_LOG_PATH
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
+from agents.Infrastructure_Agents.MemoryAgent.memory_log_search import memory_log_search
+from agents.Infrastructure_Agents.MemoryAgent.memory_config import (
+    MEMORY_LOG_PATH,
+    ENABLE_INDEX_MATCHING,
+    ENABLE_ROLE_ROUTING,
+    DEFAULT_AGENT_ROLE,
+    DEFAULT_MEMORY_CATEGORY,
+    PRIORITY_TAGS,
+    SENSITIVE_TAGS,
+    AUTOSAVE_CATEGORIES
+)
 
-def gpt_route_memory_action(entry_summary):
+
+def route_memory_entry(entry):
     """
-    Fragt GPT, was mit einem bestimmten Memory-Eintrag geschehen soll
-    (Antwort senden, Ablegen, Weiterleiten etc.)
+    Routet eine neue GPT-Memory-Antwort basierend auf Konfigurationswerten.
+    Zuweisung erfolgt nach Kategorie, Tags, Rollenlogik etc.
     """
-    prompt = f"""
-Du bist der Memory-Router der Gordon Holding. 
-Ein neuer Memory-Eintrag wurde gespeichert:
+    routed_entry = entry.copy()
 
-"{entry_summary}"
+    # Standardkategorie setzen, falls nicht vorhanden
+    if "category" not in routed_entry:
+        routed_entry["category"] = DEFAULT_MEMORY_CATEGORY
 
-Was soll mit diesem Eintrag geschehen? Gib mir nur eine klare Anweisung: 
-z. B. "weiterleiten an InvestorAgent", "antworten", "archivieren", "ignorieren".
-"""
+    # Rolle zuweisen, wenn Routing aktiviert
+    if ENABLE_ROLE_ROUTING and "role" not in routed_entry:
+        routed_entry["role"] = DEFAULT_AGENT_ROLE
 
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": "Du bist ein Routing-Assistent für Memory-Einträge."},
-                {"role": "user", "content": prompt}
-            ]
-        )
-        decision = response.choices[0].message["content"].strip()
-        print(f"[GPT-Router] Entscheidung: {decision}")
-        return decision
-    except Exception as e:
-        print(f"❌ GPT-Routing-Fehler: {e}")
-        return "unentschieden"
+    # Indexlogik (z. B. zur Navigierbarkeit, Tag-Matching)
+    if ENABLE_INDEX_MATCHING:
+        tags = routed_entry.get("tags", [])
+        if any(tag in PRIORITY_TAGS for tag in tags):
+            routed_entry["priority"] = "high"
+        if any(tag in SENSITIVE_TAGS for tag in tags):
+            routed_entry["sensitive"] = True
+
+    return routed_entry
+
+
+def save_memory_entry(entry, user="System", source="Router"):
+    """
+    Speichert die finale Memory-Interaktion ins Log.
+    Nutzt das zentrale Logging-Modul.
+    """
+    log_interaction(
+        user=user,
+        prompt=entry.get("prompt", ""),
+        response=entry.get("response", ""),
+        path=MEMORY_LOG_PATH
+    )
+    return {"status": "saved", "path": MEMORY_LOG_PATH}
+
+
+def retrieve_similar_entries(criteria):
+    """
+    Führt eine Suchabfrage im Memory-Log durch.
+    Liefert strukturierte, gefilterte Ergebnisse.
+    """
+    result = memory_log_search(criteria)
+    return result
