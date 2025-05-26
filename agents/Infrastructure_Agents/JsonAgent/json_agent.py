@@ -1,7 +1,7 @@
 # json_agent.py – zentrale Logik für GPT-gesteuerte JSON-Verwaltung
 
-from .json_loader import load_json, write_json
-from .json_config import JSON_CONFIG_LIST
+from utils.json_loader import load_json, write_json
+from agents.Infrastructure_Agents.JsonAgent.json_config import JSON_CONFIG_LIST
 from datetime import datetime
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
