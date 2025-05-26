@@ -162,17 +162,17 @@
     },
     {
         "filename": "json_agent.py",
-        "active": true,
+        "active": false,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_agent"
     },
     {
         "filename": "json_config.py",
-        "active": true,
+        "active": false,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_config"
     },
     {
         "filename": "json_router.py",
-        "active": true,
+        "active": false,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_router"
     },
     {
