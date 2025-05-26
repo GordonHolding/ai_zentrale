@@ -167,7 +167,7 @@
     },
     {
         "filename": "json_config.py",
-        "active": false,
+        "active": true,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_config"
     },
     {
