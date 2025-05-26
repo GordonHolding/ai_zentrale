@@ -208,7 +208,7 @@
     },
    {
         "filename": "conversation_tracker.py",
-        "active": false,
+        "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_tracker"
     },
        {
