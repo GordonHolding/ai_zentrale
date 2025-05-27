@@ -473,11 +473,6 @@
         "import_path": "modules.reasoning_intelligenz.structure_content_loader"
     },
     {
-        "filename": "global_identity_prompt.py",
-        "active": true,
-        "import_path": "modules.reasoning_intelligenz.global_identity_prompt"
-    },
-    {
         "filename": "gpt_prompt_selector.py",
         "active": false,
         "import_path": "modules.reasoning_intelligenz.gpt_prompt_selector"
