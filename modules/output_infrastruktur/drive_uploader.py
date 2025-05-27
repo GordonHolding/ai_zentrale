@@ -1,12 +1,14 @@
+# drive_uploader.py – Uploads zu Google Drive mit Logging
+
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from modules.authentication.google_utils import get_credentials
+from modules.authentication.google_utils import get_service_account_credentials
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 from datetime import datetime
 import os
 
-def upload_to_drive(file_path, name=None, mime_type="application/pdf", folder_id=None):
-    creds = get_credentials(["https://www.googleapis.com/auth/drive"])
+def upload_to_drive(file_path, name=None, mime_type="application/pdf", folder_id=None, account_name="office_gordonholding"):
+    creds = get_service_account_credentials(account_name, scopes=["https://www.googleapis.com/auth/drive"])
     service = build("drive", "v3", credentials=creds)
 
     file_metadata = {"name": name or os.path.basename(file_path)}
