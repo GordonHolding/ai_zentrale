@@ -3,7 +3,7 @@
 import json
 import os
 from googleapiclient.discovery import build
-from modules.authentication.google_utils import get_credentials
+from modules.authentication.google_utils import get_service_account_credentials
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 from datetime import datetime
 
@@ -19,11 +19,12 @@ def index_drive_from_config():
         folder_id=config["root_folder_id"],
         allowed_types=config.get("allowed_mime_types"),
         ignore_folders=config.get("ignore_folders", []),
-        log_to_memory=config.get("log_to_memory", False)
+        log_to_memory=config.get("log_to_memory", False),
+        account_name=config.get("account_name", "office_gordonholding")
     )
 
-def index_drive(folder_id, allowed_types=None, ignore_folders=None, log_to_memory=False):
-    creds = get_credentials(["https://www.googleapis.com/auth/drive"])
+def index_drive(folder_id, allowed_types=None, ignore_folders=None, log_to_memory=False, account_name="office_gordonholding"):
+    creds = get_service_account_credentials(account_name, scopes=["https://www.googleapis.com/auth/drive"])
     service = build("drive", "v3", credentials=creds)
 
     def _scan(fid, path=""):
