@@ -1,50 +1,49 @@
-# gpt_response_parser.py
+# gpt_response_parser.py – GPT-Analyse mit Rolle, Trigger, Memorylogik
 
-import json
-import os
+from utils.json_loader import load_json
+from modules.reasoning_intelligenz.structure_content_loader import get_all_structures
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
-AGENT_REGISTRY_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/agent_registry.json"
+def get_system_context():
+    return {
+        "identity": load_json("system_identity_prompt.json"),
+        "index": load_json("index.json"),
+        "structure": get_all_structures()
+    }
 
-def load_agent_registry():
-    if os.path.exists(AGENT_REGISTRY_PATH):
-        with open(AGENT_REGISTRY_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+def extract_role(response: str, identity_data: dict) -> str:
+    roles = identity_data.get("rollen", {})
+    for key, role in roles.items():
+        if key.lower() in response.lower():
+            return key
+    return "unbekannt"
 
-def parse_gpt_response(text):
-    """
-    Sucht JSON-ähnliche Blöcke in einer GPT-Antwort und prüft auf bekannte Agenten.
-    """
-    try:
-        # Rohtext extrahieren (z. B. aus ```json ... ```)
-        raw_json = text.strip()
-        if "```json" in raw_json:
-            raw_json = raw_json.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw_json:
-            raw_json = raw_json.split("```")[1].strip()
+def detect_system_trigger(response: str) -> str:
+    triggers = ["save", "export", "memory", "route", "tool"]
+    for keyword in triggers:
+        if keyword in response.lower():
+            return keyword
+    return ""
 
-        data = json.loads(raw_json)
-        registry = load_agent_registry()
+def log_response_analysis(user_input: str, gpt_reply: str):
+    log_interaction(
+        user="Parser",
+        prompt=user_input,
+        response=gpt_reply,
+        path="memory_log.json"
+    )
 
-        agent_key = data.get("agent")
-        if agent_key not in registry:
-            return {
-                "valid": False,
-                "reason": f"Agent '{agent_key}' nicht registriert.",
-                "raw": data
-            }
+def parse_gpt_response(user_input: str, gpt_reply: str) -> dict:
+    context = get_system_context()
+    role = extract_role(gpt_reply, context["identity"])
+    action = detect_system_trigger(gpt_reply)
 
-        return {
-            "valid": True,
-            "action": data.get("action"),
-            "agent": agent_key,
-            "status": data.get("status", "unknown"),
-            "raw": data
-        }
-
-    except Exception as e:
-        return {
-            "valid": False,
-            "reason": f"Fehler beim Parsen: {str(e)}",
-            "raw": text
-        }
+    return {
+        "role": role,
+        "trigger": action,
+        "summary": gpt_reply[:200],
+        "identity_prompt_used": context["identity"].get("system_name", "Unbekannt"),
+        "project_count": len(context["structure"]),
+        "user_input": user_input,
+        "raw_response": gpt_reply
+    }
