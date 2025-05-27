@@ -1,18 +1,28 @@
 # modules/authentication/google_utils.py
+# ⛓ Zugriff auf Google Drive & Sheets via Service Account – optimiert für AI-ZENTRALE
 
 import os
+from datetime import datetime
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from datetime import datetime
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
-# 🔐 Zentrale Service Account-Funktion
-def get_service_account_credentials(account_name="office_gordonholding", scopes=[]):
-    base_path = os.getenv("GOOGLE_SECRET_PATH", "/etc/secrets")
-    key_path = os.path.join(base_path, f"service_account_{account_name}.json")
-    return service_account.Credentials.from_service_account_file(key_path, scopes=scopes)
+# 📁 Fallback-Pfad für Service-Account-Dateien
+DEFAULT_SECRET_PATH = "/etc/secrets"
 
-# 📂 Bonus: Google Drive Objekt direkt zurückgeben
+# 🔐 Erstellt Credentials aus .json-Datei für beliebigen Account
+def get_service_account_credentials(account_name="office_gordonholding", scopes=None):
+    try:
+        scopes = scopes or []
+        base_path = os.getenv("GOOGLE_SECRET_PATH", DEFAULT_SECRET_PATH)
+        key_path = os.path.join(base_path, f"service_account_{account_name}.json")
+        credentials = service_account.Credentials.from_service_account_file(key_path, scopes=scopes)
+        return credentials
+    except Exception as e:
+        log_interaction("System", f"❌ Fehler bei Credentials für {account_name}", str(e))
+        raise e
+
+# 📂 Google Drive-API zurückgeben
 def get_drive_service(account_name="office_gordonholding", log_access=False):
     scopes = ["https://www.googleapis.com/auth/drive"]
     creds = get_service_account_credentials(account_name, scopes)
@@ -20,7 +30,7 @@ def get_drive_service(account_name="office_gordonholding", log_access=False):
         log_credential_usage("Drive", account_name)
     return build("drive", "v3", credentials=creds)
 
-# 📊 Bonus: Google Sheets Objekt zurückgeben
+# 📊 Google Sheets-API zurückgeben
 def get_sheet_service(account_name="office_gordonholding", log_access=False):
     scopes = ["https://www.googleapis.com/auth/spreadsheets"]
     creds = get_service_account_credentials(account_name, scopes)
@@ -28,8 +38,6 @@ def get_sheet_service(account_name="office_gordonholding", log_access=False):
         log_credential_usage("Sheets", account_name)
     return build("sheets", "v4", credentials=creds)
 
-# 🧠 Loggt, wann welches Google-System genutzt wurde (für GPT & DSGVO)
+# 🧠 Optionales DSGVO-kompatibles Log – nur wenn log_access=True gesetzt
 def log_credential_usage(service_type, account_name):
-    log_interaction("System", f"Google Zugriff: {service_type} über Account {account_name}", "✅ Zugriff erfolgreich")
-
-get_credentials = get_service_account_credentials
+    log_interaction("System", f"🔐 Google Zugriff: {service_type} via {account_name}", "✅ Zugriff erfolgreich")
