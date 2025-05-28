@@ -62,3 +62,7 @@ def save_log(memory, path):
 # 🕒 Zeitstempel
 def timestamp():
     return datetime.utcnow().isoformat()
+
+# 🔄 Für Kontextabruf über context_manager
+def get_memory_log():
+    return load_log(DEFAULT_LOG_FILE)
