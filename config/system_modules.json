@@ -493,11 +493,6 @@
         "import_path": "modules.output_infrastruktur.file_uploader"
     },
     {
-        "filename": "drive_uploader.py",
-        "active": true,
-        "import_path": "modules.output_infrastruktur.drive_uploader"
-    },
-    {
         "filename": "drive_indexer.py",
         "active": true,
         "import_path": "modules.output_infrastruktur.drive_indexer"
