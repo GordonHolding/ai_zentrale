@@ -2,10 +2,17 @@
 # ⛓ Zugriff auf Google Drive & Sheets via Service Account – optimiert für AI-ZENTRALE
 
 import os
+import logging
 from datetime import datetime
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
+
+# 🔕 Google API Logging unterdrücken (nur echte Fehler anzeigen)
+logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
+logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
+logging.getLogger('urllib3').setLevel(logging.ERROR)
+logging.getLogger('google').setLevel(logging.ERROR)
 
 # 📁 Fallback-Pfad für Service-Account-Dateien
 DEFAULT_SECRET_PATH = "/etc/secrets"
@@ -40,4 +47,9 @@ def get_sheet_service(account_name="office_gordonholding", log_access=False):
 
 # 🧠 Optionales DSGVO-kompatibles Log – nur wenn log_access=True gesetzt
 def log_credential_usage(service_type, account_name):
-    log_interaction("System", f"🔐 Google Zugriff: {service_type} via {account_name}", "✅ Zugriff erfolgreich")
+    log_interaction(
+        user="System",
+        prompt=f"🔐 Google Zugriff: {service_type} via {account_name}",
+        response="✅ Zugriff erfolgreich",
+        path="memory_log.json"
+    )
