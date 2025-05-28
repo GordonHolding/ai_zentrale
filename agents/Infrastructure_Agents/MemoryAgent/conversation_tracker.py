@@ -63,3 +63,7 @@ def log_system_note(user_id: str, note: str):
 def save_log():
     with open(LOG_PATH, "w", encoding="utf-8") as f:
         json.dump(conversation_store, f, indent=2, ensure_ascii=False)
+
+# 🔄 Für Kontextabruf über context_manager
+def get_conversation_context() -> Dict[str, List[Dict]]:
+    return conversation_store
