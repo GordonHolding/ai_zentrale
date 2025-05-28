@@ -1,20 +1,24 @@
-# json_router.py – GPT-Befehle analysieren und weiterreichen
+# json_config.py – Dynamische JSON-Verwaltung über zentralen Index
 
-from agents.Infrastructure_Agents.JsonAgent.json_agent import update_json_entry
+from utils.json_loader import load_json
 
-def handle_json_instruction(instruction: str) -> str:
-    # einfache textbasierte Analyse – z. B. für: "Füge zu trigger_config X hinzu"
-    try:
-        if "trigger_config" in instruction and "füge" in instruction.lower():
-            key = "scan_drive"
-            value = {
-                "active": True,
-                "interval_hours": 72,
-                "target_module": "agents.Infrastructure_Agents.TriggerAgent.trigger_triggers",
-                "target_function": "trigger_scan_drive"
-            }
-            return update_json_entry("trigger_config", key, value, overwrite=False)
+# 🔁 Lädt vollständigen Index aller verwaltbaren JSON-Dateien
+def get_json_index():
+    data = load_json("json_memory_index.json")
+    if isinstance(data, dict):
+        return data
+    return {}
 
-        return "❌ Anweisung nicht erkannt oder zu ungenau."
-    except Exception as e:
-        return f"❌ Fehler: {e}"
+# 🔎 Gibt die Pfadinfo zu einer spezifischen Datei anhand des Schlüssels zurück
+def get_json_config(file_key):
+    index = get_json_index()
+    return index.get(file_key, None)
+
+# ✅ Einheitlicher Zugriff auf Metadaten – empfohlene Standardfunktion
+def get_json_metadata(file_key):
+    return get_json_config(file_key) or {
+        "filename": f"{file_key}.json",
+        "description": "Not found – fallback config",
+        "tags": [],
+        "status": "missing"
+    }
