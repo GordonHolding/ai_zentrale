@@ -64,3 +64,7 @@ def attach_file_summary(user_id: str, summary: str):
 def save_log():
     with open(LOG_PATH, "w", encoding="utf-8") as f:
         json.dump(conversation_store, f, indent=2, ensure_ascii=False)
+
+# 🔄 Für Kontextabruf über context_manager
+def get_recent_context():
+    return conversation_store
