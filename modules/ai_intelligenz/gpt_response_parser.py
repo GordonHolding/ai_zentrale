@@ -50,4 +50,5 @@ def parse_gpt_response(user_input: str, gpt_reply: str) -> dict:
         "identity_prompt_used": context["identity"].get("system_name", "Unbekannt"),
         "project_count": len(context["structure"]),
         "user_input": user_input,
-   
+        "raw_response": gpt_reply
+    }
