@@ -15,8 +15,8 @@ _JSON_PATHS = {
     "identity": "system_identity_prompt.json",
     "index": "index.json",
     "agents": "agent_registry.json",
-    "projects": "structure_content_loader",  # ❌ wird gleich ersetzt
-    "drive_config": "0.3 AI-Regelwerk & Historie/Systemregeln/Config/drive_index_config.json"
+    "drive_config": "0.3 AI-Regelwerk & Historie/Systemregeln/Config/drive_index_config.json",
+    "chat_history_log": "system_logs/chat_history_log.json",  # NEU: Read-only Kontext
 }
 
 # ✅ Kontext abrufen mit intelligentem Cache
@@ -30,6 +30,8 @@ def get_context(name):
         data = get_conversation_context()
     elif name == "memory_log":
         data = get_memory_log()
+    elif name == "chat_history_log":
+        data = _load_json_file(_JSON_PATHS["chat_history_log"])  # expliziter Read-only-Zugriff
     elif name == "projects":
         # ✅ Statt structure_content_loader jetzt direkte Auslesung des Verzeichnisses
         path = "0.3 AI-Regelwerk & Historie/Systemregeln/Projekte"
@@ -56,6 +58,13 @@ def preload_all():
     get_context("conversation")
     get_context("memory_log")
 
-# ❌ Cache zurücksetzen (z. B. bei Reload)
+# ❌ Cache zurücksetzen (z. B. bei Reload)
 def clear_context_cache():
     _context_cache.clear()
+
+# 🔐 Interne Utility-Funktion für direkten JSON-Read
+def _load_json_file(path):
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f"Datei nicht gefunden: {path}")
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
