@@ -1,6 +1,6 @@
 # startup_loader.py – Direkter Systemstart mit Kontextlogik
 
-from infrastructure.context_manager import get_context, preload_all
+from utils.context_manager import get_context, preload_all
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
 # 🔐 Identity Prompt laden
