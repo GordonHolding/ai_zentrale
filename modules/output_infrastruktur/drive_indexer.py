@@ -1,11 +1,11 @@
-# drive_indexer.py – Konfigurierbarer Drive-Scanner mit GPT-Zusammenfassung
+# drive_indexer.py – Konfigurierbarer Drive-Scanner mit MIME-Filter & GPT-Zusammenfassung
 
 import json
 import os
+from datetime import datetime
 from googleapiclient.discovery import build
 from modules.authentication.google_utils import get_service_account_credentials
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
-from datetime import datetime
 
 CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/drive_index_config.json"
 
@@ -18,12 +18,13 @@ def index_drive_from_config():
     return index_drive(
         folder_id=config["root_folder_id"],
         allowed_types=config.get("allowed_mime_types"),
+        include_all=config.get("include_all_mime_types", False),
         ignore_folders=config.get("ignore_folders", []),
         log_to_memory=config.get("log_to_memory", False),
         account_name=config.get("account_name", "office_gordonholding")
     )
 
-def index_drive(folder_id, allowed_types=None, ignore_folders=None, log_to_memory=False, account_name="office_gordonholding"):
+def index_drive(folder_id, allowed_types=None, include_all=False, ignore_folders=None, log_to_memory=False, account_name="office_gordonholding"):
     creds = get_service_account_credentials(account_name, scopes=["https://www.googleapis.com/auth/drive"])
     service = build("drive", "v3", credentials=creds)
 
@@ -38,7 +39,7 @@ def index_drive(folder_id, allowed_types=None, ignore_folders=None, log_to_memor
                     continue
                 results.extend(_scan(file["id"], path + "/" + file["name"]))
             else:
-                if allowed_types and file["mimeType"] not in allowed_types:
+                if not include_all and allowed_types and file["mimeType"] not in allowed_types:
                     continue
                 results.append({
                     "id": file["id"],
