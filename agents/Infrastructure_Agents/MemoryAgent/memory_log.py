@@ -1,3 +1,4 @@
+
 # memory_log.py – Logging-Funktionen für AI-Zentrale (Chat, Mail, Systemstart)
 
 import os
