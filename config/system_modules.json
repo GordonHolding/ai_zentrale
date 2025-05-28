@@ -1,13 +1,13 @@
 [
     {
-        "filename": "agent_loader.py",
-        "active": true,
-        "import_path": "utils.agent_loader"
-    },
-    {
         "filename": "json_loader.py",
         "active": true,
         "import_path": "utils.json_loader"
+    },
+   {
+        "filename": "context_manager.py",
+        "active": false,
+        "import_path": "utils.context_manager"
     },
     {
         "filename": "mail_agent.py",
@@ -466,11 +466,6 @@
         "filename": "startup_loader.py",
         "active": true,
         "import_path": "modules.reasoning_intelligenz.startup_loader"
-    },
-    {
-        "filename": "structure_content_loader.py",
-        "active": true,
-        "import_path": "modules.reasoning_intelligenz.structure_content_loader"
     },
     {
         "filename": "gpt_prompt_selector.py",
