@@ -6,8 +6,8 @@ import datetime
 from typing import List, Dict
 
 # 🔁 Basispfad für Konversationen
-BASE_DIR = "chat_history"
-LOG_PATH = os.path.join(BASE_DIR, "chat_history_log.json")
+BASE_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Chat-History"
+LOG_PATH = os.path.join(BASE_DIR, "recent_context.json")
 UPLOAD_DIR = os.path.join(BASE_DIR, "Uploads")
 
 # 📁 Verzeichnisse sicherstellen
