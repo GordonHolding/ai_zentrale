@@ -180,6 +180,11 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_router"
     },
+ {
+        "filename": "json_triggers.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_triggers"
+    },
     {
         "filename": "gpt_vision_handler.py",
         "active": false,
