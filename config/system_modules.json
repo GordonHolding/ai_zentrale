@@ -6,9 +6,34 @@
     },
    {
         "filename": "context_manager.py",
-        "active": false,
+        "active": true,
         "import_path": "utils.context_manager"
     },
+    {
+        "filename": "drive_agent.py",
+        "active": true,
+        "import_path": "agents.General_Agents.DriveAgent.drive_agent"
+    },
+        {
+        "filename": "drive_utils.py",
+        "active": true,
+        "import_path": "agents.General_Agents.DriveAgent.drive_utils"
+    },
+        {
+        "filename": "drive_triggers.py",
+        "active": true,
+        "import_path": "agents.General_Agents.DriveAgent.drive_triggers"
+    },
+           {
+        "filename": "drive_router.py",
+        "active": true,
+        "import_path": "agents.General_Agents.DriveAgent.drive_router"
+    },
+        {
+        "filename": "drive_config.py",
+        "active": true,
+        "import_path": "agents.General_Agents.DriveAgent.drive_config"
+    },    
     {
         "filename": "mail_agent.py",
         "active": false,
@@ -24,7 +49,6 @@
         "active": false,
         "import_path": "agents.General_Agents.MailAgent.mail_gpt_router"
     },
-  
     {
         "filename": "multi_account_router.py",
         "active": false,
