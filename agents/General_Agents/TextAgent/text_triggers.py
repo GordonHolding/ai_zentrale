@@ -4,7 +4,7 @@ import datetime
 from agents.General_Agents.TextAgent import text_agent
 from modules.reasoning_intelligenz import startup_loader
 from modules.output_infrastruktur import drive_indexer
-from modules.Infrastructure_Agents.MemoryAgent import memory_log
+from agents.Infrastructure_Agents.MemoryAgent import memory_log
 
 # 📌 Trigger bei Systemstart
 def trigger_on_startup():
