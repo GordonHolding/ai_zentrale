@@ -2,7 +2,7 @@
 
 import datetime
 from agents.Infrastructure_Agents.JsonAgent import json_agent
-from modules.Infrastructure_Agents.MemoryAgent import memory_log
+from agents.Infrastructure_Agents.MemoryAgent import memory_log
 from modules.output_infrastruktur import drive_indexer
 
 # 📌 Trigger bei Systemstart
