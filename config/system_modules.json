@@ -236,6 +236,16 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.context_tracker"
     },
+      {
+        "filename": "context_triggers.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.context_triggers"
+    },
+      {
+        "filename": "conversation_triggers.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_triggers"
+    },  
     {
         "filename": "router_agent.py",
         "active": false,
