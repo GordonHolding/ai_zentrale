@@ -1,9 +1,9 @@
 # memory_triggers.py – Triggerlogik für MemoryAgent
 
 import datetime
-from modules.Infrastructure_Agents.MemoryAgent import memory_log
-from modules.Infrastructure_Agents.MemoryAgent import memory_config
-from modules.Infrastructure_Agents.MemoryAgent import memory_agent
+from agents.Infrastructure_Agents.MemoryAgent import memory_log
+from agents.Infrastructure_Agents.MemoryAgent import memory_config
+from agents.Infrastructure_Agents.MemoryAgent import memory_agent
 from modules.output_infrastruktur import drive_indexer
 
 # 📌 Trigger bei Systemstart – Initialisierung des Memory Logs
