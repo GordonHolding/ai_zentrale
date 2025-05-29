@@ -3,7 +3,7 @@
 import os
 import json
 from utils.json_loader import load_json
-from agents.Infrastructure_Agents.MemoryAgent.context_tracker import get_recent_context
+from agents.Infrastructure_Agents.MemoryAgent.context_tracker import get_context as get_context_sessions
 from agents.Infrastructure_Agents.MemoryAgent.conversation_tracker import get_conversation_context
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import get_memory_log
 
@@ -20,14 +20,15 @@ _JSON_PATHS = {
 }
 
 # ✅ Kontext abrufen mit intelligentem Cache
-def get_context(name):
+def get_context(name, user_id="default"):
     if name in _context_cache:
         return _context_cache[name]
 
     if name == "recent_chat":
-        data = get_recent_context()
+        sessions = get_context_sessions(user_id)
+        data = sessions[-1] if sessions else []  # Liefert nur die aktuellste Session
     elif name == "conversation":
-        data = get_conversation_context()
+        data = get_conversation_context().get(user_id, [])
     elif name == "memory_log":
         data = get_memory_log()
     elif name == "chat_history_log":
@@ -50,7 +51,7 @@ def get_context(name):
     _context_cache[name] = data
     return data
 
-# ▶þ Alles auf einmal laden (für startup_loader)
+# ▶️ Alles auf einmal laden (für startup_loader)
 def preload_all():
     for key in _JSON_PATHS:
         get_context(key)
