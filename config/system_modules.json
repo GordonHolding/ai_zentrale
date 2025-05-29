@@ -216,7 +216,12 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_log_search"
     },
-   {
+       {
+        "filename": "memory_triggers.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_triggers"
+    },
+    {
         "filename": "conversation_tracker.py",
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_tracker"
