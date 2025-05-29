@@ -1,70 +1,82 @@
-# context_tracker.py – Lokale Chat-Session für User-Verlauf, Uploads & Kontexte
+# context_tracker.py – Mehrfach-Speicher für lokale Kurzzeitkontexte (bis 5 Sessions)
 
 import os
 import json
 import datetime
 from typing import List, Dict
 
-# 🔁 Basispfad für Konversationen
+# 📁 Basispfade
 BASE_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Chat-History"
 LOG_PATH = os.path.join(BASE_DIR, "recent_context.json")
 UPLOAD_DIR = os.path.join(BASE_DIR, "Uploads")
 
-# 📁 Verzeichnisse sicherstellen
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+# ⚙️ Einstellungen
+MAX_RECENT_SESSIONS = 5
+
+# 📂 Verzeichnisse anlegen
 os.makedirs(BASE_DIR, exist_ok=True)
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# 🧠 Interner Speicher (Speichert Verlauf pro Nutzer)
-conversation_store: Dict[str, List[Dict]] = {}
+# 🧠 Kontextspeicherstruktur: user_id → Liste von Sessions → Liste von Nachrichten
+context_store: Dict[str, List[List[Dict]]] = {}
 
-# 🗃️ Lade bestehende Daten (falls vorhanden)
+# 📥 Bestehende Daten laden
 if os.path.exists(LOG_PATH):
     with open(LOG_PATH, "r", encoding="utf-8") as f:
         try:
-            conversation_store = json.load(f)
+            context_store = json.load(f)
         except json.JSONDecodeError:
-            conversation_store = {}
+            context_store = {}
 
-# 🔍 Aktuellen Kontext eines Users abrufen
-def get_context(user_id: str) -> List[Dict]:
-    return conversation_store.get(user_id, [])
+# 🆕 Neue Session starten
+def start_new_session(user_id: str):
+    context_store.setdefault(user_id, []).append([])
+    # Wenn mehr als erlaubt → älteste Session löschen
+    if len(context_store[user_id]) > MAX_RECENT_SESSIONS:
+        context_store[user_id].pop(0)
+    save_log()
 
-# ✏️ Neuen Nutzereintrag hinzufügen + speichern
-def log_and_get_context(user_id: str, message: str) -> List[Dict]:
-    conversation_store.setdefault(user_id, []).append({
+# ➕ Nutzernachricht hinzufügen
+def log_user_message(user_id: str, message: str):
+    if user_id not in context_store or not context_store[user_id]:
+        start_new_session(user_id)
+    context_store[user_id][-1].append({
         "role": "user",
         "content": message
     })
     save_log()
-    return conversation_store[user_id]
 
-# 💬 GPT-Antwort anhängen
-def add_gpt_reply(user_id: str, reply: str):
-    conversation_store.setdefault(user_id, []).append({
+# ➕ GPT-Antwort hinzufügen
+def log_assistant_reply(user_id: str, reply: str):
+    if user_id not in context_store or not context_store[user_id]:
+        start_new_session(user_id)
+    context_store[user_id][-1].append({
         "role": "assistant",
         "content": reply
     })
     save_log()
 
-# ♻️ Kontext für einen User zurücksetzen
+# 🔁 Session vollständig zurücksetzen
 def reset_context(user_id: str):
-    conversation_store[user_id] = []
+    context_store[user_id] = []
     save_log()
 
-# 📎 Kommentar für Datei-Upload speichern
+# 📎 Datei-Kommentar hinzufügen
 def attach_file_summary(user_id: str, summary: str):
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    conversation_store.setdefault(user_id, []).append({
+    if user_id not in context_store or not context_store[user_id]:
+        start_new_session(user_id)
+    context_store[user_id][-1].append({
         "role": "system",
         "content": f"📎 Datei-Upload registriert am {timestamp}: {summary}"
     })
     save_log()
 
-# 💾 Lokal speichern
+# 🔍 Kontext eines Nutzers abrufen
+def get_context(user_id: str) -> List[List[Dict]]:
+    return context_store.get(user_id, [])
+
+# 💾 Speichern
 def save_log():
     with open(LOG_PATH, "w", encoding="utf-8") as f:
-        json.dump(conversation_store, f, indent=2, ensure_ascii=False)
-
-# 🔄 Für Kontextabruf über context_manager
-def get_recent_context():
-    return conversation_store
+        json.dump(context_store, f, indent=2, ensure_ascii=False)
