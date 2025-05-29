@@ -1,6 +1,6 @@
 # startup_triggers.py – Triggerlogik bei Systemstart & Initialisierung
 
-from agents.Infrastructure_Agents.MemoryAgent.startup_loader import (
+from modules.reasoning_intelligenz.startup_loader import (
     full_system_start,
     get_identity_prompt,
     load_prompt_for_project
