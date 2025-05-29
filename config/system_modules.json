@@ -497,6 +497,11 @@
         "active": true,
         "import_path": "modules.reasoning_intelligenz.startup_loader"
     },
+   {
+        "filename": "startup_triggers.py",
+        "active": true,
+        "import_path": "modules.reasoning_intelligenz.startup_triggers"
+    },
     {
         "filename": "gpt_prompt_selector.py",
         "active": false,
