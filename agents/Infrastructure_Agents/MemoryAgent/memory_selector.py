@@ -37,3 +37,17 @@ def build_memory_entry(user_id: str, content: str) -> Dict:
         "source": "memory_selector",
         "category": "GPT"
     }
+
+# ✅ NEU: Zusammenfassung aus aktuellem Kontext (für context_triggers)
+def extract_summary_from_context(context_block: List[List[Dict]]) -> str:
+    if not context_block or not context_block[-1]:
+        return "Kein Kontext vorhanden."
+    last_messages = context_block[-1][-4:]
+    return " / ".join(entry["content"][:60] for entry in last_messages)
+
+# ✅ NEU: Zusammenfassung aus Langzeitverlauf (für conversation_triggers)
+def extract_summary_from_conversation(history_block: List[Dict]) -> str:
+    if not history_block:
+        return "Kein Verlauf vorhanden."
+    last_entries = history_block[-4:]
+    return " / ".join(entry["content"][:60] for entry in last_entries)
