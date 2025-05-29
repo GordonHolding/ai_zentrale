@@ -55,6 +55,11 @@
         "active": true,
         "import_path": "agents.General_Agents.TextAgent.text_agent"
     },
+  {
+        "filename": "text_triggers.py",
+        "active": false,
+        "import_path": "agents.General_Agents.TextAgent.text_triggers"
+    },  
     {
         "filename": "text_templates.py",
         "active": false,
