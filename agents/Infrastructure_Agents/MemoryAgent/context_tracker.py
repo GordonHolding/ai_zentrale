@@ -1,24 +1,23 @@
-# context_tracker.py – Kurzzeitgedächtnis mit Session-Struktur (max. 5 Sessions)
+# context_tracker.py – Lokale Chat-Session für User-Verlauf, Uploads & Kontexte
 
 import os
 import json
 import datetime
 from typing import List, Dict
 
-# 📁 Basispfade
+# 🔁 Basispfad für Konversationen
 BASE_DIR = "0.3 AI-Regelwerk & Historie/Systemregeln/Chat-History"
 LOG_PATH = os.path.join(BASE_DIR, "recent_context.json")
 UPLOAD_DIR = os.path.join(BASE_DIR, "Uploads")
 
-# 📁 Sicherstellen, dass Ordner existieren
+# 📁 Verzeichnisse sicherstellen
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(BASE_DIR, exist_ok=True)
 
-# 🧠 Speicherstruktur: user_id → List of Sessions → List of Messages
-# Eine Session = List[Dict]
+# 🧠 Interner Speicher (Speichert Verlauf pro Nutzer)
 conversation_store: Dict[str, List[List[Dict]]] = {}
 
-# 🗃️ Lade bestehende Kontexte
+# 🗃️ Bestehende Daten laden (falls vorhanden)
 if os.path.exists(LOG_PATH):
     with open(LOG_PATH, "r", encoding="utf-8") as f:
         try:
@@ -26,61 +25,52 @@ if os.path.exists(LOG_PATH):
         except json.JSONDecodeError:
             conversation_store = {}
 
-# ✅ Hilfsfunktion: Speichern
+# 🔍 Aktuellen Kontext abrufen (letzte 5 Sessions)
+def get_recent_context(user_id: str = "default") -> List[Dict]:
+    sessions = conversation_store.get(user_id, [])
+    return [msg for session in sessions[-5:] for msg in session]
+
+# ✏️ Neue Nachricht starten (Neue Session)
+def start_new_session(user_id: str = "default"):
+    conversation_store.setdefault(user_id, []).append([])
+    if len(conversation_store[user_id]) > 5:
+        conversation_store[user_id] = conversation_store[user_id][-5:]
+    save_log()
+
+# 💬 GPT-Antwort oder Nutzernachricht hinzufügen
+def log_message(user_id: str, role: str, content: str):
+    if user_id not in conversation_store or not conversation_store[user_id]:
+        start_new_session(user_id)
+    conversation_store[user_id][-1].append({
+        "role": role,
+        "content": content,
+        "timestamp": datetime.datetime.utcnow().isoformat()
+    })
+    save_log()
+
+# 📎 System-Kommentar hinzufügen (z. B. Upload, Hinweis)
+def log_system_note(user_id: str, note: str):
+    log_message(user_id, "system", f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}] {note}")
+
+# ♻️ Vollständiger Reset eines Users
+def reset_context(user_id: str = "default"):
+    conversation_store[user_id] = []
+    save_log()
+
+# 🧠 Für GPT-Auswertung alle Sessions in flacher Liste
+def get_all_sessions_flat(user_id: str = "default") -> List[Dict]:
+    sessions = conversation_store.get(user_id, [])
+    return [msg for session in sessions for msg in session]
+
+# 🔍 Kontext optional schlank extrahieren (Zusammenfassungen möglich)
+def get_all_sessions_slim(user_id: str = "default") -> List[str]:
+    sessions = conversation_store.get(user_id, [])
+    return [f"{s[0]['content']} … {s[-1]['content']}" if s else "Leere Sitzung" for s in sessions]
+
+# 💾 Zentral speichern
 def save_log():
     with open(LOG_PATH, "w", encoding="utf-8") as f:
         json.dump(conversation_store, f, indent=2, ensure_ascii=False)
 
-# 🔁 Starte neue Session für Nutzer
-def start_new_session(user_id: str):
-    conversation_store.setdefault(user_id, []).append([])
-
-    # Maximal 5 Sessions behalten
-    if len(conversation_store[user_id]) > 5:
-        conversation_store[user_id].pop(0)
-
-    save_log()
-
-# ✏️ Nachricht des Nutzers hinzufügen
-def log_and_get_context(user_id: str, message: str) -> List[List[Dict]]:
-    if user_id not in conversation_store or not conversation_store[user_id]:
-        start_new_session(user_id)
-
-    conversation_store[user_id][-1].append({
-        "role": "user",
-        "content": message
-    })
-    save_log()
-    return conversation_store[user_id]
-
-# 💬 GPT-Antwort hinzufügen
-def add_gpt_reply(user_id: str, reply: str):
-    if user_id not in conversation_store or not conversation_store[user_id]:
-        start_new_session(user_id)
-
-    conversation_store[user_id][-1].append({
-        "role": "assistant",
-        "content": reply
-    })
-    save_log()
-
-# ♻️ Kontext manuell zurücksetzen (alle Sessions)
-def reset_context(user_id: str):
-    conversation_store[user_id] = []
-    save_log()
-
-# 📎 Kommentar zu Datei-Upload hinzufügen
-def attach_file_summary(user_id: str, summary: str):
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    if user_id not in conversation_store or not conversation_store[user_id]:
-        start_new_session(user_id)
-
-    conversation_store[user_id][-1].append({
-        "role": "system",
-        "content": f"📎 Datei-Upload registriert am {timestamp}: {summary}"
-    })
-    save_log()
-
-# 🔎 Kontext vollständig abrufen
-def get_recent_context(user_id: str = "default") -> List[List[Dict]]:
-    return conversation_store.get(user_id, [])
+# ✅ Alias für Kompatibilität mit get_context()
+get_context = get_recent_context
