@@ -35,3 +35,4 @@ class DriveAgent:
         return convert_file_to_pdf(file_id, export_mime, self.account_name)
 
     def permissions(self, file_id):
+        return check_permissions(file_id, self.account_name)
