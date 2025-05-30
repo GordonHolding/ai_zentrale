@@ -4,7 +4,6 @@ import datetime
 from agents.Infrastructure_Agents.JsonAgent import json_agent
 from agents.Infrastructure_Agents.MemoryAgent import memory_log
 from agents.Infrastructure_Agents.JsonAgent.json_validator import validate_entry
-from modules.output_infrastruktur import drive_indexer
 
 # 📌 Trigger bei Systemstart
 def trigger_on_startup():
@@ -32,13 +31,10 @@ def trigger_on_new_json(file_path: str):
         )
         return f"[Fehler im JsonAgent Trigger]: {str(e)}"
 
-# 🧾 Routing-Log schreiben
+# 🧾 Routing-Log schreiben (über MemoryAgent)
 def log_routing(file_path, result):
-    routing_log = {
-        "timestamp": datetime.datetime.now().isoformat(),
-        "agent": "JsonAgent",
-        "trigger": "trigger_on_new_json",
+    memory_log.log_interaction("JsonAgent", "📦 JSON-Datei analysiert", {
         "file": file_path,
-        "output_preview": str(result)[:100]
-    }
-    drive_indexer.append_to_log("driveagent_routing_log.json", routing_log)
+        "output_preview": str(result)[:100],
+        "timestamp": datetime.datetime.now().isoformat()
+    })
