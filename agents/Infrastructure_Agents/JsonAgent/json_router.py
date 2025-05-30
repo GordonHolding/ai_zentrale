@@ -1,24 +1,31 @@
-# json_config.py – Dynamische JSON-Verwaltung über zentralen Index
+# json_router.py – GPT-Befehle analysieren und systemisch weiterreichen
 
-from utils.json_loader import load_json
+from agents.Infrastructure_Agents.JsonAgent.json_agent import update_json_entry
+from agents.Infrastructure_Agents.JsonAgent.json_config import get_json_index
 
-# 🔁 Lädt vollständigen Index aller verwaltbaren JSON-Dateien
-def get_json_index():
-    data = load_json("json_memory_index.json")
-    if isinstance(data, dict):
-        return data
-    return {}
+# 🔍 Analyse & Routing eingehender GPT-Anweisungen zu JSON-Dateien
+def handle_json_instruction(instruction: str) -> str:
+    try:
+        instruction_lower = instruction.lower()
+        index = get_json_index()
 
-# 🔎 Gibt die Pfadinfo zu einer spezifischen Datei anhand des Schlüssels zurück
-def get_json_config(file_key):
-    index = get_json_index()
-    return index.get(file_key, None)
+        # Beispiel: TriggerConfig aktualisieren
+        if "trigger_config" in instruction_lower and "füge" in instruction_lower:
+            key = "scan_drive"
+            value = {
+                "active": True,
+                "interval_hours": 72,
+                "target_module": "agents.Infrastructure_Agents.TriggerAgent.trigger_triggers",
+                "target_function": "trigger_scan_drive"
+            }
+            return update_json_entry("trigger_config", key, value, overwrite=False)
 
-# ✅ Einheitlicher Zugriff auf Metadaten – empfohlene Standardfunktion
-def get_json_metadata(file_key):
-    return get_json_config(file_key) or {
-        "filename": f"{file_key}.json",
-        "description": "Not found – fallback config",
-        "tags": [],
-        "status": "missing"
-    }
+        # 🔄 Dynamischer JSON-Index-Zugriff
+        for file_key in index.keys():
+            if file_key in instruction_lower:
+                return f"🧭 JSON-Datei erkannt: '{file_key}' – was genau soll geändert werden?"
+
+        return "⚠️ Anweisung unklar oder kein gültiger JSON-Kontext erkannt."
+
+    except Exception as e:
+        return f"❌ Fehler beim Verarbeiten der JSON-Anweisung: {e}"
