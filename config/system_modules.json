@@ -225,7 +225,7 @@
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_protection"
     },
      {
-        "filename": "json_reader.py,
+        "filename": "json_reader.py",
         "active": true,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_reader"
     },
@@ -275,11 +275,16 @@
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_triggers"
     },
    {
-        "filename": "memory_selector.py ",
+        "filename": "memory_selector.py",
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_selector"
     },
-    {
+   {
+        "filename": "memory_cleanup.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_cleanup"
+    },
+ {
         "filename": "conversation_tracker.py",
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_tracker"
