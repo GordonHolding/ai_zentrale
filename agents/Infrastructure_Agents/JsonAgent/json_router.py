@@ -2,6 +2,7 @@
 
 from agents.Infrastructure_Agents.JsonAgent.json_agent import update_json_entry
 from agents.Infrastructure_Agents.JsonAgent.json_config import get_json_index
+from agents.Infrastructure_Agents.JsonAgent.json_validator import validate_entry
 
 # 🔍 Analyse & Routing eingehender GPT-Anweisungen zu JSON-Dateien
 def handle_json_instruction(instruction: str) -> str:
