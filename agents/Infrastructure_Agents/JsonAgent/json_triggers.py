@@ -3,6 +3,7 @@
 import datetime
 from agents.Infrastructure_Agents.JsonAgent import json_agent
 from agents.Infrastructure_Agents.MemoryAgent import memory_log
+from agents.Infrastructure_Agents.JsonAgent.json_validator import validate_entry
 from modules.output_infrastruktur import drive_indexer
 
 # 📌 Trigger bei Systemstart
