@@ -3,13 +3,14 @@
 import datetime
 import schedule
 import threading
+import time
 from agents.Infrastructure_Agents.MemoryAgent import (
     memory_log,
     memory_config,
-    memory_agent
+    memory_agent,
+    memory_cleanup
 )
-from agents.Infrastructure_Agents.MemoryAgent import memory_cleanup
-from modules.output_infrastruktur import drive_indexer
+from agents.General_Agents.DriveAgent.drive_agent import DriveAgent
 
 # 📌 Trigger bei Systemstart – Initialisierung des Memory Logs
 def trigger_on_startup():
@@ -40,20 +41,20 @@ def schedule_weekly_cleanup():
     thread.daemon = True
     thread.start()
 
-def trigger_weekly_memory_cleanup():
-    result = memory_cleanup.run_memory_cleanup()
-    log_cleanup("weekly", result)
-    return result
-
 # ▶ Manueller Aufruf des Memory Cleanups – z. B. über Chainlit-Button
 def trigger_manual_memory_cleanup():
     result = memory_cleanup.run_memory_cleanup()
     log_cleanup("manual", result)
     return result
 
+def trigger_weekly_memory_cleanup():
+    result = memory_cleanup.run_memory_cleanup()
+    log_cleanup("weekly", result)
+    return result
+
 # 🧾 GPT-Verlaufs-Log (Routing)
 def log_routing(user_id, user_message, gpt_reply):
-    routing_log = {
+    log_entry = {
         "timestamp": datetime.datetime.now().isoformat(),
         "agent": "MemoryAgent",
         "trigger": "trigger_on_gpt_message",
@@ -61,15 +62,23 @@ def log_routing(user_id, user_message, gpt_reply):
         "input": user_message[:100],
         "output": gpt_reply[:100]
     }
-    drive_indexer.append_to_log("driveagent_routing_log.json", routing_log)
+    agent = DriveAgent()
+    agent.append_log_entry(
+        log_path="Systemberichte/MEMORY/driveagent_routing_log.json",
+        entry=log_entry
+    )
 
 # 📁 Log-Eintrag für Cleanup-Vorgang
 def log_cleanup(trigger_type: str, result: list):
-    entry = {
+    log_entry = {
         "timestamp": datetime.datetime.now().isoformat(),
         "trigger": f"trigger_{trigger_type}_memory_cleanup",
         "agent": "MemoryAgent",
         "status": "✔ abgeschlossen",
         "details": result
     }
-    drive_indexer.append_to_log("driveagent_routing_log.json", entry)
+    agent = DriveAgent()
+    agent.append_log_entry(
+        log_path=f"Systemberichte/MEMORY/cleanup_reports/{datetime.datetime.now().date()}_report.json",
+        entry=log_entry
+    )
