@@ -209,6 +209,36 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_triggers"
     },
+ {
+        "filename": "json_updater.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_updater"
+    },
+     {
+        "filename": "json_formatter.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_formatter"
+    },
+     {
+        "filename": "json_protection.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_protection"
+    },
+     {
+        "filename": "json_reader.py,
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_reader"
+    },
+     {
+        "filename": "json_validator.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_validator"
+    },
+     {
+        "filename": "json_log_writer.py",
+        "active": true,
+        "import_path": "agents.Infrastructure_Agents.JsonAgent.json_log_writer"
+    },    
     {
         "filename": "gpt_vision_handler.py",
         "active": false,
@@ -229,7 +259,6 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_router"
     },
-
     {
         "filename": "memory_log.py",
         "active": true,
