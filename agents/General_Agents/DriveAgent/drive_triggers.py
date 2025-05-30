@@ -5,7 +5,6 @@ from agents.General_Agents.DriveAgent.drive_agent import DriveAgent
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 from agents.General_Agents.DriveAgent.drive_config import ROOT_FOLDER_ID
 
-
 # ⚡ Trigger bei Systemstart (z. B. für Initialscan oder Index)
 def trigger_on_startup():
     agent = DriveAgent()
@@ -25,4 +24,4 @@ def trigger_on_search_request(search_query):
     agent = DriveAgent()
     results = agent.search(search_query)
     log_interaction("DriveAgent", f"🔍 Suche ausgelöst: {search_query}", f"{len(results)} Treffer")
-    return
+    return results
