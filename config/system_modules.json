@@ -74,13 +74,6 @@
         "active": true,
         "import_path": "modules.authentication.google_utils"
     }
-
- 
-
-# JsonAgent TRUE
-
-
-
     {
         "filename": "json_agent.py",
         "active": true,
@@ -131,15 +124,7 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.JsonAgent.json_log_writer"
     },    
- 
-
-
-
-# MemoryAgent TRUE
-
-
-
-    {
+  {
         "filename": "memory_agent.py",
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_agent"
@@ -199,14 +184,7 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_triggers"
     }, 
-
-
-
-# RouterAgent FALSE
-
-
- 
-    {
+ {
         "filename": "router_agent.py",
         "active": false,
         "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent"
@@ -232,14 +210,7 @@
         "active": false,
         "import_path": "agents.Infrastructure_Agents.RouterAgent.list_available_agents"
     },
-
-
-
-# Systemguardian FALSE
-
-
-
-    {
+{
         "filename": "systemguardian_agent.py",
         "active": false,
         "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_agent"
@@ -279,15 +250,7 @@
         "active": false,
         "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer"
     },
-
-
-
-
-# TriggerAgent TRUE
-
-
-
-    {
+{
         "filename": "trigger_agent.py",
         "active": true,
         "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_agent"
@@ -332,14 +295,6 @@
         "active": true,
         "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger_log"
     },
-
-
-
-# General_Agents TRUE
-
-# DriveAgent TRUE
-
-
     {
         "filename": "drive_agent.py",
         "active": true,
@@ -370,15 +325,7 @@
         "active": true,
         "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine"
     }, 
-
-
-
-
-# RetrievalAgent TRUE
-
-
-
-  {
+{
         "filename": "retrieval_agent.py",
         "active": true,
         "import_path": "agents.General_Agents.RetrievalAgent.retrieval_agent"
@@ -403,15 +350,7 @@
         "active": true,
         "import_path": "agents.General_Agents.RetrievalAgent.update_retrieval_mode"
     }, 
-
-
-
-
-# General_Agents FALSE
-
-
-
- {
+{
         "filename": "text_agent.py",
         "active": true,
         "import_path": "agents.General_Agents.TextAgent.text_agent"
@@ -551,13 +490,7 @@
         "active": false,
         "import_path": "agents.General_Agents.CalendarAgent.calendar_reader"
     },
-
-
-
-# Business_Agents FALSE
-
-
-    {
+{
         "filename": "business_plan_agent.py",
         "active": false,
         "import_path": "agents.Business_Core_Agents.business_plan_agent"
@@ -602,15 +535,7 @@
         "active": false,
         "import_path": "agents.Business_Core_Agents.law_agent"
     },
-
-
-
-
-# Private_Agents FALSE
-
-
-
-    {
+{
         "filename": "education_agent.py",
         "active": false,
         "import_path": "agents.Private_Agents.education_agent"
@@ -670,15 +595,7 @@
         "active": false,
         "import_path": "agents.Private_Agents.shopping_agent"
     },
-
-
-
-
-# Special_Agents FALSE
-
-
-
-  {
+ {
         "filename": "agent_suggester.py",
         "active": false,
         "import_path": "agents.General_Agents.AgentSuggester.agent_suggester"
