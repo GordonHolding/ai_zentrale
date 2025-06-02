@@ -73,7 +73,7 @@
         "filename": "google_utils.py",
         "active": true,
         "import_path": "modules.authentication.google_utils"
-    }
+    },
     {
         "filename": "json_agent.py",
         "active": true,
