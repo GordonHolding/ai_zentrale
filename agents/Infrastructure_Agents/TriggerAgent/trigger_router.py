@@ -1,23 +1,34 @@
-# trigger_router.py
+# trigger_router.py – Leitet Trigger an die passende Routine weiter (GPT-kompatibel)
 
-from trigger_triggers import (
-    trigger_systemguardian_check,
-    trigger_mail_reply_check
-)
+from agents.Infrastructure_Agents.TriggerAgent.trigger_runner import run_routine
+from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_routing_error
 
-def determine_trigger(user_input):
-    user_input = user_input.lower()
+# 🔀 Routet eine Liste erkannter Trigger zu den passenden Routinen
+def route_triggers(trigger_list: list) -> list:
+    results = []
 
-    if "systemscan" in user_input or "guardian" in user_input:
-        return trigger_systemguardian_check
-    elif "mail" in user_input or "72h" in user_input:
-        return trigger_mail_reply_check
-    else:
-        return None
+    for trigger in trigger_list:
+        try:
+            if trigger["type"] == "gpt_trigger":
+                result = run_routine(trigger["name"], source="GPT")
+            elif trigger["type"] == "time_trigger":
+                result = run_routine(trigger["name"], source="Time")
+            elif trigger["type"] == "watcher_trigger":
+                result = run_routine(trigger["name"], source="Watcher")
+            elif trigger["type"] == "manual_trigger":
+                result = run_routine(trigger["name"], source="Manual")
+            else:
+                result = f"⚠️ Unbekannter Trigger-Typ: {trigger.get('type')}"
+            results.append(result)
+        except Exception as e:
+            log_routing_error(trigger, str(e))
+            results.append(f"❌ Fehler bei Routing für Trigger: {trigger.get('name')}")
 
-def handle_trigger_input(user_input):
-    func = determine_trigger(user_input)
-    if func:
-        return func()
-    else:
-        return "❌ Kein gültiger Trigger erkannt."
+    return results
+
+# ▶ Testfunktion
+if __name__ == "__main__":
+    test = [{"type": "gpt_trigger", "name": "trigger_cleanup_now"}]
+    out = route_triggers(test)
+    for res in out:
+        print(res)
