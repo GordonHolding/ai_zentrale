@@ -1,19 +1,39 @@
-# trigger_triggers.py – zentrale Triggerfunktionen des Systems
+# trigger_triggers.py – GPT-basierte Triggererkennung und Auslösung
 
-from agents.Infrastructure_Agents.SystemGuardian import systemguardian_analyzer
-from modules.ai_intelligenz.time_based_trigger_checker import check_mail_reply_timeout
-from modules.output_infrastruktur.drive_indexer import drive_index_summary
-from modules.reasoning_intelligenz.reminder_engine import run_reminder_routine
+from datetime import datetime
+from utils.json_loader import load_json
+from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_execution
 
-def trigger_systemguardian_check():
-    return systemguardian_analyzer.systemguardian_routine()
+# 🔄 Lade GPT-Trigger-Konfiguration aus JSON (z. B. trigger_gpt_config.json)
+def load_gpt_trigger_config():
+    config = load_json("trigger_gpt_config.json")
+    if "error" in config:
+        return {}
+    return config.get("gpt_triggers", {})
 
-def trigger_mail_reply_check():
-    return check_mail_reply_timeout()
+# 🧠 Erkenne GPT-Trigger in einem eingegebenen Text
+def check_gpt_trigger(user_input: str) -> list:
+    trigger_config = load_gpt_trigger_config()
+    matched_triggers = []
 
-def trigger_scan_drive():
-    return drive_index_summary()
+    for phrase, trigger_name in trigger_config.items():
+        if phrase.lower() in user_input.lower():
+            matched_triggers.append({
+                "type": "gpt_trigger",
+                "name": trigger_name,
+                "source": "gpt_input",
+                "matched_on": phrase,
+                "timestamp": datetime.utcnow().isoformat()
+            })
 
-def trigger_reminder_check():
-    return run_reminder_routine()
+    if matched_triggers:
+        log_trigger_execution("GPT-Trigger", [t["name"] for t in matched_triggers], datetime.utcnow().isoformat())
 
+    return matched_triggers
+
+# ▶ Direktes Testing
+if __name__ == "__main__":
+    test_input = "bitte cleanup jetzt und drive analysieren"
+    results = check_gpt_trigger(test_input)
+    for r in results:
+        print(f"✅ Trigger erkannt: {r['name']} durch Phrase: '{r['matched_on']}'")
