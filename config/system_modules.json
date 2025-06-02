@@ -614,6 +614,6 @@
         "filename": "agent_suggester_router.py",
         "active": false,
         "import_path": "agents.General_Agents.AgentSuggester.agent_suggester_router"
-    },
+    }    
 ]
 
