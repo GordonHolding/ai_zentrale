@@ -1,73 +1,59 @@
-# trigger_agent.py
+# agents/Infrastructure_Agents/TriggerAgent/trigger_agent.py
 
-import json
-import importlib
-import os
-from datetime import datetime, timedelta
+from datetime import datetime
+import traceback
 
-CONFIG_PATH = "config/trigger_config.json"
-STATE_PATH = "agents/Infrastructure_Agents/TriggerAgent/TriggerAgent_Memory/trigger_state.json"
-HISTORY_PATH = "agents/Infrastructure_Agents/TriggerAgent/TriggerAgent_Memory/trigger_history.json"
-ERROR_PATH = "agents/Infrastructure_Agents/TriggerAgent/TriggerAgent_Protokolle/trigger_errors.json"
-EXECUTION_LOG_PATH = "agents/Infrastructure_Agents/TriggerAgent/TriggerAgent_Protokolle/trigger_execution_log.json"
+from utils.json_loader import load_json, write_json
+from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import (
+    log_trigger_execution,
+    log_trigger_error,
+    update_trigger_state
+)
+from agents.Infrastructure_Agents.TriggerAgent.trigger_runner import run_all_triggers
 
-def load_json(path):
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+TRIGGER_NAME = "TriggerAgent"
 
-def save_json(path, data):
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
-
-def execute_routine(name, routine):
+def execute_trigger_cycle():
     try:
-        mod = importlib.import_module(routine["target_module"])
-        func = getattr(mod, routine["target_function"])
-        result = func()
+        # 🔄 Konfiguration laden (aus Google Drive, GPT-kompatibel)
+        config = load_json("trigger_config.json")
+        if "error" in config:
+            raise ValueError(f"⚠️ Trigger-Konfiguration nicht gefunden: {config['error']}")
 
-        log = load_json(EXECUTION_LOG_PATH)
-        log_entry = {
-            "timestamp": datetime.now().isoformat(),
-            "routine": name,
-            "result": str(result)[:200]
+        # 📎 Prompt-Definitionen laden (für spätere GPT-Integration)
+        prompts = load_json("trigger_prompts.json")
+        if "error" in prompts:
+            prompts = {}
+        else:
+            print(f"📎 Trigger-Prompts geladen: {len(prompts)} Einträge")
+
+        timestamp = datetime.utcnow().isoformat()
+
+        # ▶ Triggers ausführen
+        triggered_items = run_all_triggers(config)
+
+        # 💾 Trigger-Zustand speichern
+        update_trigger_state("trigger_state.json", triggered_items, timestamp)
+
+        # 🪵 Erfolg loggen
+        log_trigger_execution(trigger_name=TRIGGER_NAME, items=triggered_items, timestamp=timestamp)
+
+        return {
+            "status": "ok",
+            "triggered": triggered_items,
+            "timestamp": timestamp
         }
-        log.setdefault("runs", []).append(log_entry)
-        save_json(EXECUTION_LOG_PATH, log)
-
-        history = load_json(HISTORY_PATH)
-        history[name] = log_entry["timestamp"]
-        save_json(HISTORY_PATH, history)
 
     except Exception as e:
-        errors = load_json(ERROR_PATH)
-        errors.setdefault(name, []).append({
-            "timestamp": datetime.now().isoformat(),
-            "error": str(e)
-        })
-        save_json(ERROR_PATH, errors)
+        tb = traceback.format_exc()
+        log_trigger_error(trigger_name=TRIGGER_NAME, error=str(e), traceback_str=tb)
+        return {
+            "status": "error",
+            "error": str(e),
+            "traceback": tb
+        }
 
-def check_triggers():
-    config = load_json(CONFIG_PATH)
-    last_run = load_json(HISTORY_PATH)
-
-    for name, routine in config.items():
-        if not routine.get("active"):
-            continue
-
-        last_exec = last_run.get(name)
-        now = datetime.now()
-
-        if not last_exec:
-            execute_routine(name, routine)
-            continue
-
-        last_time = datetime.fromisoformat(last_exec)
-        delta = timedelta(hours=routine["interval_hours"])
-
-        if now - last_time >= delta:
-            execute_routine(name, routine)
-
+# ▶ Manuell startbar (z. B. bei Startup-Trigger)
 if __name__ == "__main__":
-    check_triggers()
+    result = execute_trigger_cycle()
+    print(result)
