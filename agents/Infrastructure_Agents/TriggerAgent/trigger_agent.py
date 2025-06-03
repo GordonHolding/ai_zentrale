@@ -9,7 +9,7 @@ from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import (
     log_trigger_error,
     update_trigger_state
 )
-from agents.Infrastructure_Agents.TriggerAgent.trigger_runner import run_all_triggers
+from agents.Infrastructure_Agents.TriggerAgent.trigger_triggers import run_all_triggers
 
 TRIGGER_NAME = "TriggerAgent"
 
