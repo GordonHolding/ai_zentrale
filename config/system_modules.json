@@ -1,11 +1,11 @@
 [
-{
-  "filename": "chainlit.py",
-  "active": true,
-  "import_path": "chainlit",
-  "type": "server",
-  "port": 8000
-},
+  {
+    "filename": "chainlit.py",
+    "active": true,
+    "import_path": "chainlit",
+    "type": "server",
+    "port": 8000
+  },
   {
     "filename": "json_loader.py",
     "active": true,
@@ -24,79 +24,8 @@
     "import_path": "modules.ai_intelligenz.gpt_response_parser",
     "type": "library"
   },
-  {
-    "filename": "startup_loader.py",
-    "active": true,
-    "import_path": "modules.reasoning_intelligenz.startup_loader",
-    "type": "library"
-  },
-  {
-    "filename": "startup_triggers.py",
-    "active": true,
-    "import_path": "modules.reasoning_intelligenz.startup_triggers",
-    "type": "library"
-  },
-  {
-    "filename": "gpt_prompt_selector.py",
-    "active": false,
-    "import_path": "modules.reasoning_intelligenz.gpt_prompt_selector",
-    "type": "library"
-  },
-  {
-    "filename": "analytics_module.py",
-    "active": false,
-    "import_path": "modules.reasoning_intelligenz.analytics_module",
-    "type": "library"
-  },
-  {
-    "filename": "qa_checker.py",
-    "active": false,
-    "import_path": "modules.reasoning_intelligenz.qa_checker",
-    "type": "library"
-  },
-  {
-    "filename": "voice_tools.py",
-    "active": false,
-    "import_path": "modules.reasoning_intelligenz.voice_tools",
-    "type": "library"
-  },
-  {
-    "filename": "file_uploader.py",
-    "active": false,
-    "import_path": "modules.output_infrastruktur.file_uploader",
-    "type": "library"
-  },
-  {
-    "filename": "format_optimizer.py",
-    "active": false,
-    "import_path": "modules.output_infrastruktur.format_optimizer",
-    "type": "library"
-  },
-  {
-    "filename": "telegram_file_handler.py",
-    "active": false,
-    "import_path": "modules.input_interfaces.telegram_file_handler",
-    "type": "library"
-  },
-  {
-    "filename": "telegram_bot.py",
-    "active": false,
-    "import_path": "telegram_bot",
-    "type": "server",
-    "port": 5010
-  },
-  {
-    "filename": "gmail_auth.py",
-    "active": false,
-    "import_path": "modules.authentication.gmail_auth",
-    "type": "library"
-  },
-  {
-    "filename": "google_utils.py",
-    "active": true,
-    "import_path": "modules.authentication.google_utils",
-    "type": "library"
-  },
+
+  // ---------------------- JSON AGENT ----------------------
   {
     "filename": "json_agent.py",
     "active": true,
@@ -157,6 +86,8 @@
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_log_writer",
     "type": "library"
   },
+
+  // ---------------------- MEMORY AGENT ----------------------
   {
     "filename": "memory_agent.py",
     "active": true,
@@ -229,6 +160,8 @@
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_triggers",
     "type": "library"
   },
+
+  // ---------------------- ROUTER AGENT ----------------------
   {
     "filename": "router_agent.py",
     "active": false,
@@ -259,6 +192,8 @@
     "import_path": "agents.Infrastructure_Agents.RouterAgent.list_available_agents",
     "type": "library"
   },
+
+  // ---------------------- SYSTEMGUARDIAN AGENT ----------------------
   {
     "filename": "systemguardian_agent.py",
     "active": false,
@@ -307,6 +242,8 @@
     "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer",
     "type": "library"
   },
+
+  // ---------------------- TRIGGER AGENT ----------------------
   {
     "filename": "trigger_agent.py",
     "active": true,
@@ -361,7 +298,9 @@
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger_log",
     "type": "library"
   },
-   {
+  
+// ---------------------- DRIVE AGENT ----------------------
+  {
     "filename": "drive_agent.py",
     "active": true,
     "import_path": "agents.General_Agents.DriveAgent.drive_agent",
@@ -397,6 +336,8 @@
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
     "type": "library"
   },
+
+  // ---------------------- RETRIEVAL AGENT ----------------------
   {
     "filename": "retrieval_agent.py",
     "active": true,
@@ -427,6 +368,8 @@
     "import_path": "agents.General_Agents.RetrievalAgent.update_retrieval_mode",
     "type": "library"
   },
+
+  // ---------------------- TEXT AGENT ----------------------
   {
     "filename": "text_agent.py",
     "active": false,
@@ -469,6 +412,8 @@
     "import_path": "agents.General_Agents.TextAgent.text_creator",
     "type": "library"
   },
+
+  // ---------------------- PDF AGENT (output_infrastruktur) ----------------------
   {
     "filename": "document_template_engine.py",
     "active": false,
@@ -499,6 +444,8 @@
     "import_path": "modules.output_infrastruktur.gpt_pdf_summary",
     "type": "library"
   },
+
+  // ---------------------- SHEET AGENT ----------------------
   {
     "filename": "sheet_agent.py",
     "active": false,
@@ -541,12 +488,16 @@
     "import_path": "agents.General_Agents.SheetAgent.sheet_summary",
     "type": "library"
   },
+
+  // ---------------------- VISION AGENT ----------------------
   {
     "filename": "gpt_vision_handler.py",
     "active": false,
     "import_path": "agents.Infrastructure_Agents.VisionAgent.gpt_vision_handler",
     "type": "library"
   },
+
+  // ---------------------- MAIL AGENT ----------------------
   {
     "filename": "mail_agent.py",
     "active": false,
@@ -583,6 +534,8 @@
     "import_path": "modules.output_infrastruktur.mail_tools",
     "type": "library"
   },
+
+  // ---------------------- CALENDAR AGENT ----------------------
   {
     "filename": "calendar_tools.py",
     "active": false,
@@ -595,6 +548,8 @@
     "import_path": "agents.General_Agents.CalendarAgent.calendar_reader",
     "type": "library"
   },
+
+  // ---------------------- BUSINESS CORE AGENTS ----------------------
   {
     "filename": "business_plan_agent.py",
     "active": false,
@@ -649,6 +604,8 @@
     "import_path": "agents.Business_Core_Agents.law_agent",
     "type": "library"
   },
+
+  // ---------------------- PRIVATE AGENTS ----------------------
   {
     "filename": "education_agent.py",
     "active": false,
@@ -721,6 +678,8 @@
     "import_path": "agents.Private_Agents.shopping_agent",
     "type": "library"
   },
+
+  // ---------------------- SPECIAL AGENTS ----------------------
   {
     "filename": "agent_suggester.py",
     "active": false,
