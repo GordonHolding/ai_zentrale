@@ -1,11 +1,16 @@
+# Interfaces
 python-telegram-bot==20.7
-openai>=1.0.0
 chainlit
+schedule>=1.2
+python-dotenv
+
+# Google API
 google-api-python-client
 google-auth
-python-dotenv
 google-auth-oauthlib
-schedule>=1.2
+
+# Embedding (lokal & OpenAI)
 sentence-transformers==2.2.2
+torch==1.13.1+cpu
 numpy>=1.21.0
-huggingface_hub>=0.14.1
+openai>=1.0.0  # optional genutzt, keine Performance-Auswirkung
