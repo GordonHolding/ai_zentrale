@@ -7,9 +7,9 @@ async def start():
     await cl.Message(content="🧠 Willkommen in der AI-ZENTRALE!").send()
 
 @cl.on_message
-async def handle_message(message: cl.Message):
+async def main(message: cl.Message):
     text = message.content.strip().lower()
     if text in ("hi", "hallo"):
         await cl.Message(content="👋 Hallo! Wie kann ich dir helfen?").send()
     else:
-        await cl.Message(content=f"📨 Du hast geschrieben: '{text}'").send()
+        await cl.Message(content=f"📄 Du hast geschrieben: '{text}'").send()
