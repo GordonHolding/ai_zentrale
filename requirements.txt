@@ -6,3 +6,4 @@ google-auth
 python-dotenv
 google-auth-oauthlib
 schedule>=1.2
+sentence-transformers==2.2.2
