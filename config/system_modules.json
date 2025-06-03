@@ -323,8 +323,12 @@
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger_log",
     "type": "library"
   },
-  
-// -------------------------------------------- DRIVE AGENT --------------------------------------------
+  {
+    "filename": "======================================== DRIVE AGENT ========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "drive_agent.py",
     "active": true,
@@ -362,7 +366,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- RETRIEVAL AGENT --------------------------------------------
+  {
+    "filename": "====================================== RETRIEVAL AGENT ======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "retrieval_agent.py",
     "active": true,
@@ -394,7 +403,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- TEXT AGENT --------------------------------------------
+  {
+    "filename": "========================================= TEXT AGENT =========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "text_agent.py",
     "active": false,
@@ -438,7 +452,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- PDF AGENT (output_infrastruktur) --------------------------------------------
+  {
+    "filename": "========================================= PDF AGENT ==========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "document_template_engine.py",
     "active": false,
@@ -470,7 +489,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- SHEET AGENT --------------------------------------------
+  {
+    "filename": "======================================== SHEET AGENT =========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "sheet_agent.py",
     "active": false,
@@ -514,7 +538,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- VISION AGENT --------------------------------------------
+  {
+    "filename": "======================================== VISION AGENT ========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "gpt_vision_handler.py",
     "active": false,
@@ -522,7 +551,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- MAIL AGENT --------------------------------------------
+  {
+    "filename": "========================================= MAIL AGENT =========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "mail_agent.py",
     "active": false,
@@ -560,7 +594,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- CALENDAR AGENT --------------------------------------------
+  {
+    "filename": "====================================== CALENDAR AGENT ========================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "calendar_tools.py",
     "active": false,
@@ -574,7 +613,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- BUSINESS CORE AGENTS --------------------------------------------
+  {
+    "filename": "=================================== BUSINESS CORE AGENTS ====================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "business_plan_agent.py",
     "active": false,
@@ -630,7 +674,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- PRIVATE AGENTS --------------------------------------------
+  {
+    "filename": "======================================== PRIVATE AGENTS =======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "education_agent.py",
     "active": false,
@@ -704,7 +753,12 @@
     "type": "library"
   },
 
-  // -------------------------------------------- SPECIAL AGENTS --------------------------------------------
+  {
+    "filename": "======================================== SPECIAL AGENTS ======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "agent_suggester.py",
     "active": false,
@@ -730,4 +784,3 @@
     "type": "library"
   }
 ]
-
