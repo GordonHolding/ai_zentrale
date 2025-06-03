@@ -1,36 +1,54 @@
-# main_controller.py – Zentrale Steuerinstanz der AI-ZENTRALE
+# main_controller.py – Zentrale Steuerinstanz der AI-ZENTRALE (Chainlit-kompatibel)
 
 import json
 import importlib
 import os
-import time
+import traceback
 
-# 🔁 Direkter Loader für GitHub-Dateien
+# 📄 Lade JSON-Dateien (z. B. system_modules.json)
 def load_json_file(path: str) -> dict:
     try:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        print(f"❌ Fehler beim Laden der Datei {path}: {e}")
-        return []
+        return {"error": f"❌ Fehler beim Laden von {path}: {e}"}
 
-# 🔄 Lade aktivierte Module direkt aus GitHub (config/system_modules.json)
+# 🔁 Lade aktivierte Module aus Konfig
 def load_active_modules():
     modules = load_json_file("config/system_modules.json")
-    return [m for m in modules if m.get("active") is True]
+    if isinstance(modules, dict) and "error" in modules:
+        return [], modules["error"]
+    return [m for m in modules if m.get("active") is True], None
 
-# ▶ Starte Module nacheinander
-def run_modules():
-    modules = load_active_modules()
+# 🚀 Starte alle aktivierten Module (optional: Ergebnisse zurückgeben)
+async def run_full_system_check():
+    modules, error = load_active_modules()
+    if error:
+        return {"status": "error", "message": error}
+
+    results = []
     for module in modules:
+        import_path = module.get("import_path")
         try:
-            import_path = module["import_path"]
-            print(f"🟢 Lade Modul: {import_path}")
             importlib.import_module(import_path)
+            results.append({"module": import_path, "status": "ok"})
         except Exception as e:
-            print(f"❌ Fehler beim Laden von {import_path}: {e}")
+            results.append({
+                "module": import_path,
+                "status": "error",
+                "message": str(e),
+                "traceback": traceback.format_exc()
+            })
 
+    return {
+        "status": "done",
+        "checked_modules": len(modules),
+        "results": results
+    }
+
+# ▶ Optionaler CLI-Test
 if __name__ == "__main__":
+    import asyncio
     print("🚀 Starte MAIN CONTROLLER ...")
-    time.sleep(1)
-    run_modules()
+    result = asyncio.run(run_full_system_check())
+    print(json.dumps(result, indent=2, ensure_ascii=False))
