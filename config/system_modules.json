@@ -361,7 +361,7 @@
   },
   {
     "filename": "file_metadata_engine.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
     "type": "library"
   },
@@ -374,31 +374,31 @@
   },
   {
     "filename": "retrieval_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.RetrievalAgent.retrieval_agent",
     "type": "library"
   },
   {
     "filename": "embedding_engine.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.RetrievalAgent.embedding_engine",
     "type": "library"
   },
   {
     "filename": "embedding_store.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.RetrievalAgent.embedding_store",
     "type": "library"
   },
   {
     "filename": "similarity_tools.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.RetrievalAgent.similarity_tools",
     "type": "library"
   },
   {
     "filename": "update_retrieval_mode.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.RetrievalAgent.update_retrieval_mode",
     "type": "library"
   },
