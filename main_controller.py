@@ -1,4 +1,4 @@
-{# main_controller.py – Zentrale Steuerinstanz der AI-ZENTRALE
+# main_controller.py – Zentrale Steuerinstanz der AI-ZENTRALE
 
 import json
 import importlib
@@ -33,4 +33,4 @@ def run_modules():
 if __name__ == "__main__":
     print("🚀 Starte MAIN CONTROLLER ...")
     time.sleep(1)
-    run_modules()}
+    run_modules()
