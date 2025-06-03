@@ -1,12 +1,26 @@
-# chainlit.py – Minimal + Backend-Controller
+# chainlit.py – Eigenständiges Startskript für Chainlit
 
-import chainlit as cl
-import subprocess
+import argparse
+import os
 
-# ▶ Starte Backend-Controller (async, blockiert Chainlit nicht)
-subprocess.Popen(["python3", "main_controller.py"])
+def main():
+    parser = argparse.ArgumentParser(description="Starte Chainlit Server mit optionalem Port.")
+    parser.add_argument("--port", type=int, default=int(os.environ.get("CHAINLIT_PORT", 8000)))
+    args = parser.parse_args()
 
-# ✅ Reagiere auf Eingaben
-@cl.on_message
-async def on_message(message: cl.Message):
-    await cl.Message(content="✅ Chainlit läuft & MainController wurde gestartet!").send()
+    # Starte Chainlit auf dem gegebenen Port (hier als Beispiel mit "chainlit run")
+    # Voraussetzung: chainlit ist installiert und ein passendes config/script vorhanden!
+    import subprocess
+    import sys
+
+    print(f"🚀 Starte Chainlit auf Port {args.port} ...")
+    try:
+        # Passe ggf. den Dateinamen (z.B. "app.py") an, falls du ein eigenes Script hast!
+        subprocess.run([
+            sys.executable, "-m", "chainlit", "run", "app.py", "--port", str(args.port)
+        ], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Fehler beim Start von Chainlit: {e}")
+
+if __name__ == "__main__":
+    main()
