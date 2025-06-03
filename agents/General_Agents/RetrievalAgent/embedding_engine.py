@@ -1,5 +1,3 @@
-# embedding_engine.py – wandelt Text in Vektoren (MiniLM lokal oder OpenAI)
-
 import os
 from typing import List, Union
 from sentence_transformers import SentenceTransformer
@@ -10,8 +8,10 @@ from utils.json_loader import load_json
 config = load_json("retrieval_config.json")
 MODE = config.get("mode", "local").strip().lower()
 
-# 📁 Lokales Modellverzeichnis
-LOCAL_MODEL_PATH = "General_Agents/RetrievalAgent/Model/all-MiniLM-L6-v2"
+# 📁 Lokales Modellverzeichnis (stabiler Pfad relativ zum Modulverzeichnis)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOCAL_MODEL_PATH = os.path.join(BASE_DIR, "Model", "all-MiniLM-L6-v2")
+
 _model = None
 
 def load_local_model():
