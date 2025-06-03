@@ -7,10 +7,13 @@ from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_
 from datetime import datetime
 import os
 
-# 📁 Konfiguration & Metapfade
+# 📁 BASE_DIR für Pfadstabilität
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 📁 Konfiguration & Metapfade (relativ zur Projektstruktur)
 WATCHED_FOLDER_ID = load_json("drive_config.json").get("watched_folder_id", "")
-META_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/WatcherTrigger/watcher_trigger_log.json"
-STRUCTURE_META_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Drive/file_structure_meta.json"
+META_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../../../../../0.3 AI-Regelwerk & Historie/Systemregeln/WatcherTrigger/watcher_trigger_log.json"))
+STRUCTURE_META_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../../../../../0.3 AI-Regelwerk & Historie/Systemregeln/Drive/file_structure_meta.json"))
 
 def scan_drive_and_trigger():
     if not WATCHED_FOLDER_ID:
