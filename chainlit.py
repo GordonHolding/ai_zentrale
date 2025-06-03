@@ -8,16 +8,14 @@ def main():
     parser.add_argument("--port", type=int, default=int(os.environ.get("CHAINLIT_PORT", 8000)))
     args = parser.parse_args()
 
-    # Starte Chainlit auf dem gegebenen Port (hier als Beispiel mit "chainlit run")
-    # Voraussetzung: chainlit ist installiert und ein passendes config/script vorhanden!
+    # Starte Chainlit auf dem gegebenen Port mit chainlitapp.py als Hauptskript
     import subprocess
     import sys
 
-    print(f"🚀 Starte Chainlit auf Port {args.port} ...")
+    print(f"🚀 Starte Chainlit auf Port {args.port} mit chainlitapp.py ...")
     try:
-        # Passe ggf. den Dateinamen (z.B. "app.py") an, falls du ein eigenes Script hast!
         subprocess.run([
-            sys.executable, "-m", "chainlit", "run", "app.py", "--port", str(args.port)
+            sys.executable, "-m", "chainlit", "run", "chainlitapp.py", "--port", str(args.port)
         ], check=True)
     except subprocess.CalledProcessError as e:
         print(f"❌ Fehler beim Start von Chainlit: {e}")
