@@ -5,7 +5,9 @@ import json
 from datetime import datetime
 from utils.json_loader import load_json, write_json
 
-LOG_PATH = "0.2 Agenten/Infrastructure_Agents/TriggerAgent/TriggerAgent_Protokolle/watcher_trigger_log.json"
+# 📁 BASE_DIR zur Pfad-Absicherung
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_PATH = os.path.abspath(os.path.join(BASE_DIR, "../../../../../../0.2 Agenten/Infrastructure_Agents/TriggerAgent/TriggerAgent_Protokolle/watcher_trigger_log.json"))
 
 def append_watcher_log(change_type: str, file_info: dict, trigger_source: str = "WatcherTrigger"):
     """
