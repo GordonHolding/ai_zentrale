@@ -13,4 +13,4 @@ google-auth-oauthlib
 sentence-transformers==2.2.2
 torch==1.13.1
 numpy>=1.21.0
-openai>=1.0.0
+openai>=1.0.0  # optional, für OpenAI-Embedding
