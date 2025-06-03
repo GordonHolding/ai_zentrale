@@ -1,12 +1,11 @@
 # drive_config.py – Zentrale Konfiguration für DriveAgent & Trigger
 
-import os
-import json
+from utils.json_loader import load_json
 
-# 📁 Standardpfad zur Drive-Konfigurationsdatei
-CONFIG_PATH = "0.3 AI-Regelwerk & Historie/Systemregeln/Config/drive_index_config.json"
+# 📄 Drive-Konfigurationsdatei (Dateiname – Pfad wird automatisch im json_loader gesucht)
+CONFIG_FILENAME = "drive_index_config.json"
 
-# 🧠 Fallback-Werte (wenn JSON fehlt oder unvollständig)
+# 🧠 Fallback-Werte (werden automatisch ergänzt, falls im JSON unvollständig oder fehlerhaft)
 DEFAULT_CONFIG = {
     "root_folder_id": "root",
     "allowed_mime_types": [
@@ -22,19 +21,14 @@ DEFAULT_CONFIG = {
     "account_name": "office_gordonholding"
 }
 
-# 📦 Konfiguration laden (mit Fallback)
-def load_drive_config():
-    if os.path.exists(CONFIG_PATH):
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                user_config = json.load(f)
-                return {**DEFAULT_CONFIG, **user_config}
-        except Exception:
-            pass
-    return DEFAULT_CONFIG
+# 🧩 JSON laden + Fallback-Merge
+CONFIG = load_json(CONFIG_FILENAME)
+if not isinstance(CONFIG, dict) or "root_folder_id" not in CONFIG:
+    CONFIG = DEFAULT_CONFIG
+else:
+    CONFIG = {**DEFAULT_CONFIG, **CONFIG}
 
-# 🔁 Konfigurationswerte direkt bereitstellen
-CONFIG = load_drive_config()
+# 🔁 Direkt verwendbare Konfig-Variablen (für alle Module)
 ROOT_FOLDER_ID = CONFIG["root_folder_id"]
 ALLOWED_MIME_TYPES = CONFIG["allowed_mime_types"]
 INCLUDE_ALL_MIME_TYPES = CONFIG["include_all_mime_types"]
