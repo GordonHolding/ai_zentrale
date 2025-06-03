@@ -11,6 +11,6 @@ google-auth-oauthlib
 
 # Embedding (lokal & OpenAI)
 sentence-transformers==2.2.2
-torch==1.13.1+cpu
+torch==1.13.1       # ohne +cpu, sonst Fehler bei Render!
 numpy>=1.21.0
-openai>=1.0.0  # optional genutzt, keine Performance-Auswirkung
+openai>=1.0.0       # optional genutzt, keine Performance-Auswirkung
