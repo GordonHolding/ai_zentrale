@@ -1,10 +1,13 @@
-python-telegram-bot==20.7
+# Core AI-System (Chainlit + OpenAI-API)
 openai>=1.0.0
 chainlit
+python-dotenv
+schedule>=1.2
+
+# Google API (für spätere Drive- und Sheet-Integration)
 google-api-python-client
 google-auth
-python-dotenv
 google-auth-oauthlib
-schedule>=1.2
-sentence-transformers==2.2.2
+
+# Systemfunktionen (JSON, Trigger, Logging, optional Embedding später)
 numpy>=1.21.0
