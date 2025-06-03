@@ -1,7 +1,12 @@
-from main_controller import run_full_system_check
+# chainlit.py – Minimal + Backend-Controller
 
-@cl.on_chat_start
-async def on_start():
-    await cl.Message(content="🧠 Starte Systemcheck...").send()
-    result = await run_full_system_check()
-    await cl.Message(content=f"✅ Ergebnis:\n{result}").send()
+import chainlit as cl
+import subprocess
+
+# ▶ Starte Backend-Controller (async, blockiert Chainlit nicht)
+subprocess.Popen(["python3", "main_controller.py"])
+
+# ✅ Reagiere auf Eingaben
+@cl.on_message
+async def on_message(message: cl.Message):
+    await cl.Message(content="✅ Chainlit läuft & MainController wurde gestartet!").send()
