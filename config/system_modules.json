@@ -25,7 +25,12 @@
     "type": "library"
   },
 
-  // ---------------------- JSON AGENT ----------------------
+  {
+    "filename": "======================================= JSON AGENT =======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "json_agent.py",
     "active": true,
@@ -87,7 +92,12 @@
     "type": "library"
   },
 
-  // ---------------------- MEMORY AGENT ----------------------
+  {
+    "filename": "====================================== MEMORY AGENT ======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "memory_agent.py",
     "active": true,
@@ -161,7 +171,12 @@
     "type": "library"
   },
 
-  // ---------------------- ROUTER AGENT ----------------------
+  {
+    "filename": "====================================== ROUTER AGENT ======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "router_agent.py",
     "active": false,
@@ -193,7 +208,12 @@
     "type": "library"
   },
 
-  // ---------------------- SYSTEMGUARDIAN AGENT ----------------------
+  {
+    "filename": "================================== SYSTEMGUARDIAN AGENT ==================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "systemguardian_agent.py",
     "active": false,
@@ -243,7 +263,12 @@
     "type": "library"
   },
 
-  // ---------------------- TRIGGER AGENT ----------------------
+  {
+    "filename": "====================================== TRIGGER AGENT ======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
   {
     "filename": "trigger_agent.py",
     "active": true,
@@ -299,7 +324,7 @@
     "type": "library"
   },
   
-// ---------------------- DRIVE AGENT ----------------------
+// -------------------------------------------- DRIVE AGENT --------------------------------------------
   {
     "filename": "drive_agent.py",
     "active": true,
@@ -337,7 +362,7 @@
     "type": "library"
   },
 
-  // ---------------------- RETRIEVAL AGENT ----------------------
+  // -------------------------------------------- RETRIEVAL AGENT --------------------------------------------
   {
     "filename": "retrieval_agent.py",
     "active": true,
@@ -369,7 +394,7 @@
     "type": "library"
   },
 
-  // ---------------------- TEXT AGENT ----------------------
+  // -------------------------------------------- TEXT AGENT --------------------------------------------
   {
     "filename": "text_agent.py",
     "active": false,
@@ -413,7 +438,7 @@
     "type": "library"
   },
 
-  // ---------------------- PDF AGENT (output_infrastruktur) ----------------------
+  // -------------------------------------------- PDF AGENT (output_infrastruktur) --------------------------------------------
   {
     "filename": "document_template_engine.py",
     "active": false,
@@ -445,7 +470,7 @@
     "type": "library"
   },
 
-  // ---------------------- SHEET AGENT ----------------------
+  // -------------------------------------------- SHEET AGENT --------------------------------------------
   {
     "filename": "sheet_agent.py",
     "active": false,
@@ -489,7 +514,7 @@
     "type": "library"
   },
 
-  // ---------------------- VISION AGENT ----------------------
+  // -------------------------------------------- VISION AGENT --------------------------------------------
   {
     "filename": "gpt_vision_handler.py",
     "active": false,
@@ -497,7 +522,7 @@
     "type": "library"
   },
 
-  // ---------------------- MAIL AGENT ----------------------
+  // -------------------------------------------- MAIL AGENT --------------------------------------------
   {
     "filename": "mail_agent.py",
     "active": false,
@@ -535,7 +560,7 @@
     "type": "library"
   },
 
-  // ---------------------- CALENDAR AGENT ----------------------
+  // -------------------------------------------- CALENDAR AGENT --------------------------------------------
   {
     "filename": "calendar_tools.py",
     "active": false,
@@ -549,7 +574,7 @@
     "type": "library"
   },
 
-  // ---------------------- BUSINESS CORE AGENTS ----------------------
+  // -------------------------------------------- BUSINESS CORE AGENTS --------------------------------------------
   {
     "filename": "business_plan_agent.py",
     "active": false,
@@ -605,7 +630,7 @@
     "type": "library"
   },
 
-  // ---------------------- PRIVATE AGENTS ----------------------
+  // -------------------------------------------- PRIVATE AGENTS --------------------------------------------
   {
     "filename": "education_agent.py",
     "active": false,
@@ -679,7 +704,7 @@
     "type": "library"
   },
 
-  // ---------------------- SPECIAL AGENTS ----------------------
+  // -------------------------------------------- SPECIAL AGENTS --------------------------------------------
   {
     "filename": "agent_suggester.py",
     "active": false,
