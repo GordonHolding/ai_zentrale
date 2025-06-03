@@ -1,13 +1,15 @@
-# Core AI-System (Chainlit + OpenAI-API)
-openai>=1.0.0
+# Interfaces & Scheduling
 chainlit
-python-dotenv
 schedule>=1.2
+python-dotenv
 
-# Google API (für spätere Drive- und Sheet-Integration)
+# Google API Access
 google-api-python-client
 google-auth
 google-auth-oauthlib
 
-# Systemfunktionen (JSON, Trigger, Logging, optional Embedding später)
+# OpenAI-Zugriff (GPT, Embedding, Vision, etc.)
+openai>=1.0.0
+
+# Basis für Textverarbeitung, Embeddings, NumPy
 numpy>=1.21.0
