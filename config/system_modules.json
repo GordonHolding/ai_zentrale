@@ -352,7 +352,7 @@
     }, 
 {
         "filename": "text_agent.py",
-        "active": true,
+        "active": false,
         "import_path": "agents.General_Agents.TextAgent.text_agent"
     },
   {
