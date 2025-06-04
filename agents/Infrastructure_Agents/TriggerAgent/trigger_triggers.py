@@ -4,7 +4,7 @@ from datetime import datetime
 from utils.json_loader import load_json
 from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_execution
 from agents.Infrastructure_Agents.TriggerAgent.time_trigger import run_scheduled_triggers
-from agents.Infrastructure_Agents.TriggerAgent.custom_action import check_custom_trigger
+from agents.Infrastructure_Agents.TriggerAgent.trigger_custom_action import check_custom_trigger
 from agents.Infrastructure_Agents.TriggerAgent.watcher_trigger import check_watcher_trigger
 
 # 🔄 Lade GPT-Trigger-Konfiguration aus JSON (z. B. trigger_gpt_config.json)
