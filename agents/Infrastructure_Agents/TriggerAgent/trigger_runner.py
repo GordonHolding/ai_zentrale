@@ -1,4 +1,4 @@
-# trigger_runner.py – zentrale Routineausführung für erkannte Trigger
+# agents/Infrastructure_Agents/TriggerAgent/trigger_runner.py
 
 from datetime import datetime
 from agents.Infrastructure_Agents.TriggerAgent.time_trigger import run_time_trigger_routine
@@ -7,8 +7,9 @@ from agents.Infrastructure_Agents.TriggerAgent.watcher_trigger import run_drive_
 from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_execution
 
 # ▶ Hauptfunktion: Führe eine Routine basierend auf Trigger-Namen aus
-def run_routine(trigger_name: str) -> str:
-    log_trigger_execution("TriggerRunner", [trigger_name], datetime.utcnow().isoformat())
+def run_routine(trigger_name: str, source: str = "System") -> str:
+    timestamp = datetime.utcnow().isoformat()
+    log_trigger_execution("TriggerRunner", [trigger_name], timestamp)
 
     try:
         # 💡 Zeitbasierte Routinen
@@ -22,12 +23,12 @@ def run_routine(trigger_name: str) -> str:
         # 💡 Benutzerdefinierte Aktion aus JSON-TriggerConfig
         else:
             result = execute_trigger_action({"name": trigger_name})
-            return f"✅ Trigger '{trigger_name}' ausgeführt → {result}"
+            return f"✅ Trigger '{trigger_name}' ({source}) ausgeführt → {result}"
 
     except Exception as e:
-        return f"❌ Fehler beim Ausführen von Trigger '{trigger_name}': {e}"
+        return f"❌ Fehler bei Trigger '{trigger_name}' ({source}): {e}"
 
 # ▶ Direktes Testing
 if __name__ == "__main__":
-    test = run_routine("run_time_trigger")
+    test = run_routine("run_time_trigger", source="Manual Test")
     print(test)
