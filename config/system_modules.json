@@ -361,7 +361,7 @@
   },
   {
     "filename": "file_metadata_engine.py",
-    "active": false,
+    "active": true,
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
     "type": "library"
   },
