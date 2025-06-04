@@ -65,7 +65,7 @@ def enrich_file_metadata(file_list):
     # Bestehende Metadatenbank laden und ergänzen
     try:
         existing = load_json(META_PATH)
-   except Exception:
+   except:
     existing = []
 
     updated = existing + enriched_files
