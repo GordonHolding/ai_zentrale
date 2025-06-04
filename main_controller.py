@@ -1,13 +1,16 @@
-# main_controller.py – Eigenständiger Steuerdienst der AI-ZENTRALE
-
 import json
 import importlib
 import os
 import subprocess
 import sys
 import time
+from fastapi import FastAPI
+import threading
+import uvicorn
 
 CONFIG_PATH = "config/system_modules.json"
+app = FastAPI()
+processes = []
 
 def load_json_file(path: str) -> list:
     try:
@@ -26,7 +29,6 @@ def load_active_modules():
 
 def run_modules():
     modules = load_active_modules()
-    processes = []
     for module in modules:
         try:
             import_path = module["import_path"]
@@ -36,7 +38,6 @@ def run_modules():
             if mod_type == "server":
                 script_path = import_path.replace('.', os.sep) + ".py"
                 port = str(module.get("port", 8000))
-
                 proc = subprocess.Popen(
                     [sys.executable, script_path, "--port", port],
                     stdout=subprocess.PIPE,
@@ -44,23 +45,26 @@ def run_modules():
                     env=os.environ.copy()
                 )
                 processes.append(proc)
-                print(f"   → Server-Modul läuft als Subprozess auf Port {port} (PID: {proc.pid})")
+                print(f"   → Server-Modul läuft auf Port {port} (PID: {proc.pid})")
             else:
                 importlib.import_module(import_path)
                 print(f"   → Library-Modul importiert.")
         except Exception as e:
             print(f"❌ Fehler beim Starten von {module.get('filename', 'Unbekannt')}: {e}")
 
-    try:
-        print("🛑 Zum Beenden: [STRG+C]")
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("\n🛑 Stoppe alle Subprozesse ...")
-        for proc in processes:
-            proc.terminate()
-        print("✅ Alle Module gestoppt.")
+# Dummy API-Endpunkt für Render
+@app.get("/")
+def status():
+    return {"status": "Main Controller läuft", "prozesse": len(processes)}
+
+# Modulstart als Hintergrundthread
+def start_modules_async():
+    thread = threading.Thread(target=run_modules)
+    thread.daemon = True
+    thread.start()
 
 if __name__ == "__main__":
-    print("🚀 Starte MAIN CONTROLLER als Webservice ...")
-    run_modules()
+    print("🚀 Starte MAIN CONTROLLER als Webservice (FastAPI + Agenten) ...")
+    start_modules_async()
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
