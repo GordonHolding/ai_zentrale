@@ -1,12 +1,5 @@
 [
   {
-  "filename": "chainlit_start.py",
-  "active": true,
-  "import_path": "chainlit_start",
-  "type": "server",
-  "port": 8000
-},
-  {
     "filename": "json_loader.py",
     "active": true,
     "import_path": "utils.json_loader",
