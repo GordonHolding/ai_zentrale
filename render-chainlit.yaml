@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: chainlit-interface
+    env: python
+    plan: starter
+    buildCommand: ""
+    startCommand: python3 chainlit_start.py
+    envVars:
+      - key: CHAINLIT_PORT
+        value: 8000
+    autoDeploy: true
