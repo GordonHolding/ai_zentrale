@@ -7,15 +7,21 @@ from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import (
     log_trigger_error
 )
 
-ACTION_MAP = load_json("trigger_action_map.json")
+# 🔐 Sichere Initialisierung
+try:
+    ACTION_MAP = load_json("trigger_action_map.json")
+    if "error" in ACTION_MAP:
+        ACTION_MAP = {}
+except:
+    ACTION_MAP = {}
 
-# ▶ Führt eine definierte Aktion aus, basierend auf dem Trigger
+# ▶ Führt eine definierte Aktion aus
 def execute_trigger_action(trigger: dict) -> str:
     action_name = trigger.get("action", "undefined")
     trigger_name = trigger.get("name", "Unbenannt")
 
     if action_name == "undefined" or action_name not in ACTION_MAP:
-        log_trigger_error(trigger_name, f"Aktionsname '{action_name}' unbekannt oder nicht definiert.", "")
+        log_trigger_error(trigger_name, f"Aktionsname '{action_name}' unbekannt oder nicht definiert.")
         return f"❌ Unbekannte Aktion: '{action_name}'"
 
     try:
@@ -28,10 +34,10 @@ def execute_trigger_action(trigger: dict) -> str:
         return f"{action_name} → {result}"
 
     except Exception as e:
-        log_trigger_error(trigger_name, f"❌ Fehler bei Aktion '{action_name}': {e}", "")
+        log_trigger_error(trigger_name, f"❌ Fehler bei Aktion '{action_name}': {e}")
         return f"{action_name} ❌ Fehler: {e}"
 
-# ▶ Prüft auf aktivierte benutzerdefinierte Trigger (aus Konfig)
+# ▶ Benutzerdefinierte Trigger aus Konfig
 def check_custom_trigger(config: dict) -> list:
     results = []
     for trig in config.get("custom_triggers", []):
