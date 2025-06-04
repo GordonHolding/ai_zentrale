@@ -1,9 +1,9 @@
-# trigger_triggers.py – GPT-basierte Triggererkennung und zentrale Triggersteuerung
+# agents/Infrastructure_Agents/TriggerAgent/trigger_triggers.py
 
 from datetime import datetime
 from utils.json_loader import load_json
 from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_execution
-from agents.Infrastructure_Agents.TriggerAgent.time_trigger import check_time_trigger
+from agents.Infrastructure_Agents.TriggerAgent.time_trigger import run_scheduled_triggers
 from agents.Infrastructure_Agents.TriggerAgent.custom_action import check_custom_trigger
 from agents.Infrastructure_Agents.TriggerAgent.watcher_trigger import check_watcher_trigger
 
@@ -38,11 +38,11 @@ def check_gpt_trigger(user_input: str) -> list:
 def run_all_triggers(config: dict) -> list:
     results = []
 
-    # 1. Zeitbasierte Trigger
+    # 1. Zeitbasierte Trigger (nur wenn explizit aktiviert)
     try:
-        results.extend(check_time_trigger(config))
+        results.extend(run_scheduled_triggers())
     except Exception as e:
-        print(f"⚠️ Fehler in check_time_trigger: {e}")
+        print(f"⚠️ Fehler in run_scheduled_triggers: {e}")
 
     # 2. Benutzerdefinierte Aktionen
     try:
