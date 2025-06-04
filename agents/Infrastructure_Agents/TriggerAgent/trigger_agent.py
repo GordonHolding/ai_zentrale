@@ -9,7 +9,7 @@ from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import (
     log_trigger_error,
     update_trigger_state
 )
-from agents.Infrastructure_Agents.TriggerAgent.trigger_triggers import run_all_triggers
+from agents.Infrastructure_Agents.TriggerAgent.trigger_triggers import run_all_triggers  # <- korrekt importiert
 
 TRIGGER_NAME = "TriggerAgent"
 
@@ -22,7 +22,7 @@ def execute_trigger_cycle():
 
         timestamp = datetime.utcnow().isoformat()
 
-        # ▶ Trigger erkennen & einsammeln
+        # ▶ Triggers ausführen
         triggered_items = run_all_triggers(config)
 
         # 💾 Trigger-Zustand speichern
