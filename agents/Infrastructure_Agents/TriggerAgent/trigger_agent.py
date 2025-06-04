@@ -9,10 +9,9 @@ from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import (
     log_trigger_error,
     update_trigger_state
 )
-from agents.Infrastructure_Agents.TriggerAgent.trigger_triggers import run_all_triggers
+from agents.Infrastructure_Agents.TriggerAgent.trigger_runner import run_all_triggers
 
 TRIGGER_NAME = "TriggerAgent"
-
 
 def execute_trigger_cycle():
     try:
@@ -46,7 +45,6 @@ def execute_trigger_cycle():
             "error": str(e),
             "traceback": tb
         }
-
 
 # ▶ Manuell startbar (z. B. bei Startup-Trigger)
 if __name__ == "__main__":
