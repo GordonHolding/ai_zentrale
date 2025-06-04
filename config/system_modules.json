@@ -299,6 +299,12 @@
     "type": "library"
   },
   {
+    "filename": "trigger_runner.py",
+    "active": true,
+    "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_runner",
+    "type": "library"
+  },     
+  {
     "filename": "watcher_trigger.py",
     "active": true,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger",
