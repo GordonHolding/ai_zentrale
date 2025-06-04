@@ -9,26 +9,21 @@ def route_triggers(trigger_list: list) -> list:
 
     for trigger in trigger_list:
         try:
-            if trigger["type"] == "gpt_trigger":
-                result = run_routine(trigger["name"], source="GPT")
-            elif trigger["type"] == "time_trigger":
-                result = run_routine(trigger["name"], source="Time")
-            elif trigger["type"] == "watcher_trigger":
-                result = run_routine(trigger["name"], source="Watcher")
-            elif trigger["type"] == "manual_trigger":
-                result = run_routine(trigger["name"], source="Manual")
-            else:
-                result = f"⚠️ Unbekannter Trigger-Typ: {trigger.get('type')}"
-            results.append(result)
+            trigger_name = trigger.get("name", "Unbekannt")
+            trigger_type = trigger.get("type", "undefined")
+            trigger_source = trigger.get("source", "unspecified")
+
+            result = run_routine(trigger_name)
+            results.append(f"▶ {trigger_type.upper()} → {trigger_name} → {result}")
         except Exception as e:
             log_routing_error(trigger, str(e))
-            results.append(f"❌ Fehler bei Routing für Trigger: {trigger.get('name')}")
-
+            results.append(f"❌ Fehler bei Routing für Trigger: {trigger.get('name', 'Unbekannt')}")
+    
     return results
 
 # ▶ Testfunktion
 if __name__ == "__main__":
-    test = [{"type": "gpt_trigger", "name": "trigger_cleanup_now"}]
+    test = [{"type": "gpt_trigger", "name": "run_time_trigger", "source": "GPT"}]
     out = route_triggers(test)
     for res in out:
         print(res)
