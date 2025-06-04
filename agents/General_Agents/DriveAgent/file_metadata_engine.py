@@ -1,32 +1,25 @@
-# file_metadata_engine.py
+# agents/General_Agents/DriveAgent/file_metadata_engine.py
 
 from utils.json_loader import load_json, write_json
 from datetime import datetime
-import re
 
 META_PATH = "0.2 Agenten/General_Agents/DriveAgent/DriveAgent_Memory/file_structure_meta.json"
 
 def enrich_file_metadata(file_list):
     """
     Ergänzt Dateiobjekte um strategische Metadaten für GPT-Verarbeitung, Sensitivität, Kategorisierung usw.
-
-    Args:
-        file_list (list): Liste von Dateiobjekten mit Grundinformationen (id, name, path, mimeType)
-
-    Returns:
-        list: Dateiobjekte mit erweiterten Metadaten
     """
     enriched_files = []
 
     for f in file_list:
-        enriched = dict(f)  # Deepcopy
+        enriched = dict(f)
         name = f.get("name", "").lower()
         path = f.get("path", "").lower()
 
         # 1. Typklassifikation
         if f.get("mimeType", "").startswith("application/json") or name.endswith(".json"):
             enriched["type"] = "json"
-        elif "text" in f.get("mimeType", "") or name.endswith(".txt") or name.endswith(".md"):
+        elif "text" in f.get("mimeType", "") or name.endswith((".txt", ".md")):
             enriched["type"] = "text"
         elif name.endswith((".png", ".jpg", ".jpeg", ".gif")):
             enriched["type"] = "image"
@@ -39,7 +32,7 @@ def enrich_file_metadata(file_list):
         else:
             enriched["type"] = "unknown"
 
-        # 2. Kategorie (Pfadbasierte Heuristik)
+        # 2. Kategorie
         if "zugangsdaten" in path:
             enriched["category"] = "Zugangsdaten"
         elif "verträge" in path:
@@ -49,27 +42,25 @@ def enrich_file_metadata(file_list):
         else:
             enriched["category"] = "Allgemein"
 
-        # 3. Sensitivität & Kommentare
+        # 3. Sensitivität
         enriched["sensitive"] = any(x in name for x in ["passwort", "geheim", "login", "zugang"])
         enriched["comment_required"] = enriched["sensitive"] or enriched["category"] in ["Zugangsdaten", "Verträge"]
 
         # 4. GPT-Kompatibilität
         enriched["gpt_context_enabled"] = enriched["type"] in ["text", "json", "code"]
 
-        # 5. Watcher-Info
+        # 5. Zusatzinfos
         enriched["watcher_detected"] = True
         enriched["enriched_at"] = datetime.now().isoformat()
 
         enriched_files.append(enriched)
 
-    # Bestehende Metadatenbank laden und ergänzen
     try:
         existing = load_json(META_PATH)
-   except:
-    existing = []
+    except:
+        existing = []
 
     updated = existing + enriched_files
     write_json(META_PATH, updated)
 
     return enriched_files
-
