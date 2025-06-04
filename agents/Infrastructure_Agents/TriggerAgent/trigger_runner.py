@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from agents.Infrastructure_Agents.TriggerAgent.time_trigger import run_time_trigger_routine
-from agents.Infrastructure_Agents.TriggerAgent.custom_action import execute_trigger_action
+from agents.Infrastructure_Agents.TriggerAgent.trigger_custom_action import execute_trigger_action
 from agents.Infrastructure_Agents.TriggerAgent.watcher_trigger import scan_drive_and_trigger  # <- fix
 from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_execution
 
