@@ -15,8 +15,8 @@ def main():
     print(f"🚀 Starte Chainlit auf Port {args.port} mit chainlitapp.py ...")
     try:
         subprocess.run([
-            sys.executable, "-m", "chainlit", "run", "chainlitapp.py", "--port", str(args.port)
-        ], check=True)
+    sys.executable, "-m", "chainlit", "run", "chainlitapp.py", "--host", "0.0.0.0", "--port", str(args.port)
+], check=True)
     except subprocess.CalledProcessError as e:
         print(f"❌ Fehler beim Start von Chainlit: {e}")
 
