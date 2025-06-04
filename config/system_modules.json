@@ -1,11 +1,4 @@
 [
-  {
-    "filename": "chainlit.py",
-    "active": false,
-    "import_path": "chainlit",
-    "type": "server",
-    "port": 8000
-  },
 {
   "filename": "chainlitapp.py",
   "active": true,
