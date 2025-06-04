@@ -270,7 +270,7 @@
   },
   {
     "filename": "trigger_utils.py",
-    "active": false,
+    "active": true,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_utils",
     "type": "library"
   },
@@ -294,7 +294,7 @@
   },
   {
     "filename": "trigger_custom_action.py",
-    "active": false,
+    "active": true,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_custom_action",
     "type": "library"
   },
