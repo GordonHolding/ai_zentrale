@@ -1,31 +1,32 @@
-# watcher_trigger.py – erkennt neue Dateien im Drive-Folder und prüft Trigger-Konfiguration
+# agents/Infrastructure_Agents/TriggerAgent/watcher_trigger.py
 
 from datetime import datetime
 from utils.json_loader import load_json, write_json
 from agents.General_Agents.DriveAgent.drive_utils import list_files_in_folder
 from agents.General_Agents.DriveAgent.file_metadata_engine import enrich_file_metadata
-from agents.Infrastructure_Agents.TriggerAgent.trigger_utils import log_trigger_execution
 
 WATCHED_FOLDER_ID = load_json("drive_config.json").get("watched_folder_id", "")
 WATCHER_META_KEY = "watcher_trigger_log.json"
 STRUCTURE_META_KEY = "file_structure_meta.json"
 
-# 🔍 Erkennt neue Dateien und führt Metadatenanalyse durch
-def scan_drive_and_trigger():
+# ▶ Hauptscan: Findet neue Dateien, aktualisiert Metadaten, loggt Info
+def scan_drive_and_trigger() -> str:
     if not WATCHED_FOLDER_ID:
         return "❌ Kein Watcher-Folder definiert."
 
     try:
         previous_files = load_json(WATCHER_META_KEY)
+        if not isinstance(previous_files, list):
+            previous_files = []
     except:
         previous_files = []
 
     current_files = list_files_in_folder(WATCHED_FOLDER_ID)
     new_files = []
-    previous_ids = {f["id"] for f in previous_files}
+    previous_ids = {f["id"] for f in previous_files if "id" in f}
 
     for f in current_files:
-        if f["id"] not in previous_ids:
+        if f.get("id") not in previous_ids:
             f["watcher_detected"] = True
             new_files.append(f)
 
@@ -37,25 +38,28 @@ def scan_drive_and_trigger():
 
     try:
         all_entries = load_json(STRUCTURE_META_KEY)
+        if not isinstance(all_entries, list):
+            all_entries = []
     except:
         all_entries = []
 
     all_entries.extend(enriched)
     write_json(STRUCTURE_META_KEY, all_entries)
 
-    log_trigger_execution("WatcherTrigger", [f["name"] for f in new_files], datetime.now().isoformat())
     return f"🔍 {len(new_files)} Datei(en) erkannt und analysiert."
 
-# ✅ Ergänzt: Liefert aktive Watcher-Trigger aus Konfig zurück
+# ▶ Wrapper für Trigger-System (liefert Trigger-Objekte zurück)
 def check_watcher_trigger(config: dict) -> list:
-    results = []
-    for trig in config.get("watcher_triggers", []):
-        if not trig.get("enabled", True):
-            continue
-        results.append({
-            "type": "watcher_trigger",
-            "name": trig.get("name", "unnamed_watcher_trigger"),
-            "source": "watcher_config",
-            "timestamp": datetime.utcnow().isoformat()
-        })
-    return results
+    if not WATCHED_FOLDER_ID:
+        return []
+    return [{
+        "type": "watcher_trigger",
+        "name": "scan_drive_structure",
+        "source": "watcher_check",
+        "timestamp": datetime.utcnow().isoformat()
+    }]
+
+# ▶ Optional: Direktes Testen
+if __name__ == "__main__":
+    result = scan_drive_and_trigger()
+    print(result)
