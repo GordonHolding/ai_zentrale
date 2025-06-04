@@ -1,4 +1,4 @@
-# main_controller.py – Optimierte zentrale Steuerinstanz der AI-ZENTRALE
+# main_controller.py – Eigenständiger Steuerdienst der AI-ZENTRALE
 
 import json
 import importlib
@@ -34,7 +34,6 @@ def run_modules():
             print(f"🟢 Starte Modul: {import_path} ({mod_type})")
 
             if mod_type == "server":
-                # Pfad zur .py-Datei aus Importpfad berechnen
                 script_path = import_path.replace('.', os.sep) + ".py"
                 port = str(module.get("port", 8000))
 
@@ -63,6 +62,5 @@ def run_modules():
         print("✅ Alle Module gestoppt.")
 
 if __name__ == "__main__":
-    print("🚀 Starte MAIN CONTROLLER ...")
-    time.sleep(1)
+    print("🚀 Starte MAIN CONTROLLER als Webservice ...")
     run_modules()
