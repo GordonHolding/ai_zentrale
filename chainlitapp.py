@@ -1,4 +1,4 @@
-# chainlitapp.py – Funktionale Beispiel-Chainlit-App mit Mindestanforderung erfüllt
+# chainlitapp.py – GUI-Fassade der AI-ZENTRALE
 
 import chainlit as cl
 
