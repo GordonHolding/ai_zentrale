@@ -1,11 +1,18 @@
 [
   {
     "filename": "chainlit.py",
-    "active": true,
+    "active": false,
     "import_path": "chainlit",
     "type": "server",
     "port": 8000
   },
+{
+  "filename": "chainlitapp.py",
+  "active": true,
+  "import_path": "chainlitapp",
+  "type": "server",
+  "port": 8000
+}, 
   {
     "filename": "json_loader.py",
     "active": true,
