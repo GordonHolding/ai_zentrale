@@ -1,20 +1,17 @@
 # list_available_agents.py
 
-import json
-import os
-
-REGISTRY_PATH = os.path.join(
-    os.path.dirname(__file__),
-    "Router_Memory",
-    "agent_registry.json"
-)
+from utils.json_loader import load_json
 
 def list_available_agents():
-    try:
-        with open(REGISTRY_PATH) as f:
-            agents = json.load(f)
-        print("🧠 Verfügbare Agenten:")
-        for key, info in agents.items():
-            print(f"• {info['name']} – {info['description']} [Status: {info['status']}]")
-    except Exception as e:
-        print(f"❌ Fehler beim Lesen der Agentenübersicht: {e}")
+    registry = load_json("agent_registry.json")
+    print("\n📦 Verfügbare Agenten:\n")
+
+    for key, data in registry.items():
+        if data.get("active", False):
+            label = data.get("label", "Kein Label")
+            desc = data.get("description", "Keine Beschreibung")
+            print(f"– {key} → {label}: {desc}")
+
+if __name__ == "__main__":
+    list_available_agents()
+
