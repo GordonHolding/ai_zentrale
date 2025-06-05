@@ -272,6 +272,7 @@
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
     "type": "library"
   },
+  
   {
     "filename": "====================================== ROUTER AGENT ======================================",
     "active": false,
@@ -280,7 +281,7 @@
   },
   {
     "filename": "router_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent",
     "type": "library"
   },
