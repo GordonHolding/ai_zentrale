@@ -28,7 +28,7 @@ Falls kein Agent zuständig ist, gib exakt `none` zurück.
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # optional anpassbar
+            model="gpt-4",
             messages=messages,
             temperature=0.1,
             max_tokens=10
