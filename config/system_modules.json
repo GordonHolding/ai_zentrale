@@ -163,100 +163,7 @@
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_triggers",
     "type": "library"
   },
-
-  {
-    "filename": "====================================== ROUTER AGENT ======================================",
-    "active": false,
-    "import_path": "",
-    "type": "separator"
-  },
-  {
-    "filename": "router_agent.py",
-    "active": true,
-    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent",
-    "type": "library"
-  },
-  {
-    "filename": "router_utils.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_utils",
-    "type": "library"
-  },
-  {
-    "filename": "router_prompt_loader.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_prompt_loader",
-    "type": "library"
-  },
-  {
-    "filename": "router_router.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_router",
-    "type": "library"
-  },
-  {
-    "filename": "list_available_agents.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.RouterAgent.list_available_agents",
-    "type": "library"
-  },
-
-  {
-    "filename": "================================== SYSTEMGUARDIAN AGENT ==================================",
-    "active": false,
-    "import_path": "",
-    "type": "separator"
-  },
-  {
-    "filename": "systemguardian_agent.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_agent",
-    "type": "library"
-  },
-  {
-    "filename": "systemguardian_config.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_config",
-    "type": "library"
-  },
-  {
-    "filename": "systemguardian_triggers.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_triggers",
-    "type": "library"
-  },
-  {
-    "filename": "systemguardian_router.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_router",
-    "type": "library"
-  },
-  {
-    "filename": "systemguardian_prompt_loader.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_prompt_loader",
-    "type": "library"
-  },
-  {
-    "filename": "list_available_guardian_functions.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.list_available_guardian_functions",
-    "type": "library"
-  },
-  {
-    "filename": "guardian_function_registry.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.guardian_function_registry",
-    "type": "library"
-  },
-  {
-    "filename": "systemguardian_analyzer.py",
-    "active": false,
-    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer",
-    "type": "library"
-  },
-
-  {
+{
     "filename": "====================================== TRIGGER AGENT ======================================",
     "active": false,
     "import_path": "",
@@ -363,6 +270,97 @@
     "filename": "file_metadata_engine.py",
     "active": true,
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
+    "type": "library"
+  },
+  {
+    "filename": "====================================== ROUTER AGENT ======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
+  {
+    "filename": "router_agent.py",
+    "active": true,
+    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent",
+    "type": "library"
+  },
+  {
+    "filename": "router_utils.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_utils",
+    "type": "library"
+  },
+  {
+    "filename": "router_prompt_loader.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_prompt_loader",
+    "type": "library"
+  },
+  {
+    "filename": "router_router.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.RouterAgent.router_router",
+    "type": "library"
+  },
+  {
+    "filename": "list_available_agents.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.RouterAgent.list_available_agents",
+    "type": "library"
+  },
+
+  {
+    "filename": "================================== SYSTEMGUARDIAN AGENT ==================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
+  {
+    "filename": "systemguardian_agent.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_agent",
+    "type": "library"
+  },
+  {
+    "filename": "systemguardian_config.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_config",
+    "type": "library"
+  },
+  {
+    "filename": "systemguardian_triggers.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_triggers",
+    "type": "library"
+  },
+  {
+    "filename": "systemguardian_router.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_router",
+    "type": "library"
+  },
+  {
+    "filename": "systemguardian_prompt_loader.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_prompt_loader",
+    "type": "library"
+  },
+  {
+    "filename": "list_available_guardian_functions.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.list_available_guardian_functions",
+    "type": "library"
+  },
+  {
+    "filename": "guardian_function_registry.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.guardian_function_registry",
+    "type": "library"
+  },
+  {
+    "filename": "systemguardian_analyzer.py",
+    "active": false,
+    "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer",
     "type": "library"
   },
 
