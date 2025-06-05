@@ -281,7 +281,7 @@
   },
   {
     "filename": "router_agent.py",
-    "active": false,
+    "active": true,
     "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent",
     "type": "library"
   },
