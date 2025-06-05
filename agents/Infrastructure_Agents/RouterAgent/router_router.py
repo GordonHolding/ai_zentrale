@@ -2,34 +2,40 @@
 
 import openai
 from agents.Infrastructure_Agents.RouterAgent.router_prompt_loader import (
-    load_identity_prompt,
-    load_dynamic_router_prompt
+    get_system_identity_prompt,
+    get_agent_registry_text
 )
-from modules.structure_loader.structure_content_loader import get_structure_snippet  # neue Komponente
+from agents.Infrastructure_Agents.RouterAgent.router_utils import get_structure_snippet
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
 def determine_agent(user_input):
-    # Struktur-Snippet ergänzen (optional für besseren Kontext)
+    system_prompt = get_system_identity_prompt()
+    agent_registry_text = get_agent_registry_text()
     structure_context = get_structure_snippet()
 
-    # Prompt zusammenbauen
-    prompt = (
-        load_identity_prompt()
-        + "\n\n"
-        + load_dynamic_router_prompt()
-        + "\n\n"
-        + "📂 Ordnungsübersicht:\n"
-        + structure_context
-    )
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": f"""
+Du erhältst nun eine Benutzeranfrage. Entscheide ausschließlich, **welcher Agent** zuständig ist – basierend auf dem Aufgabenprofil, den verfügbaren Agenten und der Systemstruktur.  
+Gib **nur den Agent-Key** zurück (z. B. `drive`, `text`, `memory`).  
+Falls kein Agent zuständig ist, gib exakt `none` zurück.
+
+🔹 **User Input:** {user_input}
+🔹 **Agentenliste:** {agent_registry_text}
+🔹 **Struktureinblick:** {structure_context}
+"""}
+    ]
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": user_input}
-            ]
+            model="gpt-4",  # optional anpassbar
+            messages=messages,
+            temperature=0.1,
+            max_tokens=10
         )
-        reply = response.choices[0].message["content"].strip()
-        return reply
+        agent_key = response["choices"][0]["message"]["content"].strip().lower()
+        log_interaction("RouterRouter", f"Agent gewählt: {agent_key}", user_input)
+        return agent_key
     except Exception as e:
-        return f"❌ Routing-Fehler: {e}"
+        log_interaction("RouterRouter", f"❌ Fehler bei Routing: {e}", user_input)
+        return "none"
