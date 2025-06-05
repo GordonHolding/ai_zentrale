@@ -1,41 +1,71 @@
+# memory_log.py – Logging-Funktionen für AI-Zentrale (Chat, Mail, Systemstart)
+
 import os
 import json
+from datetime import datetime
+from utils.json_loader import get_json_by_keyword
 
-# Pfade dynamisch definieren (für Memory & Index)
-MEMORY_PATH = "agents/Infrastructure_Agents/MemoryAgent/MemoryAgent_Memory/memory_log.json"
-INDEX_PATH = "agents/Infrastructure_Agents/MemoryAgent/MemoryAgent_Memory/memory_index.json"
+# 📁 Hole Log-Dateipfad dynamisch via JSON
+DEFAULT_LOG_FILE = get_json_by_keyword("memory_config").get("MEMORY_LOG_PATH", "MemoryAgent/MemoryAgent_Memory/memory_log.json")
 
-def create_if_missing():
-    """
-    Erstellt Standard-Dateien, falls sie noch nicht existieren.
-    """
-    for path in [MEMORY_PATH, INDEX_PATH]:
-        if not os.path.exists(path):
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, "w") as f:
-                json.dump([], f, indent=2)
-            print(f"📁 Erstellt: {path}")
-        else:
-            print(f"✅ Bereits vorhanden: {path}")
+# 🧠 Chat-Verlauf loggen
+def log_interaction(user, prompt, response, path=DEFAULT_LOG_FILE):
+    memory = load_log(path)
+    memory.append({
+        "type": "chat",
+        "user": user,
+        "prompt": prompt,
+        "response": response,
+        "timestamp": timestamp()
+    })
+    save_log(memory, path)
 
-def read_memory():
-    with open(MEMORY_PATH) as f:
-        return json.load(f)
+# 📧 Mail-Eintrag loggen
+def log_mail_entry(mail_id, sender, subject, category, summary, path=DEFAULT_LOG_FILE):
+    memory = load_log(path)
+    memory.append({
+        "type": "mail",
+        "mail_id": mail_id,
+        "sender": sender,
+        "subject": subject,
+        "category": category,
+        "summary": summary,
+        "timestamp": timestamp()
+    })
+    save_log(memory, path)
 
-def search_memory(keyword):
-    memory = read_memory()
-    return [
-        entry for entry in memory
-        if keyword.lower() in json.dumps(entry).lower()
-    ]
+# 🚀 Systemstart-Eintrag loggen (wird von startup_loader.py verwendet)
+def log_system_start(path=DEFAULT_LOG_FILE, entries=None):
+    if entries is None:
+        entries = []
+    memory = load_log(path)
+    memory.append({
+        "type": "system_start",
+        "entries": entries,
+        "timestamp": timestamp()
+    })
+    save_log(memory, path)
 
-def add_memory_entry(entry: dict):
-    memory = read_memory()
-    memory.append(entry)
-    with open(MEMORY_PATH, "w") as f:
-        json.dump(memory, f, indent=2)
-    print("✅ Eintrag gespeichert.")
+# 📂 Bestehende Logs laden
+def load_log(path):
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            try:
+                return json.load(f)
+            except:
+                return []
+    return []
 
-# Beispielhafte Initialisierung bei Direktausführung
-if __name__ == "__main__":
-    create_if_missing()
+# 💾 Logs speichern
+def save_log(memory, path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(memory, f, indent=2, ensure_ascii=False)
+
+# 🕒 Zeitstempel
+def timestamp():
+    return datetime.utcnow().isoformat()
+
+# 🔄 Für Kontextabruf über context_manager
+def get_memory_log():
+    return load_log(DEFAULT_LOG_FILE)
