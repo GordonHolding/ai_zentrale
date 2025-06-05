@@ -19,20 +19,21 @@ def execute_agent(agent_key, user_input):
         args = [user_input] if "user_input" in agent.get("args", []) else []
         return func(*args)
     except Exception as e:
-        log_interaction("RouterAgent", f"❌ Fehler beim Ausführen von Agent '{agent_key}': {e}", user_input)
         return f"❌ Fehler beim Ausführen von Agent '{agent_key}': {e}"
 
 def handle_user_input(user_input):
-    agent_key = determine_agent(user_input)
-
-    if agent_key and isinstance(agent_key, str):
-        log_interaction("RouterAgent", f"🔁 Routing an: {agent_key}", user_input)
-        result = execute_agent(agent_key, user_input)
-        post_action_trigger(agent_key, result)
-        return result
-    else:
-        log_interaction("RouterAgent", "❓ Kein zuständiger Agent erkannt", user_input)
-        return "Keine Aktion ausgeführt."
+    try:
+        agent_key = determine_agent(user_input)
+        if agent_key and isinstance(agent_key, str):
+            log_interaction("RouterAgent", f"🔁 Routing an: {agent_key}", user_input)
+            result = execute_agent(agent_key, user_input)
+            post_action_trigger(agent_key, result)
+            return result
+        else:
+            log_interaction("RouterAgent", "❓ Kein zuständiger Agent erkannt", user_input)
+            return "Keine Aktion ausgeführt."
+    except Exception as e:
+        return f"❌ Fehler im RouterAgent: {e}"
 
 if __name__ == "__main__":
     user_input = input("Was möchtest du tun? ").strip()
