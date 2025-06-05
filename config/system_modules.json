@@ -93,19 +93,13 @@
   },
   {
     "filename": "memory_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_agent",
     "type": "library"
   },
   {
-    "filename": "memory_config.py",
-    "active": true,
-    "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_config",
-    "type": "library"
-  },
-  {
     "filename": "memory_router.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_router",
     "type": "library"
   },
@@ -117,49 +111,49 @@
   },
   {
     "filename": "memory_log_search.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_log_search",
     "type": "library"
   },
   {
     "filename": "memory_triggers.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_triggers",
     "type": "library"
   },
   {
     "filename": "memory_selector.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_selector",
     "type": "library"
   },
   {
     "filename": "memory_cleanup.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_cleanup",
     "type": "library"
   },
   {
     "filename": "conversation_tracker.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_tracker",
     "type": "library"
   },
   {
     "filename": "context_tracker.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.context_tracker",
     "type": "library"
   },
   {
     "filename": "context_triggers.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.context_triggers",
     "type": "library"
   },
   {
     "filename": "conversation_triggers.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_triggers",
     "type": "library"
   },
@@ -171,61 +165,61 @@
   },
   {
     "filename": "trigger_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_agent",
     "type": "library"
   },
   {
     "filename": "trigger_utils.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_utils",
     "type": "library"
   },
   {
     "filename": "trigger_router.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_router",
     "type": "library"
   },
   {
     "filename": "trigger_triggers.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_triggers",
     "type": "library"
   },
   {
     "filename": "time_trigger.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.time_trigger",
     "type": "library"
   },
   {
     "filename": "trigger_custom_action.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_custom_action",
     "type": "library"
   },
   {
     "filename": "trigger_runner.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_runner",
     "type": "library"
   },     
   {
     "filename": "watcher_trigger.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger",
     "type": "library"
   },
   {
     "filename": "watcher_trigger_runner.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger_runner",
     "type": "library"
   },
   {
     "filename": "watcher_trigger_log.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger_log",
     "type": "library"
   },
@@ -238,37 +232,37 @@
   },
   {
     "filename": "drive_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.drive_agent",
     "type": "library"
   },
   {
     "filename": "drive_utils.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.drive_utils",
     "type": "library"
   },
   {
     "filename": "drive_triggers.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.drive_triggers",
     "type": "library"
   },
   {
     "filename": "drive_router.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.drive_router",
     "type": "library"
   },
   {
     "filename": "drive_config.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.drive_config",
     "type": "library"
   },
   {
     "filename": "file_metadata_engine.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
     "type": "library"
   },
@@ -281,7 +275,7 @@
   },
   {
     "filename": "router_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.RouterAgent.router_agent",
     "type": "library"
   },
