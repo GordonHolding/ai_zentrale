@@ -1,23 +1,26 @@
 # router_prompt_loader.py
 
-import json
-import os
+from utils.json_loader import load_json
+from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 
-IDENTITY_PROMPT_PATH = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/0.3 AI-Regelwerk & Historie/Systemregeln/system_identity_prompt.json"
-AGENT_REGISTRY_PATH = "/Users/data/Library/CloudStorage/GoogleDrive-office@gordonholding.de/My Drive/AI-Zentrale/Infrastructure_Agents/RouterAgent/Router_Memory/agent_registry.json"
-
-def load_identity_prompt():
+def get_system_identity_prompt():
     try:
-        with open(IDENTITY_PROMPT_PATH) as f:
-            return json.load(f)["prompt"]
+        identity_data = load_json("system_identity_prompt.json")
+        return identity_data.get("prompt", "Kein Systemprompt gefunden.")
     except Exception as e:
-        return f"Fehler beim Laden des Systemprompts: {e}"
+        log_interaction("RouterPromptLoader", f"❌ Fehler beim Laden des Identity-Prompts: {e}", "")
+        return "Fehler beim Laden des Systemprompts."
 
-def load_dynamic_router_prompt():
+def get_agent_registry_text():
     try:
-        with open(AGENT_REGISTRY_PATH) as f:
-            agents = json.load(f)
-        agent_list = "\n".join([f"• {v['name']} – {v['description']}" for v in agents.values()])
-        return f"🧠 Die folgenden Agenten stehen dir zur Verfügung:\n{agent_list}"
+        registry = load_json("agent_registry.json")
+        agent_list = []
+        for key, val in registry.items():
+            if val.get("active", False):
+                label = val.get("label", key)
+                desc = val.get("description", "Kein Beschreibungstext")
+                agent_list.append(f"– {key}: {label} – {desc}")
+        return "\n".join(agent_list)
     except Exception as e:
-        return f"Fehler beim Laden der Agentenliste: {e}"
+        log_interaction("RouterPromptLoader", f"❌ Fehler beim Laden der Agentenliste: {e}", "")
+        return "Fehler beim Laden der Agentenliste."
