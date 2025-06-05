@@ -6,10 +6,8 @@ from utils.json_loader import load_json
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 import importlib
 
-AGENT_REGISTRY_PATH = "agent_registry.json"  # oder via get_json_by_keyword("agents")
-
 def execute_agent(agent_key, user_input):
-    agents = load_json(AGENT_REGISTRY_PATH)
+    agents = load_json("agent_registry.json")
     agent = agents.get(agent_key)
 
     if not agent or not agent.get("active", False):
@@ -21,6 +19,7 @@ def execute_agent(agent_key, user_input):
         args = [user_input] if "user_input" in agent.get("args", []) else []
         return func(*args)
     except Exception as e:
+        log_interaction("RouterAgent", f"❌ Fehler beim Ausführen von Agent '{agent_key}': {e}", user_input)
         return f"❌ Fehler beim Ausführen von Agent '{agent_key}': {e}"
 
 def handle_user_input(user_input):
