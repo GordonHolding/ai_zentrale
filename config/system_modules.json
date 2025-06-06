@@ -1,7 +1,7 @@
 [
   {
     "filename": "json_loader.py",
-    "active": true,
+    "active": false,
     "import_path": "utils.json_loader",
     "type": "library"
   },
@@ -13,11 +13,10 @@
   },
   {
     "filename": "gpt_response_parser.py",
-    "active": true,
+    "active": false,
     "import_path": "modules.ai_intelligenz.gpt_response_parser",
     "type": "library"
   },
-
   {
     "filename": "======================================= JSON AGENT =======================================",
     "active": false,
@@ -26,65 +25,64 @@
   },
   {
     "filename": "json_agent.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_agent",
     "type": "library"
   },
   {
     "filename": "json_config.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_config",
     "type": "library"
   },
   {
     "filename": "json_router.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_router",
     "type": "library"
   },
   {
     "filename": "json_triggers.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_triggers",
     "type": "library"
   },
   {
     "filename": "json_updater.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_updater",
     "type": "library"
   },
   {
     "filename": "json_formatter.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_formatter",
     "type": "library"
   },
   {
     "filename": "json_protection.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_protection",
     "type": "library"
   },
   {
     "filename": "json_reader.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_reader",
     "type": "library"
   },
   {
     "filename": "json_validator.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_validator",
     "type": "library"
   },
   {
     "filename": "json_log_writer.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.JsonAgent.json_log_writer",
     "type": "library"
   },
-
   {
     "filename": "====================================== MEMORY AGENT ======================================",
     "active": false,
@@ -105,7 +103,7 @@
   },
   {
     "filename": "memory_log.py",
-    "active": true,
+    "active": false,
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.memory_log",
     "type": "library"
   },
@@ -157,7 +155,7 @@
     "import_path": "agents.Infrastructure_Agents.MemoryAgent.conversation_triggers",
     "type": "library"
   },
-{
+  {
     "filename": "====================================== TRIGGER AGENT ======================================",
     "active": false,
     "import_path": "",
@@ -204,7 +202,7 @@
     "active": false,
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.trigger_runner",
     "type": "library"
-  },     
+  },
   {
     "filename": "watcher_trigger.py",
     "active": false,
@@ -223,7 +221,6 @@
     "import_path": "agents.Infrastructure_Agents.TriggerAgent.watcher_trigger_log",
     "type": "library"
   },
-  
   {
     "filename": "======================================== DRIVE AGENT ========================================",
     "active": false,
@@ -266,7 +263,6 @@
     "import_path": "agents.General_Agents.DriveAgent.file_metadata_engine",
     "type": "library"
   },
-  
   {
     "filename": "====================================== ROUTER AGENT ======================================",
     "active": false,
@@ -303,7 +299,6 @@
     "import_path": "agents.Infrastructure_Agents.RouterAgent.list_available_agents",
     "type": "library"
   },
-
   {
     "filename": "================================== SYSTEMGUARDIAN AGENT ==================================",
     "active": false,
@@ -358,7 +353,6 @@
     "import_path": "agents.Infrastructure_Agents.SystemGuardian.systemguardian_analyzer",
     "type": "library"
   },
-
   {
     "filename": "====================================== RETRIEVAL AGENT ======================================",
     "active": false,
@@ -395,7 +389,6 @@
     "import_path": "agents.General_Agents.RetrievalAgent.update_retrieval_mode",
     "type": "library"
   },
-
   {
     "filename": "========================================= TEXT AGENT =========================================",
     "active": false,
@@ -444,7 +437,6 @@
     "import_path": "agents.General_Agents.TextAgent.text_creator",
     "type": "library"
   },
-
   {
     "filename": "========================================= PDF AGENT ==========================================",
     "active": false,
@@ -481,7 +473,6 @@
     "import_path": "modules.output_infrastruktur.gpt_pdf_summary",
     "type": "library"
   },
-
   {
     "filename": "======================================== SHEET AGENT =========================================",
     "active": false,
@@ -530,7 +521,6 @@
     "import_path": "agents.General_Agents.SheetAgent.sheet_summary",
     "type": "library"
   },
-
   {
     "filename": "======================================== VISION AGENT ========================================",
     "active": false,
@@ -543,7 +533,6 @@
     "import_path": "agents.Infrastructure_Agents.VisionAgent.gpt_vision_handler",
     "type": "library"
   },
-
   {
     "filename": "========================================= MAIL AGENT =========================================",
     "active": false,
@@ -586,7 +575,6 @@
     "import_path": "modules.output_infrastruktur.mail_tools",
     "type": "library"
   },
-
   {
     "filename": "====================================== CALENDAR AGENT ========================================",
     "active": false,
@@ -605,7 +593,6 @@
     "import_path": "agents.General_Agents.CalendarAgent.calendar_reader",
     "type": "library"
   },
-
   {
     "filename": "=================================== BUSINESS CORE AGENTS ====================================",
     "active": false,
@@ -666,7 +653,6 @@
     "import_path": "agents.Business_Core_Agents.law_agent",
     "type": "library"
   },
-
   {
     "filename": "======================================== PRIVATE AGENTS =======================================",
     "active": false,
@@ -745,7 +731,6 @@
     "import_path": "agents.Private_Agents.shopping_agent",
     "type": "library"
   },
-
   {
     "filename": "======================================== SPECIAL AGENTS ======================================",
     "active": false,
