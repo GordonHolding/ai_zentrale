@@ -8,7 +8,7 @@ from fastapi import FastAPI
 import threading
 import uvicorn
 
-CONFIG_PATH = "config/system_modules.json"
+CONFIG_PATH = "system_modules.json"
 app = FastAPI()
 processes = []
 
