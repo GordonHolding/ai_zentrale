@@ -11,10 +11,10 @@ def main():
     parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)))
     args = parser.parse_args()
 
-    print(f"🚀 Starte Chainlit auf Port {args.port} mit chainlitapp.py ...")
+    print(f"🚀 Starte Chainlit auf Port {args.port} mit chainlit_app.py ...")
     try:
         subprocess.run([
-            sys.executable, "-m", "chainlit", "run", "chainlitapp.py",
+            sys.executable, "-m", "chainlit", "run", "chainlit_app.py",
             "--host", "0.0.0.0", "--port", str(args.port)
         ], check=True)
     except subprocess.CalledProcessError as e:
