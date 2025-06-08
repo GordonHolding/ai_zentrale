@@ -1,4 +1,4 @@
-# chainlitapp.py – GUI-Fassade der AI-ZENTRALE
+# chainlit_app.py – GUI-Fassade der AI-ZENTRALE
 
 import chainlit as cl
 
