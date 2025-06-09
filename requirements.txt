@@ -13,3 +13,6 @@ openai>=1.0.0
 
 # Basis für Textverarbeitung, Embeddings, NumPy
 numpy>=1.21.0
+
+# JSON-Validierung & GPT-Sicherheit
+pydantic>=2.0
