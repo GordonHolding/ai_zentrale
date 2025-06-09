@@ -24,16 +24,19 @@
     "import_path": "agents.GPTAgent.gpt_response_parser",
     "type": "library"
   },
+   {
    "filename": "startup_loader.py",
     "active": false,
     "import_path": "agents.GPTAgent.startup_loader.py",
     "type": "library"
   },
+   {
    "filename": "startup_triggers.py",
     "active": false,
     "import_path": "agents.GPTAgent.startup_triggers.py",
     "type": "library"
   },
+   {
      "filename": "gpt_agent.py",
     "active": true,
     "import_path": "agents.GPTAgent.gpt_agent.py",
