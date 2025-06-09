@@ -1,4 +1,4 @@
-# main_controller.py
+# main_controller.py – KI-Zentrale Modulstarter mit Logging
 
 import json
 import importlib
@@ -32,9 +32,11 @@ def load_active_modules():
 def run_modules():
     modules = load_active_modules()
     for module in modules:
+        import_path = module.get("import_path", "")
+        filename = module.get("filename", "Unbekannt")
+        mod_type = module.get("type", "library")
+
         try:
-            import_path = module["import_path"]
-            mod_type = module.get("type", "library")
             print(f"🟢 Starte Modul: {import_path} ({mod_type})")
 
             if mod_type == "server":
@@ -48,18 +50,23 @@ def run_modules():
                 )
                 processes.append(proc)
                 print(f"   → Server-Modul läuft auf Port {port} (PID: {proc.pid})")
+
             else:
                 importlib.import_module(import_path)
-                print(f"   → Library-Modul importiert.")
-        except Exception as e:
-            print(f"❌ Fehler beim Starten von {module.get('filename', 'Unbekannt')}: {e}")
+                print(f"   → ✅ Library-Modul erfolgreich importiert.")
 
-# Dummy API-Endpunkt für Render
+        except ModuleNotFoundError as e:
+            print(f"❌ MODUL NICHT GEFUNDEN – {filename} | Pfad: {import_path}")
+            print(f"   🔎 Mögliche Ursache: Falscher Pfad oder Datei nicht im Container")
+            print(f"   💥 Exception: {e}")
+        except Exception as e:
+            print(f"❌ Fehler beim Starten von {filename} (Pfad: {import_path})")
+            print(f"   💥 Exception: {e}")
+
 @app.get("/")
 def status():
     return {"status": "Main Controller läuft", "prozesse": len(processes)}
 
-# Modulstart als Hintergrundthread
 def start_modules_async():
     thread = threading.Thread(target=run_modules)
     thread.daemon = True
