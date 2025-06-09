@@ -11,12 +11,17 @@
     "import_path": "utils.json_loader",
     "type": "library"
   },
-
   {
     "filename": "======================================= GPT AGENT =======================================",
     "active": false,
     "import_path": "",
     "type": "separator"
+  },
+    {
+     "filename": "gpt_agent.py",
+    "active": true,
+    "import_path": "agents.GPTAgent.gpt_agent",
+    "type": "library"
   },
     {
     "filename": "context_manager.py",
@@ -42,13 +47,6 @@
     "import_path": "agents.GPTAgent.startup_triggers",
     "type": "library"
   },
-   {
-     "filename": "gpt_agent.py",
-    "active": true,
-    "import_path": "agents.GPTAgent.gpt_agent",
-    "type": "library"
-  },
-  
   {
     "filename": "======================================= JSON AGENT =======================================",
     "active": false,
