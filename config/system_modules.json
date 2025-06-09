@@ -27,19 +27,19 @@
    {
    "filename": "startup_loader.py",
     "active": false,
-    "import_path": "agents.GPTAgent.startup_loader.py",
+    "import_path": "agents.GPTAgent.startup_loader",
     "type": "library"
   },
    {
    "filename": "startup_triggers.py",
     "active": false,
-    "import_path": "agents.GPTAgent.startup_triggers.py",
+    "import_path": "agents.GPTAgent.startup_triggers",
     "type": "library"
   },
    {
      "filename": "gpt_agent.py",
     "active": true,
-    "import_path": "agents.GPTAgent.gpt_agent.py",
+    "import_path": "agents.GPTAgent.gpt_agent",
     "type": "library"
   },
   
