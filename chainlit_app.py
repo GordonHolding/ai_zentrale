@@ -1,7 +1,7 @@
 # chainlit_app.py – GUI-Fassade der AI-ZENTRALE (Render-kompatibel, onboardingfähig)
 
 import chainlit as cl
-from agents.Infrastructure_Agents.GPTAgent import gpt_agent
+from agents.GPTAgent import gpt_agent
 
 @cl.on_chat_start
 async def start():
