@@ -17,7 +17,8 @@ def initialize_system_context():
     for path in CONFIG.get("PROJECT_STRUCTURE_PATHS", []):
         try:
             projects[path] = load_json(path)
-        except Exception:
+        except Exception as e:
+            print(f"[GPTAgent] Projektstruktur konnte nicht geladen werden: {path} ({e})")
             continue
 
     context = {
@@ -28,4 +29,5 @@ def initialize_system_context():
     }
 
     update_context(context)
+    print("[GPTAgent] Systemkontext wurde initialisiert.")  # Optionales Logging für Transparenz
     return context
