@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 100
+target-version = ['py311']
+skip-string-normalization = true
+
+[tool.pylint]
+disable = [
+  "C0114",  # missing-module-docstring
+  "C0115",  # missing-class-docstring
+  "C0116"   # missing-function-docstring
+]
+max-line-length = 100
+ignored-modules = ["chainlit", "openai"]
