@@ -7,7 +7,7 @@ from agents.GPTAgent.context_manager import refresh_context, get_context_value
 from agents.GPTAgent.gpt_response_parser import parse_gpt_response
 
 # 🔗 Lade Konfiguration aus zentralem JSON
-CONFIG = load_json("GPTAgent/GPTAgent_Protokolle/gpt_config.json")
+CONFIG = load_json("gpt_config.json")
 PROMPT_PATH = CONFIG.get("PROMPT_PATH", "GPTAgent/GPTAgent_Kontexte_Promptweitergaben/gpt_agent_prompt.json")
 MODEL = CONFIG.get("MODEL", "gpt-4o")
 TEMPERATURE = CONFIG.get("TEMPERATURE", 0.4)
