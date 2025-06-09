@@ -1,5 +1,11 @@
 [
   {
+  "filename": "google_utils.py",
+  "active": true,
+  "import_path": "modules.authentication.google_utils",
+  "type": "library",
+},
+ {
     "filename": "json_loader.py",
     "active": true,
     "import_path": "utils.json_loader",
