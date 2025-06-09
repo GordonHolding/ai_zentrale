@@ -5,18 +5,41 @@
     "import_path": "utils.json_loader",
     "type": "library"
   },
+
   {
+    "filename": "======================================= GPT AGENT =======================================",
+    "active": false,
+    "import_path": "",
+    "type": "separator"
+  },
+    {
     "filename": "context_manager.py",
     "active": false,
-    "import_path": "utils.context_manager",
+    "import_path": "agents.GPTAgent.context_manager",
     "type": "library"
   },
   {
     "filename": "gpt_response_parser.py",
     "active": false,
-    "import_path": "modules.ai_intelligenz.gpt_response_parser",
+    "import_path": "agents.GPTAgent.gpt_response_parser",
     "type": "library"
   },
+   "filename": "startup_loader.py",
+    "active": false,
+    "import_path": "agents.GPTAgent.startup_loader.py",
+    "type": "library"
+  },
+   "filename": "startup_triggers.py",
+    "active": false,
+    "import_path": "agents.GPTAgent.startup_triggers.py",
+    "type": "library"
+  },
+     "filename": "gpt_agent.py",
+    "active": true,
+    "import_path": "agents.GPTAgent.gpt_agent.py",
+    "type": "library"
+  },
+  
   {
     "filename": "======================================= JSON AGENT =======================================",
     "active": false,
