@@ -8,6 +8,9 @@ from datetime import datetime
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
+except ImportError:
+    def log_interaction(*args, **kwargs):
+        pass
 
 # 🔕 Google API Logging unterdrücken (nur echte Fehler anzeigen)
 logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
