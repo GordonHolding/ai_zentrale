@@ -1,4 +1,3 @@
-
 # modules/authentication/google_utils.py
 # ⛓ Zugriff auf Google Drive & Sheets via Service Account – optimiert für AI-ZENTRALE
 
@@ -7,7 +6,10 @@ import logging
 from datetime import datetime
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
+
+# Versuche, log_interaction zu importieren. Falls das Modul fehlt, nimm Dummy-Funktion.
+try:
+    from agents.Infrastructure_Agents.MemoryAgent.memory_log import log_interaction
 except ImportError:
     def log_interaction(*args, **kwargs):
         pass
