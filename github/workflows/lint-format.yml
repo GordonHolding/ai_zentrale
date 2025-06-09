@@ -1,0 +1,19 @@
+name: Lint & Format Check
+
+on: [push, pull_request]
+
+jobs:
+  lint-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install black pylint
+      - name: Run Black (Formatter)
+        run: black . --check
+      - name: Run Pylint (Linter)
+        run: pylint agents/ utils/ modules/ --fail-under=7
