@@ -1,5 +1,5 @@
 # modules/authentication/google_utils.py
-# ⛓ Zugriff auf Google Drive & Sheets via Service Account – optimiert für AI-ZENTRALE
+# ⛓ Zugriff auf Google Drive via Service Account – optimiert für AI-ZENTRALE
 
 import os
 import logging
