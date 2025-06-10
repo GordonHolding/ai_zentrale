@@ -1,27 +1,23 @@
-# chainlit_app.py – GUI-Fassade der AI-ZENTRALE (Render-kompatibel, onboardingfähig)
+# chainlit_app.py – GUI-Fassade der AI-ZENTRALE (vollständig integriert)
 
 import chainlit as cl
 from agents.GPTAgent import gpt_agent
 
+# Startet Chainlit mit vollem Systemkontext aus GPTAgent
 @cl.on_chat_start
 async def start():
     try:
-        # Onboarding aus gpt_agent_onboarding.json laden – über den Kontext des GPTAgent
-        onboarding = gpt_agent.get_context_value("onboarding_message")
-        # Falls onboarding als Objekt (dict) zurückkommt, nutzen wir den "welcome_message"-Key
-        if isinstance(onboarding, dict):
-            message = onboarding.get("welcome_message", "Willkommen in der AI-ZENTRALE!")
-        elif isinstance(onboarding, str):
-            message = onboarding
-        else:
-            message = "Willkommen in der AI-ZENTRALE!"
+        # Lade Systemkontext inkl. Onboarding
+        context = gpt_agent.startup()
+        onboarding = context.get("onboarding_context", {})
+        message = onboarding.get("welcome_message", "Willkommen zurück.")
     except Exception as e:
         message = f"Willkommen in der AI-ZENTRALE! (Fehler beim Onboarding: {e})"
-    
-    # Optional: Debug-Log für Render
+
     print(f"✅ Onboarding geladen: {message}")
     await cl.Message(content=message).send()
 
+# Hauptlogik für Nutzeranfragen
 @cl.on_message
 async def main(message: cl.Message):
     user_input = message.content.strip()
