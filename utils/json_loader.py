@@ -1,4 +1,4 @@
-"# json_loader.py – Nur Google Drive – AI-ZENTRALE optimiert
+# json_loader.py – Nur Google Drive – AI-ZENTRALE optimiert
 
 import io
 import json
@@ -38,4 +38,4 @@ def load_json_from_gdrive(filename: str) -> dict:
         fh.seek(0)
         return json.load(fh)
     except Exception as e:
-        return {""error"": f""❌ Fehler beim Laden von '{filename}': {e}""}"
+        return {""error"": f""❌ Fehler beim Laden von '{filename}': {e}""}
