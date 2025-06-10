@@ -1,4 +1,4 @@
-"# modules/authentication/google_utils.py
+# modules/authentication/google_utils.py
 # ⛓ Zugriff auf Google Drive via Service Account – optimiert für AI-ZENTRALE
 
 import logging
@@ -53,4 +53,4 @@ def log_credential_usage(service_type, account_name):
         prompt=f""🔐 Google Zugriff: {service_type} via {account_name}"",
         response=""✅ Zugriff erfolgreich"",
         path=""memory_log.json""
-    )"
+    )
