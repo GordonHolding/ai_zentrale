@@ -1,29 +1,28 @@
-# main_controller.py – KI-Zentrale Modulstarter (stabil, logging-optimiert)
+# main_controller.py – KI-Zentrale Modulstarter (FastAPI + Lifespan) – final & optimiert
 
 import os
 import sys
 import json
-import time
 import threading
-import importlib
 import subprocess
+import importlib
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 import uvicorn
 
 CONFIG_PATH = "config/system_modules.json"
-app = FastAPI()
 processes = []
 
-# 📥 JSON laden mit Fehlerabfang
+# 📥 JSON-Datei laden
 def load_json_file(path: str) -> list:
     try:
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        print(f"❌ Fehler beim Laden von {path}: {e}")
+        print(f"❌ Fehler beim Laden der Datei {path}: {e}")
         return []
 
-# 📌 Aktive Module auslesen (ohne Trenner)
+# 🔍 Alle aktiven Module aus der Konfig laden
 def load_active_modules() -> list:
     modules = load_json_file(CONFIG_PATH)
     return [
@@ -34,12 +33,7 @@ def load_active_modules() -> list:
 # 🚀 Module starten (Library & Server)
 def run_modules():
     modules = load_active_modules()
-    if not modules:
-        print("⚠️  Keine aktiven Module gefunden in system_modules.json")
-        return
-
-    print(f"🔄 Lade {len(modules)} aktive Modul(e) ...")
-
+    print(f"📦 Lade {len(modules)} aktive Modul(e) ...")
     for module in modules:
         import_path = module.get("import_path", "")
         filename = module.get("filename", "Unbekannt")
@@ -58,45 +52,41 @@ def run_modules():
                     env=os.environ.copy()
                 )
                 processes.append(proc)
-                print(f"   → 🌐 Server-Modul läuft auf Port {port} (PID: {proc.pid})")
+                print(f"   → Server-Modul läuft auf Port {port} (PID: {proc.pid})")
 
             else:
                 importlib.import_module(import_path)
                 print(f"   → ✅ Library-Modul erfolgreich importiert.")
 
         except ModuleNotFoundError as e:
-            print(f"❌ MODUL NICHT GEFUNDEN – {filename}")
-            print(f"   🔎 Pfad: {import_path}")
+            print(f"❌ MODUL NICHT GEFUNDEN – {filename} | Pfad: {import_path}")
+            print(f"   🔎 Mögliche Ursache: Falscher Pfad oder Datei nicht im Container")
             print(f"   💥 Exception: {e}")
-
         except Exception as e:
-            print(f"❌ Fehler beim Laden von {filename} ({import_path})")
+            print(f"❌ Fehler beim Starten von {filename} (Pfad: {import_path})")
             print(f"   💥 Exception: {e}")
 
-# 🔄 Hintergrundthread für Modulstart
-def start_modules_async():
+# 🔄 Startup/Shutdown mit lifespan (zukunftssicher)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("🚀 Starte MAIN CONTROLLER (manuell) ...")
     thread = threading.Thread(target=run_modules)
     thread.daemon = True
     thread.start()
+    yield
+    print("🛑 MAIN CONTROLLER Shutdown eingeleitet ...")
+    for proc in processes:
+        proc.terminate()
+        print(f"   → Prozess {proc.pid} beendet.")
 
-# 🔁 Wichtig für Render: FastAPI Startup-Trigger
-@app.on_event("startup")
-def startup_event():
-    print("⚙️ FastAPI Startup → Module werden geladen ...")
-    start_modules_async()
+# 🌐 Webservice + Status-Check
+app = FastAPI(lifespan=lifespan)
 
-# 🩺 Status-Endpunkt für Render
 @app.get("/")
 def status():
-    return {
-        "status": "Main Controller läuft",
-        "aktive_prozesse": len(processes),
-        "module": [p.pid for p in processes if p.poll() is None]
-    }
+    return {"status": "Main Controller läuft", "prozesse": len(processes)}
 
-# 🧪 Manuelles Starten lokal
+# 🖥️ Lokaler Start
 if __name__ == "__main__":
-    print("🚀 Starte MAIN CONTROLLER (manuell) ...")
-    start_modules_async()
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run("main_controller:app", host="0.0.0.0", port=port, reload=False)
