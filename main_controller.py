@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from utils.json_loader import load_json  # für GDrive-kompatiblen Zugriff
 
-CONFIG_FILENAME = "system_modules.json"
+CONFIG_FILENAME = "config_system_modules.json"
 processes = []
 startup_errors = []
 startup_success = []
