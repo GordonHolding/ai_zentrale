@@ -1,3 +1,5 @@
+# main_controller.py – mit Startup-Report & Fehlerprotokoll
+
 import json
 import importlib
 import os
