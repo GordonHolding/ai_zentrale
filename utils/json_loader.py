@@ -37,3 +37,15 @@ def load_json_from_gdrive(filename: str) -> dict:
         return json.load(fh)
     except Exception as e:
         return {"error": f"Fehler beim Laden von '{filename}': {e}"}
+
+# -----------------------------------------------------
+# 🔁 Alias-Funktionen für GPT-/Legacy-Kompatibilität
+# -----------------------------------------------------
+
+load_json = load_json_from_gdrive
+
+def write_json(*args, **kwargs):
+    """
+    Placeholder: Schreibvorgänge sind in dieser Version deaktiviert oder extern geregelt.
+    """
+    raise NotImplementedError("Schreiben von JSON ist in GDrive-only-Version nicht aktiviert.")
