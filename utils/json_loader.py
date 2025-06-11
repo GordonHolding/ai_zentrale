@@ -6,28 +6,26 @@ from googleapiclient.http import MediaIoBaseDownload
 from modules.authentication.google_utils import get_drive_service
 
 def find_file_id_recursive(filename: str, parent_id: str = 'root') -> str:
-    """"""
+    """
     Sucht rekursiv nach einer Datei mit dem angegebenen Namen im gesamten Google Drive (ab parent_id).
     Gibt die erste gefundene File-ID zurück oder None.
-    """"""
+    """
     service = get_drive_service()
-    # Suche alle Dateien mit dem Namen (egal wo)
-    query = f""name = '{filename}' and trashed = false""
-    results = service.files().list(q=query, fields=""files(id, name, parents)"").execute()
-    files = results.get(""files"", [])
+    query = f"name = '{filename}' and trashed = false"
+    results = service.files().list(q=query, fields="files(id, name, parents)").execute()
+    files = results.get("files", [])
     if files:
-        # Optional: Hier könntest du noch die Ordnerstruktur prüfen, falls du mehrere Treffer hast
-        return files[0][""id""]
+        return files[0]["id"]
     return None
 
 def load_json_from_gdrive(filename: str) -> dict:
-    """"""
+    """
     Lädt eine JSON-Datei von Google Drive, indem sie rekursiv nach dem Namen sucht.
-    """"""
+    """
     try:
         file_id = find_file_id_recursive(filename)
         if not file_id:
-            return {""error"": f""📂 Datei '{filename}' nicht in Google Drive gefunden.""}
+            return {"error": f"Datei '{filename}' nicht in Google Drive gefunden."}
         service = get_drive_service()
         request = service.files().get_media(fileId=file_id)
         fh = io.BytesIO()
@@ -38,4 +36,4 @@ def load_json_from_gdrive(filename: str) -> dict:
         fh.seek(0)
         return json.load(fh)
     except Exception as e:
-        return {""error"": f""❌ Fehler beim Laden von '{filename}': {e}""}
+        return {"error": f"Fehler beim Laden von '{filename}': {e}"}
