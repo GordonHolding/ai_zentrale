@@ -3,6 +3,10 @@ chainlit
 schedule>=1.2
 python-dotenv
 
+# Web-Server/API
+fastapi
+uvicorn
+
 # Google API Access
 google-api-python-client
 google-auth
