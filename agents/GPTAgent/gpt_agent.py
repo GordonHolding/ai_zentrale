@@ -21,13 +21,9 @@ PROMPT_PATH = (
 )
 
 # ⚙️ Modellparameter mit Fallback
-MODEL = CONFIG.get("MODEL", {}).get("value") or "gpt-4o"
-TEMPERATURE = CONFIG.get("TEMPERATURE", {}).get("value") if isinstance(CONFIG.get("TEMPERATURE", {}), dict) else 0.4
-MAX_TOKENS = CONFIG.get("MAX_TOKENS", {}).get("value") if isinstance(CONFIG.get("MAX_TOKENS", {}), dict) else 1200
-if TEMPERATURE is None:
-    TEMPERATURE = 0.4
-if MAX_TOKENS is None:
-    MAX_TOKENS = 1200
+TEMPERATURE = CONFIG.get("TEMPERATURE", {}).get("value", 0.4)
+MAX_TOKENS = CONFIG.get("MAX_TOKENS", {}).get("value", 1200)
+MODEL = CONFIG.get("MODEL", {}).get("value", "gpt-4o")
 
 # 📥 Prompt-Konfiguration laden
 def get_prompt_config():
