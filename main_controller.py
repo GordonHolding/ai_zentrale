@@ -1,13 +1,15 @@
 # main_controller.py – mit Startup-Report & Fehlerprotokoll
+# ✅ Unterstützt agent, utility, server, frontend
+# ✅ Nutzt safe_load_json für robustes Startup
+# ✅ Bereit für sofortige Erweiterung (REST-Monitoring, Logging etc.)
 
-import json
-import importlib
 import os
-import subprocess
 import sys
+import subprocess
+import importlib
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from utils.json_loader import load_json  # für GDrive-kompatiblen Zugriff
+from utils.json_loader import safe_load_json
 
 CONFIG_FILENAME = "system_modules.json"
 processes = []
@@ -15,20 +17,26 @@ startup_errors = []
 startup_success = []
 
 def load_active_modules():
-    modules = load_json(CONFIG_FILENAME)
+    """
+    Lädt aktive Module aus system_modules.json, ignoriert fehlerhafte Inhalte.
+    """
+    modules = safe_load_json(CONFIG_FILENAME)
     if not isinstance(modules, list):
-        print(f"❌ Fehler beim Laden von {CONFIG_FILENAME}: {modules.get('error')}")
+        print(f"⚠️  Fehlerhafte Konfiguration in {CONFIG_FILENAME}: {modules.get('error', 'Unbekannter Fehler')}")
         return []
     print(f"📦 Lade {len(modules)} Modul(e) aus {CONFIG_FILENAME}")
     return [
         m for m in modules
-        if m.get("active") is True and m.get("type", "library") != "separator"
+        if m.get("active") is True and m.get("type") in {"agent", "utility", "server", "frontend"}
     ]
 
 def run_module(module: dict):
+    """
+    Startet das angegebene Modul je nach Typ (import oder subprocess).
+    """
     import_path = module.get("import_path", "")
     filename = module.get("filename", "Unbekannt")
-    mod_type = module.get("type", "library")
+    mod_type = module.get("type", "agent")
 
     try:
         print(f"🟢 Starte Modul: {import_path} ({mod_type})")
@@ -50,14 +58,18 @@ def run_module(module: dict):
                 "port": port,
                 "type": "server"
             })
-        else:
+
+        elif mod_type in {"agent", "utility", "frontend"}:
             importlib.import_module(import_path)
-            print(f"   → ✅ Library-Modul erfolgreich importiert.")
+            print(f"   → ✅ Modul erfolgreich importiert.")
             startup_success.append({
                 "module": filename,
                 "status": "imported",
-                "type": "library"
+                "type": mod_type
             })
+
+        else:
+            raise ValueError(f"Unbekannter Modultyp: {mod_type}")
 
     except ModuleNotFoundError as e:
         msg = f"❌ MODUL NICHT GEFUNDEN – {filename} | Pfad: {import_path}"
@@ -67,6 +79,7 @@ def run_module(module: dict):
             "reason": str(e),
             "type": mod_type
         })
+
     except Exception as e:
         msg = f"❌ Fehler beim Starten von {filename} (Pfad: {import_path})"
         print(msg)
