@@ -2,7 +2,7 @@
 
 import os
 from openai import OpenAI
-from utils.json_loader import safe_load_json
+from utils.json_loader import checked_load_json, safe_load_json
 from agents.GPTAgent.startup_loader import initialize_system_context
 from agents.GPTAgent.context_manager import refresh_context, get_context_value
 from agents.GPTAgent.gpt_response_parser import parse_gpt_response
