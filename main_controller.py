@@ -1,6 +1,6 @@
 # main_controller.py – mit Startup-Report & Fehlerprotokoll
 # ✅ Unterstützt agent, utility, server, frontend
-# ✅ Nutzt safe_load_json für robustes Startup
+# ✅ Nutzt load_json_from_gdrive für Direktzugriff über Drive-ID
 # ✅ Bereit für sofortige Erweiterung (REST-Monitoring, Logging etc.)
 
 import os
@@ -9,7 +9,7 @@ import subprocess
 import importlib
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from utils.json_loader import safe_load_json
+from utils.json_loader import load_json_from_gdrive  # <== aktualisierter Import
 
 CONFIG_FILENAME = "system_modules.json"
 processes = []
@@ -20,9 +20,9 @@ def load_active_modules():
     """
     Lädt aktive Module aus system_modules.json, ignoriert fehlerhafte Inhalte.
     """
-    modules = safe_load_json(CONFIG_FILENAME)
+    modules = load_json_from_gdrive(CONFIG_FILENAME)  # <== Direktzugriff
     if not isinstance(modules, list):
-        print(f"⚠️  Fehlerhafte Konfiguration in {CONFIG_FILENAME}: {modules.get('error', 'Unbekannter Fehler')}")
+        print(f"⚠️  Fehlerhafte Konfiguration in {CONFIG_FILENAME}: {modules}")
         return []
     print(f"📦 Lade {len(modules)} Modul(e) aus {CONFIG_FILENAME}")
     return [
