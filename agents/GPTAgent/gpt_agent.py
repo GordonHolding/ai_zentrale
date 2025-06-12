@@ -2,7 +2,7 @@
 
 import os
 from openai import OpenAI
-from utils.json_loader import safe_load_json
+from utils.json_loader import load_json_from_gdrive
 from agents.GPTAgent.startup_loader import initialize_system_context
 from agents.GPTAgent.context_manager import refresh_context, get_context_value
 from agents.GPTAgent.gpt_response_parser import parse_gpt_response
@@ -10,11 +10,8 @@ from agents.GPTAgent.gpt_response_parser import parse_gpt_response
 # 🧠 OpenAI-Client initialisieren (Render-kompatibel)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# 🗂️ GPT-Konfiguration laden (robust)
-CONFIG = safe_load_json("gpt_config.json")
-if "error" in CONFIG:
-    print(f"⚠️ Fehler beim Laden der GPT-Konfiguration: {CONFIG['error']}")
-    CONFIG = {}
+# 🗂️ GPT-Konfiguration laden (direkt)
+CONFIG = load_json_from_gdrive("gpt_config.json")
 
 # 📁 Dynamische Pfade aus Konfiguration oder Defaults
 PROMPT_PATH = (
@@ -32,13 +29,9 @@ if TEMPERATURE is None:
 if MAX_TOKENS is None:
     MAX_TOKENS = 1200
 
-# 📥 Prompt-Konfiguration laden (robust)
+# 📥 Prompt-Konfiguration laden
 def get_prompt_config():
-    prompt_config = safe_load_json(PROMPT_PATH)
-    if "error" in prompt_config:
-        print(f"⚠️ Fehler beim Laden des Systemprompts: {prompt_config['error']}")
-        return {}
-    return prompt_config
+    return load_json_from_gdrive(PROMPT_PATH)
 
 # 🚀 Initialisierung des Systemkontextes
 def startup():
