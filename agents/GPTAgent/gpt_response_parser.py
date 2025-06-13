@@ -23,6 +23,8 @@ def get_system_context():
         "identity": get_context_value("system_identity"),
         "index": get_context_value("index"),
         "json_index": get_context_value("json_index"),
+        "agent_registry": get_context_value("agent_registry"),
+        "system_modules": get_context_value("system_modules"),
         "session": get_context_value("session_context"),
         "conversation": get_context_value("conversation_context"),
         "memory_log": get_context_value("memory_log")
@@ -82,5 +84,7 @@ def parse_gpt_response(user_input: str, gpt_reply: str) -> dict:
         "raw_response": gpt_reply,
         "context_project_count": len(context.get("index", {})),
         "used_prompt": PROMPT_PATH,
-        "memory_context_available": bool(context.get("memory_log"))
+        "memory_context_available": bool(context.get("memory_log")),
+        "agents_available": list(context.get("agent_registry", {}).keys()),
+        "modules_loaded": list(context.get("system_modules", {}).keys())
     }
