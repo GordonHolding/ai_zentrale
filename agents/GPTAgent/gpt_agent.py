@@ -7,8 +7,11 @@ from agents.GPTAgent.startup_loader import initialize_system_context
 from agents.GPTAgent.context_manager import refresh_context, get_context_value
 from agents.GPTAgent.gpt_response_parser import parse_gpt_response
 
-# 🧠 OpenAI-Client initialisieren (Render-kompatibel)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# 🧠 API-Key laden und prüfen (Deployment-sicher)
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise EnvironmentError("OPENAI_API_KEY nicht gesetzt – GPTAgent kann nicht starten.")
+client = OpenAI(api_key=api_key)
 
 # 🗂️ GPT-Konfiguration laden (direkt)
 CONFIG = load_json_from_gdrive("gpt_config.json")
