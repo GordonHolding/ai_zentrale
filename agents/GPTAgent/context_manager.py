@@ -34,9 +34,12 @@ def get_context_value(key: str, default=None):
     return GPT_CONTEXT.get(key, default)
 
 def refresh_context() -> dict:
-    """Lädt alle kontextrelevanten Daten neu – System, Index, Memory."""
+    """Lädt alle kontextrelevanten Daten neu – System, Index, Memory, Registry."""
     system_identity = load_json_from_gdrive(SYSTEM_IDENTITY_PATH)
     index_data = load_json_from_gdrive(INDEX_PATH)
+    json_index = load_json_from_gdrive("json_file_index.json")
+    agent_registry = load_json_from_gdrive("agent_registry.json")
+    system_modules = load_json_from_gdrive("system_modules.json")
 
     session_context = get_context_sessions()
     conversation_context = get_conversation_context()
@@ -45,6 +48,9 @@ def refresh_context() -> dict:
     new_context = {
         "system_identity": system_identity,
         "index": index_data,
+        "json_index": json_index,
+        "agent_registry": agent_registry,
+        "system_modules": system_modules,
         "session_context": session_context,
         "conversation_context": conversation_context,
         "memory_log": memory_log
