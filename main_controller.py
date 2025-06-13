@@ -1,35 +1,37 @@
-# main_controller.py – Smarter Startup-Controller mit klarer Fehlerausgabe & Reporting
-# ✅ Unterstützt agent, utility, server, frontend (beliebig erweiterbar)
-# ✅ Lädt Konfiguration direkt aus Google Drive (per Drive-ID via load_json_from_gdrive)
-# ✅ Protokolliert erfolgreiche und fehlgeschlagene Modulstarts mit Fehlerdetails
-# ✅ Zeigt Fehlerursachen und Stacktrace im Render-Log (perfekt für Remote-Debugging)
-# ✅ Status- und Summary-Endpoints für Monitoring
+# main_controller.py – mit Startup-Report, Fehlerprotokoll und erweitertem Healthcheck
+# ✅ Unterstützt agent, utility, server, frontend
+# ✅ Nutzt load_json_from_gdrive für Direktzugriff über Drive-ID
+# ✅ Healthcheck prüft: App, Module, Prozesse, Credentials, Google Drive, Systemressourcen
+# ✅ Bereit für sofortige Erweiterung (REST-Monitoring, Logging etc.)
 
 import os
 import sys
 import subprocess
 import importlib
-import traceback
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from utils.json_loader import load_json_from_gdrive  # Direkt aus Drive laden
+from utils.json_loader import load_json_from_gdrive
+from modules.authentication.google_utils import get_drive_service, get_service_account_credentials
+
+try:
+    import psutil  # Für Systemressourcen-Healthcheck
+except ImportError:
+    psutil = None  # Fallback, falls Paket nicht installiert ist
 
 CONFIG_FILENAME = "system_modules.json"
-processes = []         # Gestartete Server-Prozesse (z.B. Subprozesse)
-startup_errors = []    # Fehlerprotokoll (dicts mit Details)
-startup_success = []   # Erfolgreiche Modulstarts (dicts mit Details)
+processes = []
+startup_errors = []
+startup_success = []
 
 def load_active_modules():
     """
-    Lädt aktive Module aus der system_modules.json (Google Drive).
-    Nur Module mit 'active': True und erlaubtem Typ werden berücksichtigt.
+    Lädt aktive Module aus system_modules.json, ignoriert fehlerhafte Inhalte.
     """
     modules = load_json_from_gdrive(CONFIG_FILENAME)
     if not isinstance(modules, list):
         print(f"⚠️  Fehlerhafte Konfiguration in {CONFIG_FILENAME}: {modules}")
         return []
     print(f"📦 Lade {len(modules)} Modul(e) aus {CONFIG_FILENAME}")
-    # Nur gewünschte Typen und aktive Module zulassen
     return [
         m for m in modules
         if m.get("active") is True and m.get("type") in {"agent", "utility", "server", "frontend"}
@@ -37,18 +39,16 @@ def load_active_modules():
 
 def run_module(module: dict):
     """
-    Startet ein Modul je nach Typ:
-      - 'server' wird als Subprozess mit eigenem Port gestartet
-      - 'agent', 'utility', 'frontend' werden per importlib importiert
-    Fehler werden umfassend geloggt (inkl. Stacktrace für Remote-Debugging).
+    Startet das angegebene Modul je nach Typ (import oder subprocess).
     """
     import_path = module.get("import_path", "")
     filename = module.get("filename", "Unbekannt")
     mod_type = module.get("type", "agent")
+
     try:
         print(f"🟢 Starte Modul: {import_path} ({mod_type})")
+
         if mod_type == "server":
-            # Pfad in Dateisystemform bringen (z.B. "my.module" -> "my/module.py")
             script_path = import_path.replace('.', os.sep) + ".py"
             port = str(module.get("port", 8000))
             proc = subprocess.Popen(
@@ -65,6 +65,7 @@ def run_module(module: dict):
                 "port": port,
                 "type": "server"
             })
+
         elif mod_type in {"agent", "utility", "frontend"}:
             importlib.import_module(import_path)
             print(f"   → ✅ Modul erfolgreich importiert.")
@@ -73,35 +74,30 @@ def run_module(module: dict):
                 "status": "imported",
                 "type": mod_type
             })
+
         else:
             raise ValueError(f"Unbekannter Modultyp: {mod_type}")
+
     except ModuleNotFoundError as e:
-        # Spezielles Logging für fehlende Module
-        msg = f"❌ MODUL NICHT GEFUNDEN – {filename} | Pfad: {import_path}\n↪️ Grund: {e}"
+        msg = f"❌ MODUL NICHT GEFUNDEN – {filename} | Pfad: {import_path}"
         print(msg)
-        traceback.print_exc()
         startup_errors.append({
             "module": filename,
-            "reason": repr(e),
+            "reason": str(e),
             "type": mod_type
         })
+
     except Exception as e:
-        # Alle anderen Fehler (inkl. Stacktrace für präzises Debugging)
-        msg = f"❌ Fehler beim Starten von {filename} (Pfad: {import_path})\n↪️ Grund: {e}"
+        msg = f"❌ Fehler beim Starten von {filename} (Pfad: {import_path})"
         print(msg)
-        traceback.print_exc()
         startup_errors.append({
             "module": filename,
-            "reason": repr(e),
+            "reason": str(e),
             "type": mod_type
         })
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    FastAPI-Lebenszyklus: Lädt und startet alle aktiven Module beim Serverstart.
-    Loggt Zusammenfassung der Ergebnisse.
-    """
     print("🚀 Starte MAIN CONTROLLER (lifespan) ...")
     modules = load_active_modules()
     for module in modules:
@@ -112,19 +108,16 @@ async def lifespan(app: FastAPI):
     yield
     print("🛑 Lifespan beendet. Controller wird gestoppt.")
 
-# FastAPI App mit Lebenszyklus
 app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def status():
     """
-    Kurzer Status-Check:
-      - Anzahl laufender Prozesse
-      - Anzahl erfolgreicher & fehlgeschlagener Modulstarts
+    Quick-Status: Zeigt Basisinfos zum Main Controller und Modulen.
     """
     return {
         "status": "Main Controller läuft",
-        "aktive_prozesse": len(processes),
+        "aktive_prozesse": len([p for p in processes if getattr(p, "poll", lambda: 0)() is None]),
         "module_erfolgreich": len(startup_success),
         "module_fehlerhaft": len(startup_errors)
     }
@@ -132,16 +125,75 @@ def status():
 @app.get("/status/summary")
 def status_summary():
     """
-    Detailübersicht:
-      - Liste der erfolgreichen und fehlgeschlagenen Module (inkl. Fehlerursache)
+    Zeigt detailliert an, welche Module erfolgreich/fehlerhaft gestartet sind.
     """
     return {
         "erfolg": startup_success,
         "fehler": startup_errors
     }
 
+@app.get("/health")
+def healthcheck():
+    """
+    Erweiterter Healthcheck für System, Prozesse, Google Drive, Credentials, Module.
+    """
+    # 1. Service-Account-Credentials
+    try:
+        creds = get_service_account_credentials()
+        credentials_status = "ok"
+    except Exception as e:
+        credentials_status = f"Fehler: {e}"
+
+    # 2. Google Drive erreichbar?
+    try:
+        service = get_drive_service()
+        service.files().list(pageSize=1).execute()
+        drive_status = "ok"
+    except Exception as e:
+        drive_status = f"Fehler: {e}"
+
+    # 3. Subprozess-Status
+    proc_status = []
+    for proc in processes:
+        try:
+            status = "running" if proc.poll() is None else f"exited ({proc.returncode})"
+        except Exception:
+            status = "unknown"
+        proc_status.append({"pid": getattr(proc, "pid", None), "status": status})
+
+    # 4. Systemressourcen (optional, falls psutil vorhanden)
+    if psutil:
+        try:
+            cpu = psutil.cpu_percent(interval=0.1)
+            mem = psutil.virtual_memory()
+            disk = psutil.disk_usage("/")
+            system_status = {
+                "cpu_percent": cpu,
+                "mem_percent": mem.percent,
+                "disk_percent": disk.percent,
+            }
+        except Exception as e:
+            system_status = {"error": str(e)}
+    else:
+        system_status = {"info": "psutil nicht installiert, keine Systemdaten verfügbar."}
+
+    # 5. Letzte Fehler
+    last_errors = startup_errors[-3:] if startup_errors else []
+
+    return {
+        "app": "ok",
+        "credentials": credentials_status,
+        "google_drive": drive_status,
+        "prozesse": proc_status,
+        "system": system_status,
+        "module": {
+            "erfolgreich": len(startup_success),
+            "fehlerhaft": len(startup_errors)
+        },
+        "letzte_fehler": last_errors
+    }
+
 if __name__ == "__main__":
-    # Lokaler Start für Entwicklung – auf Render wird meist über Uvicorn-Entrypoint gebootet!
     port = int(os.environ.get("PORT", 8000))
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=port)
