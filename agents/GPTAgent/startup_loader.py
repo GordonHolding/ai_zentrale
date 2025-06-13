@@ -7,7 +7,7 @@ from agents.GPTAgent.context_manager import update_context
 def initialize_system_context():
     """
     Lädt alle Kerninformationen für den GPTAgent bei Systemstart – 
-    inkl. Systemprompt, Indexdaten, Strukturdateien und json_file_index.
+    inkl. Systemprompt, Indexdaten, Strukturdateien, json_index, agent_registry und system_modules.
     """
 
     # GPT-Agent-Konfiguration laden
@@ -17,8 +17,10 @@ def initialize_system_context():
     system_identity = load_json_from_gdrive(config.get("SYSTEM_IDENTITY_PATH", "system_identity_prompt.json"))
     index_data = load_json_from_gdrive(config.get("INDEX_PATH", "index.json"))
     json_index = load_json_from_gdrive("json_file_index.json")
+    agent_registry = load_json_from_gdrive("agent_registry.json")
+    system_modules = load_json_from_gdrive("system_modules.json")
 
-    # Strukturdateien aus config laden (PROJECT_STRUCTURE_PATHS)
+    # Strukturdateien aus config laden
     project_structures = {}
     for path in config.get("PROJECT_STRUCTURE_PATHS", []):
         try:
@@ -27,15 +29,16 @@ def initialize_system_context():
             print(f"[GPTAgent] Strukturdatei konnte nicht geladen werden: {path} ({e})")
             continue
 
-    # Gesamtkontext bauen
+    # Gesamtkontext aufbauen
     context = {
         "system_identity": system_identity,
         "index": index_data,
         "json_index": json_index,
-        "project_structures": project_structures
+        "project_structures": project_structures,
+        "agent_registry": agent_registry,
+        "system_modules": system_modules
     }
 
-    # Kontext übergeben
     update_context(context)
     print("[GPTAgent] Systemkontext wurde initialisiert.")
 
