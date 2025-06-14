@@ -14,6 +14,8 @@ async def on_chat_start():
 @cl.on_message
 async def on_message(message: cl.Message):
     answer = handle_input(message.content)
-    # GPT denkt & spricht immer im system_prompt-Stil (siehe gpt_agent.py)
-    final_response = answer.get("final_response") or "Fehler: Keine Antwort."
-    await cl.Message(content=final_response).send()
+    if "error" in answer:
+        await cl.Message(content=f"❌ Fehler: {answer['error']}").send()
+    else:
+        final_response = answer.get("final_response") or "Fehler: Keine Antwort."
+        await cl.Message(content=final_response).send()
