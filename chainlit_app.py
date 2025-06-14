@@ -1,41 +1,23 @@
-# chainlit_app.py – GUI-Fassade der AI-ZENTRALE (inkl. Debug-Ausgabe des Prompts)
+# chainlit_app.py – Minimalistische Chainlit-App für AI-ZENTRALE (J.A.R.V.I.S.)
 
 import chainlit as cl
-from agents.GPTAgent import gpt_agent
+from agents.GPTAgent.gpt_agent import handle_input, startup
 
-# Starte Chat mit geladenem Onboarding + sichtbarem Systemprompt (Debug)
+# Initialisiere Systemkontext & Begrüßung
+system_context = startup()
+WELCOME_MSG = system_context.get("welcome_message", "Willkommen! Ich bin J.A.R.V.I.S. – wie kann ich helfen?")
+EMOJI_MOOD = system_context.get("emoji_mood", "")
+FOOTER_HINT = system_context.get("footer_hint", "")
+
 @cl.on_chat_start
-async def start():
-    try:
-        # Starte Systemkontext inkl. Onboarding
-        context = gpt_agent.startup()
-        onboarding = context.get("onboarding_context", {})
-        message = onboarding.get("welcome_message", "Willkommen zurück.")
-    except Exception as e:
-        message = f"Willkommen in der AI-ZENTRALE! (Fehler beim Onboarding: {e})"
+async def on_chat_start():
+    await cl.Message(
+        content=f"{EMOJI_MOOD} {WELCOME_MSG}\n\n{FOOTER_HINT}"
+    ).send()
 
-    # Begrüßung anzeigen
-    await cl.Message(content=message).send()
-
-    # Debug: Aktueller Prompt anzeigen
-    try:
-        system_prompt = gpt_agent.get_system_prompt()
-        await cl.Message(content=f"🧪 Debug Prompt:\n{system_prompt}").send()
-    except Exception as e:
-        await cl.Message(content=f"❌ Fehler beim Laden des Prompts: {e}").send()
-
-# Hauptverarbeitung jeder Nutzernachricht
 @cl.on_message
-async def main(message: cl.Message):
-    user_input = message.content.strip()
-
-    if not user_input:
-        await cl.Message(content="⚠️ Bitte gib eine gültige Eingabe ein.").send()
-        return
-
-    gpt_response = gpt_agent.handle_input(user_input)
-
-    if "error" in gpt_response:
-        await cl.Message(content=f"❌ Fehler: {gpt_response['error']}").send()
-    else:
-        await cl.Message(content=gpt_response["final_response"]).send()
+async def on_message(message: cl.Message):
+    # User-Input an GPTAgent weiterleiten
+    answer = handle_input(message.content)
+    final_response = answer.get("final_response") or answer.get("raw_response") or "Fehler: Keine Antwort von J.A.R.V.I.S."
+    await cl.Message(content=final_response).send()
