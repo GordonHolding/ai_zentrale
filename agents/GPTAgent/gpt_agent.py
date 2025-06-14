@@ -96,7 +96,18 @@ def ask_gpt(user_input: str) -> dict:
     except Exception as e:
         tb = traceback.format_exc()
         dbg(f"[GPTAgent][EXCEPTION] {e}\n{tb}")
-        return {"error": f"Fehler bei der GPT-Verarbeitung: {str(e)}"}
+        # Fehlerquelle aus Traceback extrahieren
+        if "gpt_response_parser.py" in tb:
+            error_source = "gpt_response_parser.py"
+        elif "gpt_agent.py" in tb:
+            error_source = "gpt_agent.py"
+        else:
+            error_source = "unbekannt"
+        return {
+            "error": f"Fehler bei der GPT-Verarbeitung in {error_source}: {str(e)}"
+            # Optional: für tiefere Analyse das Traceback mitgeben (z.B. für ein Dev-Log)
+            # "traceback": tb
+        }
 
 # 🎛️ Hauptfunktion zur Eingabeverarbeitung
 def handle_input(user_input: str) -> dict:
