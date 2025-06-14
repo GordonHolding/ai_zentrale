@@ -1,8 +1,7 @@
 # main_controller.py – mit Startup-Report, Fehlerprotokoll und erweitertem Healthcheck
 # ✅ Unterstützt agent, utility, server, frontend
-# ✅ Nutzt load_json_from_gdrive für Direktzugriff über Drive-ID
 # ✅ Healthcheck prüft: App, Module, Prozesse, Credentials, Google Drive, Systemressourcen
-# ✅ Bereit für sofortige Erweiterung (REST-Monitoring, Logging etc.)
+# ✅ Cleanup-Report integriert (wenn verfügbar in utils/render_disk_cleaner.py)
 
 import os
 import sys
@@ -18,18 +17,22 @@ try:
 except ImportError:
     psutil = None  # Fallback, falls Paket nicht installiert ist
 
+# Optional: RenderDiskCleaner einbinden
+try:
+    from utils.render_disk_cleaner import get_last_cleanup_report
+except ImportError:
+    def get_last_cleanup_report():
+        return {"status": "not available"}
+
 CONFIG_FILENAME = "system_modules.json"
 processes = []
 startup_errors = []
 startup_success = []
 
 def load_active_modules():
-    """
-    Lädt aktive Module aus system_modules.json, ignoriert fehlerhafte Inhalte.
-    """
     modules = load_json_from_gdrive(CONFIG_FILENAME)
     if not isinstance(modules, list):
-        print(f"⚠️  Fehlerhafte Konfiguration in {CONFIG_FILENAME}: {modules}")
+        print(f"⚠️ Fehlerhafte Konfiguration in {CONFIG_FILENAME}: {modules}")
         return []
     print(f"📦 Lade {len(modules)} Modul(e) aus {CONFIG_FILENAME}")
     return [
@@ -38,13 +41,9 @@ def load_active_modules():
     ]
 
 def run_module(module: dict):
-    """
-    Startet das angegebene Modul je nach Typ (import oder subprocess).
-    """
     import_path = module.get("import_path", "")
     filename = module.get("filename", "Unbekannt")
     mod_type = module.get("type", "agent")
-
     try:
         print(f"🟢 Starte Modul: {import_path} ({mod_type})")
 
@@ -112,9 +111,6 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def status():
-    """
-    Quick-Status: Zeigt Basisinfos zum Main Controller und Modulen.
-    """
     return {
         "status": "Main Controller läuft",
         "aktive_prozesse": len([p for p in processes if getattr(p, "poll", lambda: 0)() is None]),
@@ -124,9 +120,6 @@ def status():
 
 @app.get("/status/summary")
 def status_summary():
-    """
-    Zeigt detailliert an, welche Module erfolgreich/fehlerhaft gestartet sind.
-    """
     return {
         "erfolg": startup_success,
         "fehler": startup_errors
@@ -134,9 +127,6 @@ def status_summary():
 
 @app.get("/health")
 def healthcheck():
-    """
-    Erweiterter Healthcheck für System, Prozesse, Google Drive, Credentials, Module.
-    """
     # 1. Service-Account-Credentials
     try:
         creds = get_service_account_credentials()
@@ -175,10 +165,13 @@ def healthcheck():
         except Exception as e:
             system_status = {"error": str(e)}
     else:
-        system_status = {"info": "psutil nicht installiert, keine Systemdaten verfügbar."}
+        system_status = {"info": "psutil nicht installiert"}
 
     # 5. Letzte Fehler
     last_errors = startup_errors[-3:] if startup_errors else []
+
+    # 6. Cleanup-Report
+    cleanup_report = get_last_cleanup_report()
 
     return {
         "app": "ok",
@@ -190,7 +183,8 @@ def healthcheck():
             "erfolgreich": len(startup_success),
             "fehlerhaft": len(startup_errors)
         },
-        "letzte_fehler": last_errors
+        "letzte_fehler": last_errors,
+        "cleanup_report": cleanup_report
     }
 
 if __name__ == "__main__":
