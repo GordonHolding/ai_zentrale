@@ -1,58 +1,84 @@
-# render_disk_cleaner.py – automatisches Aufräum-Skript bei jedem Deploy
-# 🔒 Löscht nur temporäre, lokale Dateien – keine GDrive- oder Systemdateien
-# 🧹 Reinigt: ./tmp/, ./output/, ./logs/, __pycache__/, ~/.cache/
-# 🎯 Entfernt: .log, .pkl, .png, .pdf, .mp3, .csv – außer sie stammen aus Drive
+# utils/render_disk_cleaner.py
 
 import os
 import shutil
-from pathlib import Path
+import time
 
-# Ordner, die komplett gelöscht werden können
-FOLDERS_TO_CLEAN = [
-    "./tmp", "./output", "./logs", "__pycache__", os.path.expanduser("~/.cache")
+# 🔧 Konfigurierbare Zielverzeichnisse
+CLEAN_PATHS = [
+    "/tmp",
+    "./tmp",
+    "./output",
+    "./logs",
+    "./__pycache__",
+    os.path.expanduser("~/.cache")
 ]
 
-# Dateiendungen, die gelöscht werden dürfen
-ALLOWED_EXTENSIONS = [".log", ".pkl", ".png", ".pdf", ".mp3", ".csv", ".txt"]
+# 🔍 Ziel-Dateiendungen (temporär, speicherintensiv)
+TARGET_EXTENSIONS = [".log", ".pkl", ".png", ".pdf", ".mp3", ".csv"]
 
-# Optional: Logging-Ausgabe
-VERBOSE = True
+# 📝 Cleanup-Report
+cleanup_results = {
+    "status": "not started",
+    "start_time": None,
+    "end_time": None,
+    "deleted_files": [],
+    "errors": []
+}
 
-def clean_folder(folder_path):
-    """Löscht alle passenden Dateien innerhalb eines Ordners (rekursiv)."""
-    folder = Path(folder_path)
-    if not folder.exists():
-        return
 
-    for file_path in folder.rglob("*"):
-        try:
-            if file_path.is_file() and file_path.suffix.lower() in ALLOWED_EXTENSIONS:
-                if "gdrive" not in str(file_path).lower():
-                    file_path.unlink()
-                    if VERBOSE:
-                        print(f"🧹 Datei gelöscht: {file_path}")
-        except Exception as e:
-            print(f"⚠️ Fehler beim Löschen von {file_path}: {e}")
+def clean_path(path):
+    """
+    Löscht gezielt Dateien in einem Verzeichnis – rekursiv & selektiv.
+    """
+    deleted = []
+    if not os.path.exists(path):
+        return deleted
 
-def clean_directories():
-    """Löscht gesamte temporäre Ordner und Inhalte."""
-    for folder in FOLDERS_TO_CLEAN:
-        path = Path(folder)
-        if path.exists():
-            try:
-                shutil.rmtree(path)
-                if VERBOSE:
-                    print(f"🧹 Ordner gelöscht: {path}")
-            except Exception as e:
-                print(f"⚠️ Fehler beim Löschen von Ordner {path}: {e}")
+    for root, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            full_path = os.path.join(root, name)
+            if any(name.lower().endswith(ext) for ext in TARGET_EXTENSIONS):
+                try:
+                    os.remove(full_path)
+                    deleted.append(full_path)
+                except Exception as e:
+                    cleanup_results["errors"].append(f"{full_path}: {e}")
+        for name in dirs:
+            full_dir = os.path.join(root, name)
+            if "__pycache__" in full_dir or full_dir.endswith("/__pycache__"):
+                try:
+                    shutil.rmtree(full_dir)
+                    deleted.append(full_dir)
+                except Exception as e:
+                    cleanup_results["errors"].append(f"{full_dir}: {e}")
+    return deleted
 
-def run_disk_cleanup():
-    print("🧼 Starte Render Disk Cleanup...")
-    clean_directories()
-    for folder in FOLDERS_TO_CLEAN:
-        Path(folder).mkdir(parents=True, exist_ok=True)  # Neu anlegen, wenn gewünscht
-    print("✅ Disk Cleanup abgeschlossen.")
 
-# Wird direkt bei Deployment ausgeführt
-if __name__ == "__main__":
-    run_disk_cleanup()
+def main():
+    """
+    Hauptfunktion – führt Cleanup durch und speichert Ergebnisse.
+    """
+    cleanup_results["status"] = "started"
+    cleanup_results["start_time"] = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    all_deleted = []
+    for path in CLEAN_PATHS:
+        deleted = clean_path(path)
+        all_deleted.extend(deleted)
+
+    cleanup_results["end_time"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    cleanup_results["deleted_files"] = all_deleted
+    cleanup_results["status"] = "done"
+    print(f"[🧹 RenderDiskCleaner] Bereinigt {len(all_deleted)} Datei(en).")
+
+
+def get_last_cleanup_report():
+    """
+    Liefert den letzten Cleanup-Status für Monitoring oder HealthCheck.
+    """
+    return cleanup_results
+
+
+# 🚀 Cleanup automatisch starten (bei Import)
+main()
