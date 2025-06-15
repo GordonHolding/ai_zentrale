@@ -1,3 +1,5 @@
+# gpt_response_parser.py
+
 """
 GPT Response Parser – robuste Analyse- und Kontextextraktion für GPT-Antworten
 Verarbeitet beliebige GPT-Antwortformate (Text, Liste, Dict) und extrahiert relevante Systemdaten
