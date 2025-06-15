@@ -4,7 +4,7 @@
 # 🌍 Zeigt: geladene, fehlende, veraltete Dateien (per last_checked)
 
 import datetime
-from utils.context_memory import get_all_context
+from agents.GPTAgent.context_memory import get_all_context
 from utils.json_loader import load_json, safe_load_json
 
 # Konfigurierbare Schwelle (in Tagen) zur Verfallsanzeige
