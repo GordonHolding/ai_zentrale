@@ -1,8 +1,13 @@
-# context_manager.py
-# Verwalter des GPT-Runtime-Kontexts – nutzt RAM-basierten Kontextspeicher
+# context_manager.py – GPT-RAM-Zugriffsmodul für alle Kontexte & JSONs
 
-from utils.json_loader import load_json_from_gdrive
-from agents.GPTAgent.context_memory import set_context, get_context, clear_context
+from agents.GPTAgent.context_memory import (
+    get_context,
+    update_context,
+    get_context_value,
+    get_json,
+    get_prompt,
+    get_config
+)
 
 # Optional: robuste Imports für MemoryAgent
 try:
@@ -17,51 +22,29 @@ except ImportError:
     def get_memory_log():
         return None
 
-# GPT-Konfiguration laden
-config = load_json_from_gdrive("gpt_config.json")
-
-# Konfigurationspfade aus gpt_config.json
-SYSTEM_IDENTITY_PATH = config.get("SYSTEM_IDENTITY_PATH", "system_identity_prompt.json")
-INDEX_PATH = config.get("INDEX_PATH", "index.json")
-
 
 def refresh_context() -> dict:
-    """Lädt alle kontextrelevanten Daten neu – System, Index, Memory, Registry – und speichert sie im RAM-Store."""
-    system_identity = load_json_from_gdrive(SYSTEM_IDENTITY_PATH)
-    index_data = load_json_from_gdrive(INDEX_PATH)
-    json_index = load_json_from_gdrive("json_file_index.json")
-    agent_registry = load_json_from_gdrive("agent_registry.json")
-    system_modules = load_json_from_gdrive("system_modules.json")
-
-    session_context = get_context_sessions()
-    conversation_context = get_conversation_context()
-    memory_log = get_memory_log()
+    """
+    Aktualisiert den globalen GPT-Kontext zur Laufzeit durch erneutes Einlesen der relevanten JSONs aus RAM.
+    (Alle Daten werden aus context_memory.py gezogen – kein GDrive-Zugriff)
+    """
 
     new_context = {
-        "system_identity": system_identity,
-        "index": index_data,
-        "json_index": json_index,
-        "agent_registry": agent_registry,
-        "system_modules": system_modules,
-        "session_context": session_context,
-        "conversation_context": conversation_context,
-        "memory_log": memory_log
+        "system_identity": get_json("system_identity_prompt.json"),
+        "index": get_json("index.json"),
+        "json_index": get_json("json_file_index.json"),
+        "agent_registry": get_json("agent_registry.json"),
+        "system_modules": get_json("system_modules.json"),
+        "session_context": get_context_sessions(),
+        "conversation_context": get_conversation_context(),
+        "memory_log": get_memory_log()
     }
 
-    # In den zentralen Kontextspeicher schreiben
-    for key, value in new_context.items():
-        set_context(key, value)
-
-    print("[GPTAgent] Kontext wurde aktualisiert und gespeichert.")
+    update_context(new_context)
+    print("[GPTAgent] 🔄 Kontext wurde erfolgreich aktualisiert.")
     return new_context
 
 
-def get_context_value(key: str, default=None):
-    """Liest Kontextwert aus dem RAM-Store."""
-    return get_context(key) or default
-
-
-def update_context(new_data: dict) -> None:
-    """Optional: gezielte Aktualisierung einzelner Kontexteinträge."""
-    for key, value in new_data.items():
-        set_context(key, value)
+# Shortcut: Einzelwert aus GPT-Kontext lesen
+def get_context_value_safe(key: str, default=None):
+    return get_context().get(key, default)
