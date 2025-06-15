@@ -1,1 +1,1 @@
-__init__.py
+# Dieses File markiert den Ordner als Python-Package.
