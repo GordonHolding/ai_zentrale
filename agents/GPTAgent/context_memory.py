@@ -59,3 +59,11 @@ def get_prompt() -> dict:
 def get_config() -> dict:
     """Lädt die aktuelle GPT-Konfiguration"""
     return _context_store.get("gpt_config", {})
+
+
+# 🧠 Für Monitoring- & Statuszwecke (RAM-Debug)
+
+def get_all_context() -> dict:
+    """Gibt den gesamten RAM-Kontext als Kopie zurück (readonly)."""
+    with _lock:
+        return _context_store.copy()
