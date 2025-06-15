@@ -1,13 +1,16 @@
-# agents.GPTAgent.startup_loader.py
+# startup_loader.py
+# Lädt alle Kerninformationen in den RAM-Kontextspeicher bei Systemstart
 
 from utils.json_loader import load_json_from_gdrive
 from agents.GPTAgent.context_manager import update_context
+from agents.GPTAgent.context_memory import set_context
 
 
 def initialize_system_context():
     """
     Lädt alle Kerninformationen für den GPTAgent bei Systemstart – 
     inkl. Systemprompt, Indexdaten, Strukturdateien, json_index, agent_registry und system_modules.
+    Speichert alles direkt im RAM (context_memory).
     """
 
     # GPT-Agent-Konfiguration laden
@@ -36,10 +39,17 @@ def initialize_system_context():
         "json_index": json_index,
         "project_structures": project_structures,
         "agent_registry": agent_registry,
-        "system_modules": system_modules
+        "system_modules": system_modules,
+        "gpt_config": config  # Optional: GPT-Konfig im RAM behalten
     }
 
+    # RAM-Cache aktualisieren
     update_context(context)
-    print("[GPTAgent] Systemkontext wurde initialisiert.")
+
+    # Einzel-Keys zusätzlich abspeichern (für gezielte Nutzung durch GPT)
+    set_context("gpt_agent_prompt", system_identity)
+    set_context("project_structures", project_structures)
+
+    print("[GPTAgent] Systemkontext wurde initialisiert und in context_memory gespeichert.")
 
     return context
