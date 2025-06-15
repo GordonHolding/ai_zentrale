@@ -38,7 +38,7 @@ def parse_timestamp(ts: str) -> datetime.datetime:
         return datetime.datetime.min
 
 
-def check_json_index_status():
+def get_json_index_status():
     context = get_all_context()
     index_data = load_json("json_file_index.json")
     flat_index = flatten_index(index_data)
