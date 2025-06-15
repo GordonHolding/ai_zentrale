@@ -10,17 +10,16 @@ from contextlib import asynccontextmanager
 
 from utils.json_loader import load_json_from_gdrive
 from modules.authentication.google_utils import get_drive_service, get_service_account_credentials
-
-# 🧠 RAM-Kontext abrufen
 from agents.GPTAgent.context_memory import get_all_context
+from utils.json_index_status import get_json_index_status  # ✅ NEU
 
-# Optional: Systemressourcen (psutil)
+# Optional: Systemressourcen
 try:
     import psutil
 except ImportError:
     psutil = None
 
-# Optional: Cleanup-Report (z. B. aus Render-Disk-Cleaner)
+# Optional: Cleanup-Report
 try:
     from utils.render_disk_cleaner import get_last_cleanup_report
 except ImportError:
@@ -32,7 +31,7 @@ processes = []
 startup_errors = []
 startup_success = []
 
-# 🔄 Modulkonfiguration laden
+# 🔄 Aktive Module laden
 def load_active_modules():
     modules = load_json_from_gdrive(CONFIG_FILENAME)
     if not isinstance(modules, list):
@@ -44,7 +43,7 @@ def load_active_modules():
         if m.get("active") is True and m.get("type") in {"agent", "utility", "server", "frontend"}
     ]
 
-# ▶️ Modul starten oder importieren
+# ▶️ Module starten oder importieren
 def run_module(module: dict):
     import_path = module.get("import_path", "")
     filename = module.get("filename", "Unbekannt")
@@ -100,7 +99,7 @@ def run_module(module: dict):
             "type": mod_type
         })
 
-# 🔁 Lebenszyklus für FastAPI
+# 🔁 Lebenszyklus FastAPI
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("🚀 Starte MAIN CONTROLLER (lifespan) ...")
@@ -115,6 +114,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+# ▶️ Basisstatus
 @app.get("/")
 def status():
     return {
@@ -124,6 +124,7 @@ def status():
         "module_fehlerhaft": len(startup_errors)
     }
 
+# ▶️ Zusammenfassung
 @app.get("/status/summary")
 def status_summary():
     return {
@@ -131,6 +132,7 @@ def status_summary():
         "fehler": startup_errors
     }
 
+# ✅ Healthcheck
 @app.get("/health")
 def healthcheck():
     # 1. Service-Account-Credentials
@@ -157,7 +159,7 @@ def healthcheck():
             status = "unknown"
         proc_status.append({"pid": getattr(proc, "pid", None), "status": status})
 
-    # 4. Systemressourcen (optional, falls psutil vorhanden)
+    # 4. Systemressourcen
     if psutil:
         try:
             cpu = psutil.cpu_percent(interval=0.1)
@@ -190,7 +192,13 @@ def healthcheck():
     except Exception as e:
         ram_context = {"error": str(e)}
 
-    # 🧠 Kompletter Health-Bericht
+    # 8. JSON-Index-Status
+    try:
+        json_index_status = get_json_index_status()
+    except Exception as e:
+        json_index_status = {"error": str(e)}
+
+    # 🔎 Kompletter Health-Bericht
     return {
         "app": "ok",
         "credentials": credentials_status,
@@ -203,9 +211,11 @@ def healthcheck():
         },
         "letzte_fehler": last_errors,
         "cleanup_report": cleanup_report,
-        "ram_context": ram_context
+        "ram_context": ram_context,
+        "json_index_status": json_index_status  # ✅ Eingebaut!
     }
 
+# ▶️ Lokaler Start (Render-ready)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     import uvicorn
