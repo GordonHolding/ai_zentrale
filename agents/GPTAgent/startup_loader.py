@@ -15,6 +15,7 @@ def initialize_system_context():
 
     # GPT-Agent-Konfiguration laden
     config = load_json_from_gdrive("gpt_config.json")
+    set_context("gpt_config", config)
 
     # Kerninformationen laden
     system_identity = load_json_from_gdrive(config.get("SYSTEM_IDENTITY_PATH", "system_identity_prompt.json"))
@@ -33,8 +34,9 @@ def initialize_system_context():
             continue
 
     # Prompt-Datei mitladen und in RAM speichern
-    gpt_agent_prompt = load_json_from_gdrive(config.get("PROMPT_PATH", "gpt_agent_prompt.json"))
-    set_context("gpt_agent_prompt", gpt_agent_prompt)
+    prompt_path = config.get("PROMPT_PATH", "gpt_agent_prompt.json")
+    gpt_agent_prompt = load_json_from_gdrive(prompt_path)
+    set_context(prompt_path, gpt_agent_prompt)
 
     # Gesamtkontext aufbauen
     context = {
@@ -44,7 +46,6 @@ def initialize_system_context():
         "project_structures": project_structures,
         "agent_registry": agent_registry,
         "system_modules": system_modules,
-        "gpt_config": config
     }
 
     update_context(context)
