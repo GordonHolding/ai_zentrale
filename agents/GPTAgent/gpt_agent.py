@@ -1,13 +1,12 @@
-# gpt_agent.py – GPTAgent für AI-ZENTRALE (sicher, robust & debug-freundlich)
+# gpt_agent.py – GPTAgent für AI-ZENTRALE (sicher, robust & RAM-optimiert)
 
 import os
 import traceback
 from openai import OpenAI
 
-from utils.json_loader import load_json_from_gdrive
-from agents.GPTAgent.startup_loader import initialize_system_context
 from agents.GPTAgent.context_manager import get_context_value
 from agents.GPTAgent.context_memory import get_context
+from agents.GPTAgent.startup_loader import initialize_system_context
 from agents.GPTAgent.gpt_response_parser import parse_gpt_response
 
 # Debug-Logging
@@ -22,9 +21,10 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 dbg("[GPTAgent] OpenAI-Client initialisiert.")
 
-# 📂 Konfiguration laden
-CONFIG = load_json_from_gdrive("gpt_config.json")
-dbg(f"[GPTAgent] GPT-Konfiguration geladen: {CONFIG}")
+# 📂 Konfiguration aus RAM laden
+CONFIG = get_context_value("gpt_config") or {}
+if not CONFIG:
+    dbg("[GPTAgent][WARNUNG] GPT-Konfiguration nicht im RAM gefunden – verwende Defaults.")
 
 # 📁 Dynamischer Promptpfad
 PROMPT_PATH = (
@@ -44,8 +44,8 @@ dbg(f"[GPTAgent] Model: {MODEL} | Temp: {TEMPERATURE} | MaxTokens: {MAX_TOKENS}"
 def get_prompt_config():
     prompt_conf = get_context("gpt_agent_prompt")
     if not prompt_conf:
-        prompt_conf = load_json_from_gdrive(PROMPT_PATH)
-        dbg("[GPTAgent] WARNUNG: Prompt wurde nicht aus RAM geladen.")
+        dbg("[GPTAgent] WARNUNG: Prompt wurde nicht aus RAM geladen – Fallback notwendig.")
+        return {}
     dbg(f"[GPTAgent] Prompt-Konfiguration geladen: {prompt_conf.get('name', 'Unbenannt')}")
     return prompt_conf
 
@@ -100,7 +100,7 @@ def ask_gpt(user_input: str) -> dict:
             "error": f"Fehler bei der GPT-Verarbeitung in {error_source}: {str(e)}"
         }
 
-# 🔁 Eingabe verarbeiten (ohne globales refresh_context!)
+# 🔁 Eingabe verarbeiten
 def handle_input(user_input: str) -> dict:
     dbg(f"[GPTAgent] handle_input() aufgerufen mit user_input: {user_input}")
     return ask_gpt(user_input)
