@@ -32,6 +32,10 @@ def initialize_system_context():
             print(f"[GPTAgent] Strukturdatei konnte nicht geladen werden: {path} ({e})")
             continue
 
+    # Prompt-Datei mitladen und in RAM speichern
+    gpt_agent_prompt = load_json_from_gdrive(config.get("PROMPT_PATH", "gpt_agent_prompt.json"))
+    set_context("gpt_agent_prompt", gpt_agent_prompt)
+
     # Gesamtkontext aufbauen
     context = {
         "system_identity": system_identity,
@@ -40,15 +44,10 @@ def initialize_system_context():
         "project_structures": project_structures,
         "agent_registry": agent_registry,
         "system_modules": system_modules,
-        "gpt_config": config  # Optional: GPT-Konfig im RAM behalten
+        "gpt_config": config
     }
 
-    # RAM-Cache aktualisieren
     update_context(context)
-
-    # Einzel-Keys zusätzlich abspeichern (für gezielte Nutzung durch GPT)
-    set_context("gpt_agent_prompt", system_identity)
-    set_context("project_structures", project_structures)
 
     print("[GPTAgent] Systemkontext wurde initialisiert und in context_memory gespeichert.")
 
