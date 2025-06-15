@@ -7,11 +7,12 @@ import importlib
 from datetime import datetime
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+from time import perf_counter
 
 from utils.json_loader import load_json_from_gdrive
 from modules.authentication.google_utils import get_drive_service, get_service_account_credentials
 from agents.GPTAgent.context_memory import get_all_context
-from utils.json_index_status import get_json_index_status  # ✅ NEU
+from utils.json_index_status import get_json_index_status
 
 # Optional: Systemressourcen
 try:
@@ -135,6 +136,8 @@ def status_summary():
 # ✅ Healthcheck
 @app.get("/health")
 def healthcheck():
+    start_time = perf_counter()
+
     # 1. Service-Account-Credentials
     try:
         creds = get_service_account_credentials()
@@ -198,6 +201,8 @@ def healthcheck():
     except Exception as e:
         json_index_status = {"error": str(e)}
 
+    dauer_ms = round((perf_counter() - start_time) * 1000, 2)
+
     # 🔎 Kompletter Health-Bericht
     return {
         "app": "ok",
@@ -212,11 +217,18 @@ def healthcheck():
         "letzte_fehler": last_errors,
         "cleanup_report": cleanup_report,
         "ram_context": ram_context,
-        "json_index_status": json_index_status  # ✅ Eingebaut!
+        "json_index_status": json_index_status,
+        "messdauer_ms": dauer_ms  # ⏱️ Performance-Messung
     }
 
-# ▶️ Lokaler Start (Render-ready)
+# ▶️ Lokaler Start (Render-ready, Performance-Modus)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=port,
+        loop="uvloop",
+        http="httptools"
+    )
