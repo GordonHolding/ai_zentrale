@@ -1,23 +1,26 @@
-# main_controller.py – mit Startup-Report, Fehlerprotokoll und erweitertem Healthcheck
-# ✅ Unterstützt agent, utility, server, frontend
-# ✅ Healthcheck prüft: App, Module, Prozesse, Credentials, Google Drive, Systemressourcen
-# ✅ Cleanup-Report integriert (wenn verfügbar in utils/render_disk_cleaner.py)
+# main_controller.py – Startup-Manager & System-Monitor mit Healthcheck und RAM-Überwachung
 
 import os
 import sys
 import subprocess
 import importlib
+from datetime import datetime
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+
 from utils.json_loader import load_json_from_gdrive
 from modules.authentication.google_utils import get_drive_service, get_service_account_credentials
 
-try:
-    import psutil  # Für Systemressourcen-Healthcheck
-except ImportError:
-    psutil = None  # Fallback, falls Paket nicht installiert ist
+# 🧠 RAM-Kontext abrufen
+from agents.GPTAgent.context_memory import get_all_context
 
-# Optional: RenderDiskCleaner einbinden
+# Optional: Systemressourcen (psutil)
+try:
+    import psutil
+except ImportError:
+    psutil = None
+
+# Optional: Cleanup-Report (z. B. aus Render-Disk-Cleaner)
 try:
     from utils.render_disk_cleaner import get_last_cleanup_report
 except ImportError:
@@ -29,6 +32,7 @@ processes = []
 startup_errors = []
 startup_success = []
 
+# 🔄 Modulkonfiguration laden
 def load_active_modules():
     modules = load_json_from_gdrive(CONFIG_FILENAME)
     if not isinstance(modules, list):
@@ -40,6 +44,7 @@ def load_active_modules():
         if m.get("active") is True and m.get("type") in {"agent", "utility", "server", "frontend"}
     ]
 
+# ▶️ Modul starten oder importieren
 def run_module(module: dict):
     import_path = module.get("import_path", "")
     filename = module.get("filename", "Unbekannt")
@@ -95,6 +100,7 @@ def run_module(module: dict):
             "type": mod_type
         })
 
+# 🔁 Lebenszyklus für FastAPI
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("🚀 Starte MAIN CONTROLLER (lifespan) ...")
@@ -173,6 +179,18 @@ def healthcheck():
     # 6. Cleanup-Report
     cleanup_report = get_last_cleanup_report()
 
+    # 7. RAM-Kontextstatus
+    try:
+        context_data = get_all_context()
+        ram_context = {
+            "total_keys": len(context_data),
+            "keys": list(context_data.keys()),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        ram_context = {"error": str(e)}
+
+    # 🧠 Kompletter Health-Bericht
     return {
         "app": "ok",
         "credentials": credentials_status,
@@ -184,7 +202,8 @@ def healthcheck():
             "fehlerhaft": len(startup_errors)
         },
         "letzte_fehler": last_errors,
-        "cleanup_report": cleanup_report
+        "cleanup_report": cleanup_report,
+        "ram_context": ram_context
     }
 
 if __name__ == "__main__":
