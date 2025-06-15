@@ -5,7 +5,8 @@ python-dotenv
 
 # Web-Server/API
 fastapi
-uvicorn
+uvicorn[standard]       # ⏩ Mit uvloop + httptools für Speed
+orjson                  # ⚡ Schnelle JSON-Verarbeitung
 
 # Google API Access
 google-api-python-client
