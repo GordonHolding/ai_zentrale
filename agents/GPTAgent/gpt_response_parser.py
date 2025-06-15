@@ -1,5 +1,3 @@
-# agents.GPTAgent.gpt_response_parser.py
-
 """
 GPT Response Parser – robuste Analyse- und Kontextextraktion für GPT-Antworten
 Verarbeitet beliebige GPT-Antwortformate (Text, Liste, Dict) und extrahiert relevante Systemdaten
@@ -8,6 +6,7 @@ Aktuell fokussiert auf GPTAgent-only-Betrieb – vorbereitet auf spätere Agente
 
 from utils.json_loader import load_json_from_gdrive
 from agents.GPTAgent.context_manager import get_context_value
+from agents.GPTAgent import startup_loader  # NEU: für refresh system
 
 # Optionaler Import: MemoryAgent-Logging
 try:
@@ -98,12 +97,24 @@ def parse_gpt_response(user_input: str, gpt_reply) -> dict:
     - tasks/messages: (wenn vorhanden) extrahierte Inhalte
     """
 
-    context = get_system_context()
+    # 🔁 Spezialfall: Live-Refresh über GPTCommand
+    if isinstance(user_input, str) and "refresh system" in user_input.lower():
+        refreshed = startup_loader.initialize_system_context()
+        return {
+            "user_input": user_input,
+            "raw_response": "✅ Systemkontext wurde aktualisiert.",
+            "used_prompt": PROMPT_PATH,
+            "summary": "Systemkontext wurde neu geladen.",
+            "refreshed_keys": list(refreshed.keys()),
+            "status": "success",
+            "trigger": "refresh",
+            "role": "GPTAgent"
+        }
 
-    # Logging für Nachverfolgung
+    # ⬇️ Normale Analyse bei GPT-Antwort
+    context = get_system_context()
     log_response_analysis(str(user_input), str(gpt_reply))
 
-    # Grundstruktur
     parsed = {
         "user_input": user_input,
         "raw_response": gpt_reply,
@@ -141,7 +152,7 @@ def parse_gpt_response(user_input: str, gpt_reply) -> dict:
             "role": gpt_reply.get("role", "GPT"),
             "trigger": gpt_reply.get("trigger", ""),
         })
-        parsed.update(gpt_reply)  # alles übernehmen
+        parsed.update(gpt_reply)
         return parsed
 
     # Fallback: Unbekannter Typ
